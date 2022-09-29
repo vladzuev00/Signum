@@ -14,12 +14,12 @@ import static java.util.Collections.singletonList;
 @RequiredArgsConstructor
 @Component
 public final class DataPackageDeserializer implements PackageDeserializer {
-    private final MessageParser messageDeserializer;
+    private final MessageParser messageParser;
 
     @Override
     public DataPackage deserialize(String deserialized) {
         final String serializedMessage = removePrefixAndPostfix(deserialized, PACKAGE_PREFIX);
-        final Message message = this.messageDeserializer.parse(serializedMessage);
+        final Message message = this.messageParser.parse(serializedMessage);
         return new DataPackage(singletonList(message));
     }
 }
