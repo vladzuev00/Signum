@@ -1,9 +1,11 @@
 package by.aurorasoft.signum.protocol.wialon.deserializer.impl;
 
 import by.aurorasoft.signum.protocol.wialon.model.LoginPackage;
-import by.aurorasoft.signum.protocol.wialon.model.Package;
 import by.aurorasoft.signum.protocol.wialon.deserializer.PackageDeserializer;
 import org.springframework.stereotype.Component;
+
+import static by.aurorasoft.signum.protocol.wialon.model.LoginPackage.PACKAGE_PREFIX;
+import static by.aurorasoft.signum.protocol.wialon.model.Package.PACKAGE_POSTFIX;
 
 @Component
 public final class RequestLoginPackageDeserializer implements PackageDeserializer {
@@ -21,8 +23,8 @@ public final class RequestLoginPackageDeserializer implements PackageDeserialize
 
     private static String[] findMessageComponents(String deserialized) {
         final String message = deserialized
-                .replace(LoginPackage.PACKAGE_DESCRIPTION_PREFIX, "")
-                .replace(Package.PACKAGE_DESCRIPTION_POSTFIX, "");
+                .replace(PACKAGE_PREFIX, "")
+                .replace(PACKAGE_POSTFIX, "");
         return message.split(REGEX_DELIMITER_IMEI_AND_PASSWORD);
     }
 }

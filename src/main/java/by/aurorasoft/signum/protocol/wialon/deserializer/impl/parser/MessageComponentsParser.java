@@ -11,6 +11,7 @@ import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 import static java.lang.Math.abs;
 import static java.lang.Math.signum;
+import static java.time.Instant.ofEpochSecond;
 import static java.time.LocalDateTime.parse;
 import static java.time.ZoneOffset.UTC;
 import static java.time.format.DateTimeFormatter.ofPattern;
@@ -19,27 +20,44 @@ import static java.util.regex.Pattern.compile;
 public final class MessageComponentsParser {
     private static final int GROUP_NUMBER_DATE_TIME = 1;
 
-    private static final int GROUP_NUMBER_LATITUDE_DEGREES = 2;
-    private static final int GROUP_NUMBER_LATITUDE_MINUTE = 3;
-    private static final int GROUP_NUMBER_LATITUDE_MINUTE_SHARE = 4;
-    private static final int GROUP_NUMBER_LATITUDE_TYPE = 5;
+    private static final int GROUP_NUMBER_LATITUDE_DEGREES = 6;
+    private static final int GROUP_NUMBER_LATITUDE_MINUTE = 7;
+    private static final int GROUP_NUMBER_LATITUDE_MINUTE_SHARE = 8;
+    private static final int GROUP_NUMBER_LATITUDE_TYPE = 9;
     private static final String ALIAS_SOUTH_LATITUDE_TYPE = "S";
 
-    private static final int GROUP_NUMBER_LONGITUDE_DEGREES = 6;
-    private static final int GROUP_NUMBER_LONGITUDE_MINUTE = 7;
-    private static final int GROUP_NUMBER_LONGITUDE_MINUTE_SHARE = 8;
-    private static final int GROUP_NUMBER_LONGITUDE_TYPE = 9;
+    private static final int GROUP_NUMBER_LONGITUDE_DEGREES = 10;
+    private static final int GROUP_NUMBER_LONGITUDE_MINUTE = 11;
+    private static final int GROUP_NUMBER_LONGITUDE_MINUTE_SHARE = 12;
+    private static final int GROUP_NUMBER_LONGITUDE_TYPE = 13;
     private static final String ALIAS_WESTERN_TYPE = "W";
 
 
-    private static final int GROUP_NUMBER_SPEED = 10;
-    private static final int GROUP_NUMBER_COURSE = 11;
-    private static final int GROUP_NUMBER_ALTITUDE = 12;
-    private static final int GROUP_NUMBER_AMOUNT_SATELLITE = 13;
-    private static final int GROUP_NUMBER_AMOUNT_HDOP = 14;
-    private static final int GROUP_NUMBER_PARAMETERS = 15;
+    private static final int GROUP_NUMBER_SPEED = 14;
+    private static final int GROUP_NUMBER_COURSE = 16;
+    private static final int GROUP_NUMBER_ALTITUDE = 18;
+    private static final int GROUP_NUMBER_AMOUNT_SATELLITE = 20;
+    private static final int GROUP_NUMBER_AMOUNT_HDOP = 22;
+    private static final int GROUP_NUMBER_PARAMETERS = 34;
 
     private static final DateTimeFormatter DATE_FORMATTER = ofPattern("ddMMyy;HHmmss");
+    private static final String NOT_DEFINED_DATE_TIME_STRING = "NA;NA";
+    private static final Instant NOT_DEFINED_DATE_TIME = ofEpochSecond(0);
+
+    private static final String NOT_DEFINE_SPEED_STRING = "NA";
+    private static final int NOT_DEFINED_SPEED = 0;
+
+    private static final String NOT_DEFINED_COURSE_STRING = "NA";
+    private static final int NOT_DEFINED_COURSE = 0;
+
+    private static final String NOT_DEFINED_ALTITUDE_STRING = "NA";
+    private static final int NOT_DEFINED_ALTITUDE = 0;
+
+    private static final String NOT_DEFINED_HDOP_STRING = "NA";
+    private static final float NOT_DEFINED_HDOP = 0.F;
+
+    private static final String NOT_DEFINED_AMOUNT_SATELLITE_STRING = "NA";
+    private static final int NOT_DEFINED_AMOUNT_SATELLITE = 0;
 
     private static final String MESSAGE_REGEX
             = "((\\d{6}|(NA));(\\d{6}|(NA)));"         //date, time
@@ -61,11 +79,16 @@ public final class MessageComponentsParser {
 
     public MessageComponentsParser(String source) {
         this.matcher = MESSAGE_PATTERN.matcher(source);
+        if (!this.matcher.matches()) {
+            throw new IllegalArgumentException("Given message '" + source + "' isn't valid.");
+        }
     }
 
     public Instant parseDateTime() {
         final String timeString = this.matcher.group(GROUP_NUMBER_DATE_TIME);
-        return parse(timeString, DATE_FORMATTER).toInstant(UTC);
+        return !timeString.equals(NOT_DEFINED_DATE_TIME_STRING)
+                ? parse(timeString, DATE_FORMATTER).toInstant(UTC)
+                : NOT_DEFINED_DATE_TIME;
     }
 
     public GpsCoordinate parseGpsCoordinate() {
@@ -77,33 +100,41 @@ public final class MessageComponentsParser {
     }
 
     public int parseSpeed() {
-        return parseInt(this.matcher.group(GROUP_NUMBER_SPEED));
+        final String speedString = this.matcher.group(GROUP_NUMBER_SPEED);
+        return !speedString.equals(NOT_DEFINE_SPEED_STRING) ? parseInt(speedString) : NOT_DEFINED_SPEED;
     }
 
     public int parseCourse() {
-        return parseInt(this.matcher.group(GROUP_NUMBER_COURSE));
+        final String courseString = this.matcher.group(GROUP_NUMBER_COURSE);
+        return !courseString.equals(NOT_DEFINED_COURSE_STRING) ? parseInt(courseString) : NOT_DEFINED_COURSE;
     }
 
     public int parseAltitude() {
-        return parseInt(this.matcher.group(GROUP_NUMBER_ALTITUDE));
+        final String altitudeString = this.matcher.group(GROUP_NUMBER_ALTITUDE);
+        return !altitudeString.equals(NOT_DEFINED_ALTITUDE_STRING) ? parseInt(altitudeString) : NOT_DEFINED_ALTITUDE;
     }
 
     public int parseAmountSatellite() {
-        return parseInt(this.matcher.group(GROUP_NUMBER_AMOUNT_SATELLITE));
+        final String amountSatelliteString = this.matcher.group(GROUP_NUMBER_AMOUNT_SATELLITE);
+        return !amountSatelliteString.equals(NOT_DEFINED_AMOUNT_SATELLITE_STRING)
+                ? parseInt(amountSatelliteString)
+                : NOT_DEFINED_AMOUNT_SATELLITE;
     }
 
     public float parseHdop() {
-        return parseFloat(this.matcher.group(GROUP_NUMBER_AMOUNT_HDOP));
+        final String amountHdop = this.matcher.group(GROUP_NUMBER_AMOUNT_HDOP);
+        return !amountHdop.equals(NOT_DEFINED_HDOP_STRING) ? parseFloat(amountHdop) : NOT_DEFINED_HDOP;
     }
 
     /**
      * Parses parameters without type.
      * Example: count1:1:564,fuel:2:45.8,hw:3:V4.5 -> count1:564,fuel:45.8,hw:V4.5
+     *
      * @return parameters without type.
      */
     public String parseParameters() {
         final String parameters = this.matcher.group(GROUP_NUMBER_PARAMETERS);
-        return parameters.replaceAll(":[^:]+", "");
+        return parameters.replaceAll(":[^:]+:", ":");
     }
 
     private float parseGpsCoordinate(int groupNumberDegrees, int groupNumberMinute,

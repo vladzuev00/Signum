@@ -5,7 +5,7 @@ import by.aurorasoft.signum.entity.Message;
 import java.util.List;
 
 public final class DataPackage extends AbstractDataPackage {
-    public static final String PACKAGE_DESCRIPTION_PREFIX = "#D#";
+    public static final String PACKAGE_PREFIX = "#D#";
 
     public DataPackage(final List<Message> messages) {
         super(messages);
