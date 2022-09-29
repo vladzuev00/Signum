@@ -7,8 +7,8 @@ import by.aurorasoft.signum.protocol.wialon.model.DataPackage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import static by.aurorasoft.signum.protocol.wialon.deserializer.PackageDeserializer.removePrefixAndPostfix;
 import static by.aurorasoft.signum.protocol.wialon.model.DataPackage.PACKAGE_PREFIX;
-import static by.aurorasoft.signum.protocol.wialon.model.Package.PACKAGE_POSTFIX;
 import static java.util.Collections.singletonList;
 
 @RequiredArgsConstructor
@@ -18,9 +18,7 @@ public final class DataPackageDeserializer implements PackageDeserializer {
 
     @Override
     public DataPackage deserialize(String deserialized) {
-        final String serializedMessage = deserialized
-                .replace(PACKAGE_PREFIX, "")
-                .replace(PACKAGE_POSTFIX, "");
+        final String serializedMessage = removePrefixAndPostfix(deserialized, PACKAGE_PREFIX);
         final Message message = this.messageDeserializer.parse(serializedMessage);
         return new DataPackage(singletonList(message));
     }

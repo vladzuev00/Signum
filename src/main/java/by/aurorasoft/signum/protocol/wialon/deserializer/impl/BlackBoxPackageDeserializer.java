@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static by.aurorasoft.signum.protocol.wialon.deserializer.PackageDeserializer.removePrefixAndPostfix;
 import static by.aurorasoft.signum.protocol.wialon.model.BlackBoxPackage.PACKAGE_PREFIX;
-import static by.aurorasoft.signum.protocol.wialon.model.Package.PACKAGE_POSTFIX;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
@@ -23,9 +23,7 @@ public final class BlackBoxPackageDeserializer implements PackageDeserializer {
 
     @Override
     public BlackBoxPackage deserialize(String deserialized) {
-        final String message = deserialized
-                .replace(PACKAGE_PREFIX, "")
-                .replace(PACKAGE_POSTFIX, "");
+        final String message = removePrefixAndPostfix(deserialized, PACKAGE_PREFIX);
         final String[] serializedMessages = message.split(REGEX_MESSAGES_DELIMITER);
         final List<Message> messages = stream(serializedMessages)
                 .map(this.messageParser::parse)
