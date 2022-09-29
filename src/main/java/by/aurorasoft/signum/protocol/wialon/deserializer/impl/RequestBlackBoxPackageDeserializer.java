@@ -19,7 +19,7 @@ import static java.util.stream.Collectors.toList;
 public final class RequestBlackBoxPackageDeserializer implements PackageDeserializer {
     private static final String REGEX_MESSAGES_DELIMITER = "\\|";
 
-    private final MessageParser messageDeserializer;
+    private final MessageParser messageParser;
 
     @Override
     public BlackBoxPackage deserialize(String deserialized) {
@@ -28,7 +28,7 @@ public final class RequestBlackBoxPackageDeserializer implements PackageDeserial
                 .replace(PACKAGE_POSTFIX, "");
         final String[] serializedMessages = message.split(REGEX_MESSAGES_DELIMITER);
         final List<Message> messages = stream(serializedMessages)
-                .map(this.messageDeserializer::parse)
+                .map(this.messageParser::parse)
                 .collect(toList());
         return new BlackBoxPackage(messages);
     }
