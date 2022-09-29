@@ -11,7 +11,7 @@ import static by.aurorasoft.signum.protocol.wialon.model.DataPackage.PACKAGE_PRE
 public final class DataPackageDecoder extends PackageDecoder {
 
     public DataPackageDecoder(@Qualifier("blackBoxPackageDecoder") PackageDecoder nextPackageDecoder,
-                              @Qualifier("requestDataPackageDeserializer")
+                              @Qualifier("dataPackageDeserializer")
                               PackageDeserializer packageDeserializer) {
         super(nextPackageDecoder, PACKAGE_PREFIX, packageDeserializer);
     }

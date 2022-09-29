@@ -8,7 +8,7 @@ import static by.aurorasoft.signum.protocol.wialon.model.LoginPackage.PACKAGE_PR
 import static by.aurorasoft.signum.protocol.wialon.model.Package.PACKAGE_POSTFIX;
 
 @Component
-public final class RequestLoginPackageDeserializer implements PackageDeserializer {
+public final class LoginPackageDeserializer implements PackageDeserializer {
     private static final String REGEX_DELIMITER_IMEI_AND_PASSWORD = ";";
     private static final int INDEX_IMEI = 0;
     private static final int INDEX_PASSWORD = 1;

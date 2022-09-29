@@ -16,7 +16,7 @@ import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Component
-public final class RequestBlackBoxPackageDeserializer implements PackageDeserializer {
+public final class BlackBoxPackageDeserializer implements PackageDeserializer {
     private static final String REGEX_MESSAGES_DELIMITER = "\\|";
 
     private final MessageParser messageParser;

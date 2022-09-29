@@ -11,7 +11,7 @@ import static by.aurorasoft.signum.protocol.wialon.model.PingPackage.PACKAGE_DES
 public final class PingPackageDecoder extends PackageDecoder {
 
     public PingPackageDecoder(@Qualifier("dataPackageDecoder") PackageDecoder nextPackageDecoder,
-                              @Qualifier("requestPingPackageDeserializer")
+                              @Qualifier("pingPackageDeserializer")
                               PackageDeserializer packageDeserializer) {
         super(nextPackageDecoder, PACKAGE_DESCRIPTION_PREFIX, packageDeserializer);
     }

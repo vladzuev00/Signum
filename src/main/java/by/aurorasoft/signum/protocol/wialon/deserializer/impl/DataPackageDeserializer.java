@@ -13,7 +13,7 @@ import static java.util.Collections.singletonList;
 
 @RequiredArgsConstructor
 @Component
-public final class RequestDataPackageDeserializer implements PackageDeserializer {
+public final class DataPackageDeserializer implements PackageDeserializer {
     private final MessageParser messageDeserializer;
 
     @Override

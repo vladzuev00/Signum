@@ -5,7 +5,7 @@ import by.aurorasoft.signum.protocol.wialon.model.PingPackage;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class RequestPingPackageDeserializer implements PackageDeserializer {
+public final class PingPackageDeserializer implements PackageDeserializer {
 
     @Override
     public PingPackage deserialize(String deserialized) {

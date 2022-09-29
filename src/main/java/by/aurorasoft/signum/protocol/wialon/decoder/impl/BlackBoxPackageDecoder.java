@@ -11,7 +11,7 @@ import static by.aurorasoft.signum.protocol.wialon.model.BlackBoxPackage.PACKAGE
 public final class BlackBoxPackageDecoder extends PackageDecoder {
 
     public BlackBoxPackageDecoder(@Qualifier("finisherPackageDecoder") PackageDecoder nextPackageDecoder,
-                                  @Qualifier("requestBlackBoxPackageDeserializer")
+                                  @Qualifier("blackBoxPackageDeserializer")
                                   PackageDeserializer packageDeserializer) {
         super(nextPackageDecoder, PACKAGE_PREFIX, packageDeserializer);
     }
