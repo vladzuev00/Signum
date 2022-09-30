@@ -1,8 +1,7 @@
 package by.aurorasoft.signum.protocol.wialon.decoder.impl;
 
-import by.aurorasoft.signum.protocol.wialon.deserializer.PackageDeserializer;
 import by.aurorasoft.signum.protocol.wialon.decoder.PackageDecoder;
-import org.springframework.beans.factory.annotation.Qualifier;
+import by.aurorasoft.signum.protocol.wialon.deserializer.impl.DataPackageDeserializer;
 import org.springframework.stereotype.Component;
 
 import static by.aurorasoft.signum.protocol.wialon.model.DataPackage.PACKAGE_PREFIX;
@@ -10,9 +9,8 @@ import static by.aurorasoft.signum.protocol.wialon.model.DataPackage.PACKAGE_PRE
 @Component
 public final class DataPackageDecoder extends PackageDecoder {
 
-    public DataPackageDecoder(@Qualifier("blackBoxPackageDecoder") PackageDecoder nextPackageDecoder,
-                              @Qualifier("dataPackageDeserializer")
-                              PackageDeserializer packageDeserializer) {
+    public DataPackageDecoder(BlackBoxPackageDecoder nextPackageDecoder,
+                              DataPackageDeserializer packageDeserializer) {
         super(nextPackageDecoder, PACKAGE_PREFIX, packageDeserializer);
     }
 }
