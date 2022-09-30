@@ -16,6 +16,7 @@ public final class RequestHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext channelHandlerContext, Object requestObject) {
         final Package requestPackage = (Package) requestObject;
-        this.starterPackageHandler.doHandle(requestPackage);
+        final String responsePackage = this.starterPackageHandler.handle(requestPackage);
+        channelHandlerContext.writeAndFlush(responsePackage);
     }
 }

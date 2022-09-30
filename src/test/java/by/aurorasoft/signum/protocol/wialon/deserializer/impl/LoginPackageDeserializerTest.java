@@ -18,7 +18,7 @@ public final class LoginPackageDeserializerTest {
 
     @Test
     public void packageShouldBeDeserialized() {
-        final String givenPackage = "#L#imei;password\r\n";
+        final String givenPackage = "#L#imei;password";
         final LoginPackage actual = this.deserializer.deserialize(givenPackage);
         final LoginPackage expected = new LoginPackage("imei", "password");
         assertEquals(expected, actual);

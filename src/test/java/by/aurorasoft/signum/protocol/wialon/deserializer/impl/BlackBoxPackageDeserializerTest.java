@@ -47,8 +47,7 @@ public final class BlackBoxPackageDeserializerTest {
                 + "161122;145644;5544.6025;N;03739.6834;E;101;16;11;178;545.4555;18;19;"
                 + "5.5,4343.454544334,454.433,1;"
                 + "keydrivercode;"
-                + "param-name:1:654322,param-name:2:66.4321,param-name:3:param-value"
-                + "\r\n";
+                + "param-name:1:654322,param-name:2:66.4321,param-name:3:param-value";
 
         final List<Message> givenMessages = List.of(
                 Message.builder()

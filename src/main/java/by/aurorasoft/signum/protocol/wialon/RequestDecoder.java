@@ -10,8 +10,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static java.util.stream.IntStream.range;
+
 @Component
 public final class RequestDecoder extends ReplayingDecoder<Package> {
+    private static final char CHARACTER_OF_END_REQUEST_PACKAGE = '\n';
+
     private final PackageDecoder starterPackageDecoder;
 
     public RequestDecoder(StarterPackageDecoder starterPackageDecoder) {
@@ -20,11 +24,24 @@ public final class RequestDecoder extends ReplayingDecoder<Package> {
 
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> outObjects) {
-        final int readableBytes = byteBuf.readableBytes();
-        final byte[] bytes = new byte[readableBytes];
-        byteBuf.readBytes(bytes);
-        final String decoded = new String(bytes);
-        final Package requestPackage = this.starterPackageDecoder.decode(decoded);
+        final String serializedPackage = findSerializedPackage(byteBuf);
+        final Package requestPackage = this.starterPackageDecoder.decode(serializedPackage);
         outObjects.add(requestPackage);
+    }
+
+    private static String findSerializedPackage(ByteBuf byteBuf) {
+        final StringBuilder requestPackageBuilder = new StringBuilder();
+        char currentAppendedCharacter;
+        do {
+            currentAppendedCharacter = (char) byteBuf.readByte();
+            requestPackageBuilder.append(currentAppendedCharacter);
+        } while (byteBuf.isReadable() && currentAppendedCharacter != CHARACTER_OF_END_REQUEST_PACKAGE);
+        removePostfix(requestPackageBuilder);
+        return requestPackageBuilder.toString();
+    }
+
+    private static void removePostfix(StringBuilder requestPackageBuilder) {
+        range(0, Package.PACKAGE_POSTFIX.length())
+                .forEach(i -> requestPackageBuilder.deleteCharAt(requestPackageBuilder.length() - 1));
     }
 }

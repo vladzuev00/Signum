@@ -60,7 +60,7 @@ public final class PackageDecoderTest {
 
     @Test
     public void packageShouldBeDecodedByNextHandlerBecauseOfNotSuitablePrefix() {
-        final String givenPackage = "#BADPREFIX#date\r\n";
+        final String givenPackage = "#CANNOT_DECODE#date\r\n";
         final Package givenResultPackage = new Package() {
         };
 

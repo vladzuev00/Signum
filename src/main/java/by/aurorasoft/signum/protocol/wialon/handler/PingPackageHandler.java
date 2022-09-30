@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public final class PingPackageHandler extends PackageHandler {
-    private static final String RESPONSE_PACKAGE = "#AP#\r\n";
+    private static final String RESPONSE_PACKAGE = "#AP#";
 
     public PingPackageHandler(DataPackageHandler nextHandler) {
         super(PingPackage.class, nextHandler);

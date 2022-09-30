@@ -41,7 +41,7 @@ public final class DataPackageDeserializerTest {
         final String givenPackage = "#D#151122;145643;5544.6025;N;03739.6834;E;100;15;10;177;545.4554;17;18;"
                 + "5.5,4343.454544334,454.433,1;"
                 + "keydrivercode;"
-                + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value\r\n";
+                + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
         final Message givenMessage = Message.builder()
                 .dateTime(parse("2022-11-15T14:56:43Z"))
                 .coordinate(new GpsCoordinate(57.406944F, 39.548332F))
