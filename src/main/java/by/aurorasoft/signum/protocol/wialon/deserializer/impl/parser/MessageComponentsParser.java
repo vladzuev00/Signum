@@ -38,7 +38,7 @@ public final class MessageComponentsParser {
     private static final int GROUP_NUMBER_ALTITUDE = 18;
     private static final int GROUP_NUMBER_AMOUNT_SATELLITE = 20;
     private static final int GROUP_NUMBER_AMOUNT_HDOP = 22;
-    private static final int GROUP_NUMBER_PARAMETERS = 34;
+    private static final int GROUP_NUMBER_PARAMETERS = 35;
 
     private static final DateTimeFormatter DATE_FORMATTER = ofPattern("ddMMyy;HHmmss");
     private static final String NOT_DEFINED_DATE_TIME_STRING = "NA;NA";
@@ -69,7 +69,7 @@ public final class MessageComponentsParser {
             + "(\\d+|(NA));"                           //amountSatellite
             + "((\\d+\\.\\d+)|(NA));"                  //hdop
             + "(((\\d+|(NA));){2})"                    //inputs, outputs
-            + "(((\\d+(\\.\\d+)?),?)*);"               //analogInputs
+            + "(((\\d+(\\.\\d+)?),?)+|(NA));"          //analogInputs
             + "(.*);"                                  //driverKeyCode
             + "((.+:[123]:.+,?)*)";                    //parameters
     private static final Pattern MESSAGE_PATTERN = compile(MESSAGE_REGEX);
