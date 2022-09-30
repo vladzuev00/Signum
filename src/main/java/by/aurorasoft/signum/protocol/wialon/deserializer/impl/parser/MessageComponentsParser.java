@@ -69,7 +69,8 @@ public final class MessageComponentsParser {
             + "(\\d+|(NA));"                           //amountSatellite
             + "((\\d+\\.\\d+)|(NA));"                  //hdop
             + "(((\\d+|(NA));){2})"                    //inputs, outputs
-            + "(((\\d+(\\.\\d+)?),?)+|(NA));"          //analogInputs
+            //NA comes from retranslator
+            + "(((\\d+(\\.\\d+)?),?)*|(NA));"          //analogInputs
             + "(.*);"                                  //driverKeyCode
             + "((.+:[123]:.+,?)*)";                    //parameters
     private static final Pattern MESSAGE_PATTERN = compile(MESSAGE_REGEX);
