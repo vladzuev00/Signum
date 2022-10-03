@@ -1,6 +1,6 @@
-package by.aurorasoft.signum.protocol.wialon.handler;
+package by.aurorasoft.signum.protocol.wialon.handler.packagehandler;
 
-import by.aurorasoft.signum.protocol.wialon.handler.data.DataPackageHandler;
+import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.data.DataPackageHandler;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import by.aurorasoft.signum.protocol.wialon.model.PingPackage;
 import org.springframework.stereotype.Component;

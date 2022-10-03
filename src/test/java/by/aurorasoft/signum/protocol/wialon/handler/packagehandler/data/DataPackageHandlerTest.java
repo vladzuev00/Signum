@@ -1,4 +1,4 @@
-package by.aurorasoft.signum.protocol.wialon.handler.data;
+package by.aurorasoft.signum.protocol.wialon.handler.packagehandler.data;
 
 import by.aurorasoft.signum.ApplicationRunner;
 import by.aurorasoft.signum.protocol.wialon.model.DataPackage;

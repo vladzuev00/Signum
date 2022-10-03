@@ -1,6 +1,6 @@
-package by.aurorasoft.signum.protocol.wialon.handler.data;
+package by.aurorasoft.signum.protocol.wialon.handler.packagehandler.data;
 
-import by.aurorasoft.signum.protocol.wialon.handler.FinisherPackageHandler;
+import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.FinisherPackageHandler;
 import by.aurorasoft.signum.protocol.wialon.model.BlackBoxPackage;
 import by.aurorasoft.signum.service.MessageService;
 import org.springframework.stereotype.Component;

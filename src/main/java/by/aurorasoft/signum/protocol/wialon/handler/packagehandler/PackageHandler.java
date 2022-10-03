@@ -1,6 +1,6 @@
-package by.aurorasoft.signum.protocol.wialon.handler;
+package by.aurorasoft.signum.protocol.wialon.handler.packagehandler;
 
-import by.aurorasoft.signum.protocol.wialon.handler.exception.NoSuitablePackageAnswererException;
+import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.exception.NoSuitablePackageHandlerException;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 
 public abstract class PackageHandler {
@@ -29,6 +29,6 @@ public abstract class PackageHandler {
         if (this.nextHandler != null) {
             return this.nextHandler.handle(requestPackage);
         }
-        throw new NoSuitablePackageAnswererException();
+        throw new NoSuitablePackageHandlerException();
     }
 }

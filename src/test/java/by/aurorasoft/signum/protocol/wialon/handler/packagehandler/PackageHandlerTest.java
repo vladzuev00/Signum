@@ -1,6 +1,6 @@
-package by.aurorasoft.signum.protocol.wialon.handler;
+package by.aurorasoft.signum.protocol.wialon.handler.packagehandler;
 
-import by.aurorasoft.signum.protocol.wialon.handler.exception.NoSuitablePackageAnswererException;
+import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.exception.NoSuitablePackageHandlerException;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import org.junit.Before;
 import org.junit.Test;
@@ -90,7 +90,7 @@ public final class PackageHandlerTest {
         assertSame(givenPackage, this.packageArgumentCaptor.getValue());
     }
 
-    @Test(expected = NoSuitablePackageAnswererException.class)
+    @Test(expected = NoSuitablePackageHandlerException.class)
     public void packageShouldNotBeHandledBecauseOfNotSuitableTypeAndNextHandlerIsNull()
             throws Exception {
         setNullInField(this.packageHandler, FIELD_NAME_NEXT_HANDLER);

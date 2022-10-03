@@ -1,4 +1,4 @@
-package by.aurorasoft.signum.protocol.wialon.handler.data;
+package by.aurorasoft.signum.protocol.wialon.handler.packagehandler.data;
 
 import by.aurorasoft.signum.entity.Message;
 import by.aurorasoft.signum.protocol.wialon.model.AbstractDataPackage;

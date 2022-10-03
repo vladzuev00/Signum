@@ -1,12 +1,12 @@
-package by.aurorasoft.signum.protocol.wialon.handler;
+package by.aurorasoft.signum.protocol.wialon.handler.packagehandler;
 
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class StarterPackageHandler extends PackageHandler {
-    public StarterPackageHandler(LoginPackageHandler nextHandler) {
-        super(null, nextHandler);
+public final class FinisherPackageHandler extends PackageHandler {
+    public FinisherPackageHandler() {
+        super(null, null);
     }
 
     @Override

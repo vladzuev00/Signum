@@ -1,4 +1,4 @@
-package by.aurorasoft.signum.protocol.wialon.handler;
+package by.aurorasoft.signum.protocol.wialon.handler.packagehandler;
 
 import by.aurorasoft.signum.protocol.wialon.model.LoginPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
