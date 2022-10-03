@@ -1,11 +1,11 @@
-package by.aurorasoft.signum.protocol.wialon;
+package by.aurorasoft.signum.protocol.wialon.decoder;
 
-import by.aurorasoft.signum.protocol.wialon.decoder.PackageDecoder;
 import by.aurorasoft.signum.protocol.wialon.decoder.impl.StarterPackageDecoder;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ReplayingDecoder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,12 +13,13 @@ import java.util.List;
 import static java.util.stream.IntStream.range;
 
 @Component
-public final class RequestDecoder extends ReplayingDecoder<Package> {
+@Slf4j
+public final class WialonDecoder extends ReplayingDecoder<Package> {
     private static final char CHARACTER_OF_END_REQUEST_PACKAGE = '\n';
 
     private final PackageDecoder starterPackageDecoder;
 
-    public RequestDecoder(StarterPackageDecoder starterPackageDecoder) {
+    public WialonDecoder(StarterPackageDecoder starterPackageDecoder) {
         this.starterPackageDecoder = starterPackageDecoder;
     }
 
@@ -27,6 +28,22 @@ public final class RequestDecoder extends ReplayingDecoder<Package> {
         final String serializedPackage = findSerializedPackage(byteBuf);
         final Package requestPackage = this.starterPackageDecoder.decode(serializedPackage);
         outObjects.add(requestPackage);
+    }
+
+    @Override
+    public void channelActive(ChannelHandlerContext context) throws Exception {
+        super.channelActive(context);
+        log.info("Channel is activated.");
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        super.channelInactive(ctx);
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        super.exceptionCaught(ctx, cause);
     }
 
     private static String findSerializedPackage(ByteBuf byteBuf) {

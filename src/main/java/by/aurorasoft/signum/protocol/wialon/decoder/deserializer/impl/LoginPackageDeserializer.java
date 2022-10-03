@@ -1,10 +1,10 @@
-package by.aurorasoft.signum.protocol.wialon.deserializer.impl;
+package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl;
 
 import by.aurorasoft.signum.protocol.wialon.model.LoginPackage;
-import by.aurorasoft.signum.protocol.wialon.deserializer.PackageDeserializer;
+import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.PackageDeserializer;
 import org.springframework.stereotype.Component;
 
-import static by.aurorasoft.signum.protocol.wialon.deserializer.PackageDeserializer.removePrefix;
+import static by.aurorasoft.signum.protocol.wialon.decoder.deserializer.PackageDeserializer.removePrefix;
 import static by.aurorasoft.signum.protocol.wialon.model.LoginPackage.PACKAGE_PREFIX;
 
 @Component

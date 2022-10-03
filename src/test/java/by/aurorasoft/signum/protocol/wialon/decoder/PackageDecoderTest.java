@@ -1,6 +1,6 @@
 package by.aurorasoft.signum.protocol.wialon.decoder;
 
-import by.aurorasoft.signum.protocol.wialon.deserializer.PackageDeserializer;
+import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.PackageDeserializer;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import org.junit.Before;
 import org.junit.Test;

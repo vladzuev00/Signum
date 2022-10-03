@@ -3,6 +3,7 @@ package by.aurorasoft.signum.protocol.wialon.deserializer.impl.parser;
 import by.aurorasoft.signum.ApplicationRunner;
 import by.aurorasoft.signum.entity.GpsCoordinate;
 import by.aurorasoft.signum.entity.Message;
+import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.MessageParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

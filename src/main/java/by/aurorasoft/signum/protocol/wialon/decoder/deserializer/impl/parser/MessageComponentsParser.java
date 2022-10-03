@@ -1,4 +1,4 @@
-package by.aurorasoft.signum.protocol.wialon.deserializer.impl.parser;
+package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser;
 
 import by.aurorasoft.signum.entity.GpsCoordinate;
 

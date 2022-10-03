@@ -2,8 +2,9 @@ package by.aurorasoft.signum.protocol.wialon.deserializer.impl;
 
 import by.aurorasoft.signum.entity.GpsCoordinate;
 import by.aurorasoft.signum.entity.Message;
-import by.aurorasoft.signum.protocol.wialon.deserializer.PackageDeserializer;
-import by.aurorasoft.signum.protocol.wialon.deserializer.impl.parser.MessageParser;
+import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.PackageDeserializer;
+import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.BlackBoxPackageDeserializer;
+import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.MessageParser;
 import by.aurorasoft.signum.protocol.wialon.model.BlackBoxPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import org.junit.Before;

@@ -2,6 +2,7 @@ package by.aurorasoft.signum.protocol.wialon.handler.packagehandler;
 
 import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.exception.NoSuitablePackageHandlerException;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
+import io.netty.channel.ChannelHandlerContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,6 +33,9 @@ public final class PackageHandlerTest {
     @Captor
     private ArgumentCaptor<Package> packageArgumentCaptor;
 
+    @Captor
+    private ArgumentCaptor<ChannelHandlerContext> contextArgumentCaptor;
+
     private PackageHandler packageHandler;
 
     @Before
@@ -40,7 +44,7 @@ public final class PackageHandlerTest {
             private final Marker marker = PackageHandlerTest.this.mockedMarker;
 
             @Override
-            protected String doHandle(Package requestPackage) {
+            protected String doHandle(Package requestPackage, ChannelHandlerContext context) {
                 this.marker.mark();
                 return HANDLED_PACKAGE;
             }
@@ -50,27 +54,33 @@ public final class PackageHandlerTest {
     @Test
     public void handlerShouldHandlePackageIndependently() {
         final HandledPackage givenPackage = new HandledPackage();
+        final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
 
-        final String actual = this.packageHandler.handle(givenPackage);
+        final String actual = this.packageHandler.handle(givenPackage, givenContext);
         assertEquals(HANDLED_PACKAGE, actual);
 
         verify(this.mockedMarker, times(1)).mark();
-        verify(this.mockedNextHandler, times(0)).handle(any(Package.class));
+        verify(this.mockedNextHandler, times(0))
+                .handle(any(Package.class), any(ChannelHandlerContext.class));
     }
 
     @Test
     public void handlerShouldDelegateHandlingPackageToNextHandlerBecauseOfNotSuitableType() {
         final Package givenPackage = new Package() {
         };
+        final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
 
-        when(this.mockedNextHandler.handle(any(Package.class))).thenReturn(HANDLED_PACKAGE);
+        when(this.mockedNextHandler.handle(any(Package.class), any(ChannelHandlerContext.class)))
+                .thenReturn(HANDLED_PACKAGE);
 
-        final String actual = this.packageHandler.handle(givenPackage);
+        final String actual = this.packageHandler.handle(givenPackage, givenContext);
         assertEquals(HANDLED_PACKAGE, actual);
 
         verify(this.mockedMarker, times(0)).mark();
-        verify(this.mockedNextHandler, times(1)).handle(this.packageArgumentCaptor.capture());
+        verify(this.mockedNextHandler, times(1))
+                .handle(this.packageArgumentCaptor.capture(), this.contextArgumentCaptor.capture());
         assertSame(givenPackage, this.packageArgumentCaptor.getValue());
+        assertSame(givenContext, this.contextArgumentCaptor.getValue());
     }
 
     @Test
@@ -79,15 +89,19 @@ public final class PackageHandlerTest {
         setNullInField(this.packageHandler, FIELD_NAME_PACKAGE_TYPE);
 
         final HandledPackage givenPackage = new HandledPackage();
+        final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
 
-        when(this.mockedNextHandler.handle(any(Package.class))).thenReturn(HANDLED_PACKAGE);
+        when(this.mockedNextHandler.handle(any(Package.class), any(ChannelHandlerContext.class)))
+                .thenReturn(HANDLED_PACKAGE);
 
-        final String actual = this.packageHandler.handle(givenPackage);
+        final String actual = this.packageHandler.handle(givenPackage, givenContext);
         assertEquals(HANDLED_PACKAGE, actual);
 
         verify(this.mockedMarker, times(0)).mark();
-        verify(this.mockedNextHandler, times(1)).handle(this.packageArgumentCaptor.capture());
+        verify(this.mockedNextHandler, times(1))
+                .handle(this.packageArgumentCaptor.capture(), this.contextArgumentCaptor.capture());
         assertSame(givenPackage, this.packageArgumentCaptor.getValue());
+        assertSame(givenContext, this.contextArgumentCaptor.getValue());
     }
 
     @Test(expected = NoSuitablePackageHandlerException.class)
@@ -97,8 +111,9 @@ public final class PackageHandlerTest {
 
         final Package givenPackage = new Package() {
         };
+        final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
 
-        this.packageHandler.handle(givenPackage);
+        this.packageHandler.handle(givenPackage, givenContext);
     }
 
     @SuppressWarnings("all")

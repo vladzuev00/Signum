@@ -1,13 +1,13 @@
-package by.aurorasoft.signum.protocol.wialon.deserializer.impl;
+package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl;
 
 import by.aurorasoft.signum.entity.Message;
-import by.aurorasoft.signum.protocol.wialon.deserializer.PackageDeserializer;
-import by.aurorasoft.signum.protocol.wialon.deserializer.impl.parser.MessageParser;
+import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.PackageDeserializer;
+import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.MessageParser;
 import by.aurorasoft.signum.protocol.wialon.model.DataPackage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import static by.aurorasoft.signum.protocol.wialon.deserializer.PackageDeserializer.removePrefix;
+import static by.aurorasoft.signum.protocol.wialon.decoder.deserializer.PackageDeserializer.removePrefix;
 import static by.aurorasoft.signum.protocol.wialon.model.DataPackage.PACKAGE_PREFIX;
 import static java.util.Collections.singletonList;
 

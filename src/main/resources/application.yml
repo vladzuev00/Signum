@@ -1,0 +1,5 @@
+netty:
+  server:
+    port: 6000
+    connectionThreads: 1
+    dataProcessThreads: 10

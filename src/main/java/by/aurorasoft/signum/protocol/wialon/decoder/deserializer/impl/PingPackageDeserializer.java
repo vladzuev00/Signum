@@ -1,6 +1,6 @@
-package by.aurorasoft.signum.protocol.wialon.deserializer.impl;
+package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl;
 
-import by.aurorasoft.signum.protocol.wialon.deserializer.PackageDeserializer;
+import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.PackageDeserializer;
 import by.aurorasoft.signum.protocol.wialon.model.PingPackage;
 import org.springframework.stereotype.Component;
 

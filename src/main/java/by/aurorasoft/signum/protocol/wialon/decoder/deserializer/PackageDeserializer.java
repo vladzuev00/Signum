@@ -1,4 +1,4 @@
-package by.aurorasoft.signum.protocol.wialon.deserializer;
+package by.aurorasoft.signum.protocol.wialon.decoder.deserializer;
 
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 

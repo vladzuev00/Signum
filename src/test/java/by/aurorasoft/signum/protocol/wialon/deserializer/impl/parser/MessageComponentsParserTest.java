@@ -1,6 +1,7 @@
 package by.aurorasoft.signum.protocol.wialon.deserializer.impl.parser;
 
 import by.aurorasoft.signum.entity.GpsCoordinate;
+import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.MessageComponentsParser;
 import org.junit.Test;
 
 import java.lang.reflect.Field;

@@ -5,6 +5,7 @@ import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.PackageHandle
 import by.aurorasoft.signum.protocol.wialon.model.AbstractDataPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import by.aurorasoft.signum.service.MessageService;
+import io.netty.channel.ChannelHandlerContext;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public abstract class AbstractDataPackageHandler<T extends AbstractDataPackage> 
 
     @SuppressWarnings("unchecked")
     @Override
-    protected final String doHandle(Package requestPackage) {
+    protected final String doHandle(Package requestPackage, ChannelHandlerContext context) {
         final T dataPackage = (T) requestPackage;
         final List<Message> messages = dataPackage.getMessages();
         final int amountSavedMessages = this.messageService.saveAndReturnSavedAmount(messages);

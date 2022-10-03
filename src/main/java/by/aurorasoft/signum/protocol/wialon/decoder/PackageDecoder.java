@@ -1,7 +1,7 @@
 package by.aurorasoft.signum.protocol.wialon.decoder;
 
 import by.aurorasoft.signum.protocol.wialon.model.Package;
-import by.aurorasoft.signum.protocol.wialon.deserializer.PackageDeserializer;
+import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.PackageDeserializer;
 
 public abstract class PackageDecoder {
     private final PackageDecoder nextDecoder;

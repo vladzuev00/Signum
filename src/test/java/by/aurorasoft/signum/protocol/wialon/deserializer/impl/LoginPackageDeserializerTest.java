@@ -1,6 +1,7 @@
 package by.aurorasoft.signum.protocol.wialon.deserializer.impl;
 
 import by.aurorasoft.signum.ApplicationRunner;
+import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.LoginPackageDeserializer;
 import by.aurorasoft.signum.protocol.wialon.model.LoginPackage;
 import org.junit.Test;
 import org.junit.runner.RunWith;

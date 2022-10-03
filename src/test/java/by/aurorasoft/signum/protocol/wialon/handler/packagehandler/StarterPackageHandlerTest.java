@@ -1,7 +1,10 @@
 package by.aurorasoft.signum.protocol.wialon.handler.packagehandler;
 
 import by.aurorasoft.signum.protocol.wialon.model.Package;
+import io.netty.channel.ChannelHandlerContext;
 import org.junit.Test;
+
+import static org.mockito.Mockito.mock;
 
 public final class StarterPackageHandlerTest {
     private final PackageHandler packageHandler;
@@ -14,6 +17,7 @@ public final class StarterPackageHandlerTest {
     public void handlerShouldNotHandlePackage() {
         final Package givenPackage = new Package() {
         };
-        this.packageHandler.doHandle(givenPackage);
+        final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
+        this.packageHandler.doHandle(givenPackage, givenContext);
     }
 }

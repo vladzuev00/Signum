@@ -1,6 +1,7 @@
 package by.aurorasoft.signum.server;
 
-import by.aurorasoft.signum.protocol.wialon.RequestDecoder;
+import by.aurorasoft.signum.config.ServerConfiguration;
+import by.aurorasoft.signum.protocol.wialon.decoder.WialonDecoder;
 import by.aurorasoft.signum.protocol.wialon.handler.RequestHandler;
 import by.aurorasoft.signum.server.exception.RunningServerException;
 import by.aurorasoft.signum.server.exception.ServerShutDownException;
@@ -13,8 +14,6 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.MessageToByteEncoder;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
@@ -22,27 +21,22 @@ import java.net.InetSocketAddress;
 
 @Component
 @Slf4j
-@PropertySource("classpath:server.properties")
 public final class Server implements AutoCloseable {
-
-    @Value("${netty.server.port}")
-    private int port;
-    private final RequestDecoder requestDecoder;
+    private final WialonDecoder requestDecoder;
     private final MessageToByteEncoder<String> responseEncoder;
     private final RequestHandler requestHandler;
     private final EventLoopGroup connectionLoopGroup;
     private final EventLoopGroup dataProcessLoopGroup;
+    private final int port;
 
-    public Server(RequestDecoder requestDecoder,
-                  MessageToByteEncoder<String> responseEncoder,
-                  RequestHandler requestHandler,
-                  @Value("${netty.server.eventLoopGroup.connection.threads}") int amountOfThreadOfConnectionLoopGroup,
-                  @Value("${netty.server.eventLoopGroup.dataProcess.threads}") int amountOfThreadsOfDataProcessLoopGroup) {
+    public Server(WialonDecoder requestDecoder, MessageToByteEncoder<String> responseEncoder,
+                  RequestHandler requestHandler, ServerConfiguration serverConfiguration) {
         this.requestDecoder = requestDecoder;
         this.responseEncoder = responseEncoder;
         this.requestHandler = requestHandler;
-        this.connectionLoopGroup = new NioEventLoopGroup(amountOfThreadOfConnectionLoopGroup);
-        this.dataProcessLoopGroup = new NioEventLoopGroup(amountOfThreadsOfDataProcessLoopGroup);
+        this.connectionLoopGroup = new NioEventLoopGroup(serverConfiguration.getConnectionThreads());
+        this.dataProcessLoopGroup = new NioEventLoopGroup(serverConfiguration.getDataProcessThreads());
+        this.port = serverConfiguration.getPort();
     }
 
     public void run() {

@@ -4,6 +4,7 @@ import by.aurorasoft.signum.entity.Message;
 import by.aurorasoft.signum.protocol.wialon.model.AbstractDataPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import by.aurorasoft.signum.service.MessageService;
+import io.netty.channel.ChannelHandlerContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,10 +41,11 @@ public final class AbstractDataPackageHandlerTest {
     public void handlerShouldHandlePackage() {
         final List<Message> givenMessages = List.of(createMessage(1), createMessage(2), createMessage(3));
         final HandledPackage givenPackage = new HandledPackage(givenMessages);
+        final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
 
         when(this.mockedService.saveAndReturnSavedAmount(anyList())).thenReturn(givenMessages.size());
 
-        final String actual = this.packageHandler.doHandle(givenPackage);
+        final String actual = this.packageHandler.doHandle(givenPackage, givenContext);
         final String expected = "#RESPONSE#3\r\n";
         assertEquals(expected, actual);
 
@@ -56,7 +58,8 @@ public final class AbstractDataPackageHandlerTest {
     public void handlerShouldNotHandlePackageOfNotSuitableType() {
         final Package givenPackage = new Package() {
         };
-        this.packageHandler.doHandle(givenPackage);
+        final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
+        this.packageHandler.doHandle(givenPackage, givenContext);
     }
 
     private static Message createMessage(long id) {
