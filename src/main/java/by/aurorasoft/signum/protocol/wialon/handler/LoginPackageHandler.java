@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public final class LoginPackageHandler extends PackageHandler {
     private static final String RESPONSE_SUCCESS_AUTHORIZE = "#AL#1";
-    private static final String RESPONSE_FAILURE_AUTHORIZE = "#AL#1";
+    private static final String RESPONSE_FAILURE_AUTHORIZE = "#AL#0";
 
     private final AuthorizationDeviceService authorizationDeviceService;
 
