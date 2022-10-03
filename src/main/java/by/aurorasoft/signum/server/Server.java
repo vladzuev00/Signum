@@ -27,31 +27,26 @@ public final class Server implements AutoCloseable {
 
     @Value("${netty.server.port}")
     private int port;
-
-    @Value("${netty.server.eventLoopGroup.connection.threads}")
-    private int amountOfThreadOfConnectionLoopGroup;
-
-    @Value("${netty.server.eventLoopGroup.dataProcess.threads}")
-    private int amountOfThreadsOfDataProcessLoopGroup;
-
-    private EventLoopGroup connectionLoopGroup;
-    private EventLoopGroup dataProcessLoopGroup;
     private final RequestDecoder requestDecoder;
     private final MessageToByteEncoder<String> responseEncoder;
     private final RequestHandler requestHandler;
+    private final EventLoopGroup connectionLoopGroup;
+    private final EventLoopGroup dataProcessLoopGroup;
 
     public Server(RequestDecoder requestDecoder,
                   MessageToByteEncoder<String> responseEncoder,
-                  RequestHandler requestHandler) {
+                  RequestHandler requestHandler,
+                  @Value("${netty.server.eventLoopGroup.connection.threads}") int amountOfThreadOfConnectionLoopGroup,
+                  @Value("${netty.server.eventLoopGroup.dataProcess.threads}") int amountOfThreadsOfDataProcessLoopGroup) {
         this.requestDecoder = requestDecoder;
         this.responseEncoder = responseEncoder;
         this.requestHandler = requestHandler;
+        this.connectionLoopGroup = new NioEventLoopGroup(amountOfThreadOfConnectionLoopGroup);
+        this.dataProcessLoopGroup = new NioEventLoopGroup(amountOfThreadsOfDataProcessLoopGroup);
     }
 
     public void run() {
         try {
-            this.connectionLoopGroup = new NioEventLoopGroup(this.amountOfThreadOfConnectionLoopGroup);
-            this.dataProcessLoopGroup = new NioEventLoopGroup(this.amountOfThreadsOfDataProcessLoopGroup);
             final ServerBootstrap serverBootstrap = new ServerBootstrap();
             serverBootstrap.group(this.connectionLoopGroup, this.dataProcessLoopGroup)
                     .channel(NioServerSocketChannel.class)
@@ -77,12 +72,8 @@ public final class Server implements AutoCloseable {
     @Override
     public void close() {
         try {
-            if (this.connectionLoopGroup != null) {
-                this.connectionLoopGroup.shutdownGracefully().sync();
-            }
-            if (this.dataProcessLoopGroup != null) {
-                this.dataProcessLoopGroup.shutdownGracefully().sync();
-            }
+            this.connectionLoopGroup.shutdownGracefully().sync();
+            this.dataProcessLoopGroup.shutdownGracefully().sync();
         } catch (final InterruptedException cause) {
             throw new ServerShutDownException(cause);
         }
