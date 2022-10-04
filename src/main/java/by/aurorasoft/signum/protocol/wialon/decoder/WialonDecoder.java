@@ -5,6 +5,7 @@ import by.aurorasoft.signum.protocol.wialon.model.Package;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ReplayingDecoder;
+import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -31,19 +32,22 @@ public final class WialonDecoder extends ReplayingDecoder<Package> {
     }
 
     @Override
-    public void channelActive(ChannelHandlerContext context) throws Exception {
-        super.channelActive(context);
+    public void channelActive(ChannelHandlerContext context) {
         log.info("Channel is activated.");
+        //super.channelActive(context);
     }
 
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        super.channelInactive(ctx);
+    public void channelInactive(ChannelHandlerContext ctx) {
+        System.out.println(ctx.channel().attr(AttributeKey.valueOf("imei")).get() + " was disconnected");
+        //super.channelInactive(ctx);
     }
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        super.exceptionCaught(ctx, cause);
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        //super.exceptionCaught(ctx, cause);
+        System.out.println(ctx.channel().attr(AttributeKey.valueOf("imei")).get() + " exception: "
+                + cause.getMessage());
     }
 
     private static String findSerializedPackage(ByteBuf byteBuf) {

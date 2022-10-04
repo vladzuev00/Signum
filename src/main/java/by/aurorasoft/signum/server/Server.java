@@ -13,17 +13,21 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.MessageToByteEncoder;
+import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
 import java.net.InetSocketAddress;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 @Component
 @Slf4j
 public final class Server implements AutoCloseable {
     private final WialonDecoder requestDecoder;
     private final MessageToByteEncoder<String> responseEncoder;
+    private final ReadTimeoutHandler readTimeoutHandler;
     private final RequestHandler requestHandler;
     private final EventLoopGroup connectionLoopGroup;
     private final EventLoopGroup dataProcessLoopGroup;
@@ -33,6 +37,7 @@ public final class Server implements AutoCloseable {
                   RequestHandler requestHandler, ServerConfiguration serverConfiguration) {
         this.requestDecoder = requestDecoder;
         this.responseEncoder = responseEncoder;
+        this.readTimeoutHandler = new ReadTimeoutHandler(serverConfiguration.getTimeoutSeconds(), SECONDS);
         this.requestHandler = requestHandler;
         this.connectionLoopGroup = new NioEventLoopGroup(serverConfiguration.getConnectionThreads());
         this.dataProcessLoopGroup = new NioEventLoopGroup(serverConfiguration.getDataProcessThreads());
@@ -51,6 +56,7 @@ public final class Server implements AutoCloseable {
                         public void initChannel(SocketChannel socketChannel) {
                             socketChannel.pipeline().addLast(
                                     Server.this.requestDecoder,
+                                    Server.this.readTimeoutHandler,
                                     Server.this.responseEncoder,
                                     Server.this.requestHandler);
                         }

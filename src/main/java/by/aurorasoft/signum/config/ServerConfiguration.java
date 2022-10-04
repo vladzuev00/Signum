@@ -17,4 +17,5 @@ public class ServerConfiguration {
     private int port;
     private int connectionThreads;
     private int dataProcessThreads;
+    private int timeoutSeconds;
 }
