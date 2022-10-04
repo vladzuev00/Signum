@@ -3,8 +3,14 @@ package by.aurorasoft.signum.protocol.wialon.handler.packagehandler;
 import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.exception.NoSuitablePackageHandlerException;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.AttributeKey;
+
+import static io.netty.util.AttributeKey.valueOf;
 
 public abstract class PackageHandler {
+    private static final String NAME_CHANNEL_ATTRIBUTE_KEY_IMEI = "imei";
+    protected static final AttributeKey<String> CHANNEL_ATTRIBUTE_KEY_IMEI = valueOf(NAME_CHANNEL_ATTRIBUTE_KEY_IMEI);
+
     private final Class<? extends Package> packageType;
     private final PackageHandler nextHandler;
 

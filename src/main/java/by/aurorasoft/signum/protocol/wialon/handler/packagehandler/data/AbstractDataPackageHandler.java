@@ -5,7 +5,9 @@ import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.PackageHandle
 import by.aurorasoft.signum.protocol.wialon.model.AbstractDataPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import by.aurorasoft.signum.service.MessageService;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.Attribute;
 
 import java.util.List;
 
@@ -22,9 +24,16 @@ public abstract class AbstractDataPackageHandler<T extends AbstractDataPackage> 
     protected final String doHandle(Package requestPackage, ChannelHandlerContext context) {
         final T dataPackage = (T) requestPackage;
         final List<Message> messages = dataPackage.getMessages();
-        final int amountSavedMessages = this.messageService.saveAndReturnSavedAmount(messages);
+        final String trackerImei = findTrackerImei(context);
+        final int amountSavedMessages = this.messageService.saveAndReturnSavedAmount(messages, trackerImei);
         return this.createResponse(amountSavedMessages);
     }
 
     protected abstract String createResponse(int amountSavedMessages);
+
+    private static String findTrackerImei(ChannelHandlerContext context) {
+        final Channel channel = context.channel();
+        final Attribute<String> imeiAttribute = channel.attr(CHANNEL_ATTRIBUTE_KEY_IMEI);
+        return imeiAttribute.get();
+    }
 }

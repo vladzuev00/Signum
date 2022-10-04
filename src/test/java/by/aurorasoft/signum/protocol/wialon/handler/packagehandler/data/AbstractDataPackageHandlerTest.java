@@ -4,7 +4,10 @@ import by.aurorasoft.signum.dto.Message;
 import by.aurorasoft.signum.protocol.wialon.model.AbstractDataPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import by.aurorasoft.signum.service.MessageService;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.Attribute;
+import io.netty.util.AttributeKey;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +33,9 @@ public final class AbstractDataPackageHandlerTest {
     @Captor
     private ArgumentCaptor<List<Message>> messagesArgumentCaptor;
 
+    @Captor
+    private ArgumentCaptor<String> stringArgumentCaptor;
+
     private AbstractDataPackageHandler<HandledPackage> packageHandler;
 
     @Before
@@ -37,22 +43,34 @@ public final class AbstractDataPackageHandlerTest {
         this.packageHandler = new HandledPackageHandler(this.mockedService);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void handlerShouldHandlePackage() {
         final List<Message> givenMessages = List.of(Message.builder().build(), Message.builder().build(),
                 Message.builder().build());
         final HandledPackage givenPackage = new HandledPackage(givenMessages);
+
         final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
 
-        when(this.mockedService.saveAndReturnSavedAmount(anyList())).thenReturn(givenMessages.size());
+        final Channel givenChannel = mock(Channel.class);
+        when(givenContext.channel()).thenReturn(givenChannel);
+
+        final Attribute<String> givenImeiAttribute = mock(Attribute.class);
+        when(givenChannel.attr(any(AttributeKey.class))).thenReturn(givenImeiAttribute);
+
+        final String givenImei = "11111222223333344444";
+        when(givenImeiAttribute.get()).thenReturn(givenImei);
+
+        when(this.mockedService.saveAndReturnSavedAmount(anyList(), anyString())).thenReturn(givenMessages.size());
 
         final String actual = this.packageHandler.doHandle(givenPackage, givenContext);
         final String expected = "#RESPONSE#3\r\n";
         assertEquals(expected, actual);
 
         verify(this.mockedService, times(1))
-                .saveAndReturnSavedAmount(this.messagesArgumentCaptor.capture());
+                .saveAndReturnSavedAmount(this.messagesArgumentCaptor.capture(), this.stringArgumentCaptor.capture());
         assertEquals(givenMessages, this.messagesArgumentCaptor.getValue());
+        assertEquals(givenImei, this.stringArgumentCaptor.getValue());
     }
 
     @Test(expected = ClassCastException.class)
