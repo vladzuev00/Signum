@@ -1,6 +1,6 @@
 package by.aurorasoft.signum.protocol.wialon.model;
 
-import by.aurorasoft.signum.entity.Message;
+import by.aurorasoft.signum.entity.MessageEntity;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,5 +13,5 @@ import java.util.List;
 @EqualsAndHashCode
 @ToString
 public abstract class AbstractDataPackage implements Package {
-    private final List<Message> messages;
+    private final List<MessageEntity> messages;
 }

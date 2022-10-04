@@ -1,6 +1,6 @@
 package by.aurorasoft.signum.protocol.wialon.handler.packagehandler.data;
 
-import by.aurorasoft.signum.entity.Message;
+import by.aurorasoft.signum.entity.MessageEntity;
 import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.PackageHandler;
 import by.aurorasoft.signum.protocol.wialon.model.AbstractDataPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
@@ -21,7 +21,7 @@ public abstract class AbstractDataPackageHandler<T extends AbstractDataPackage> 
     @Override
     protected final String doHandle(Package requestPackage, ChannelHandlerContext context) {
         final T dataPackage = (T) requestPackage;
-        final List<Message> messages = dataPackage.getMessages();
+        final List<MessageEntity> messages = dataPackage.getMessages();
         final int amountSavedMessages = this.messageService.saveAndReturnSavedAmount(messages);
         return this.createResponse(amountSavedMessages);
     }

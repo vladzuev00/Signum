@@ -1,8 +1,8 @@
 package by.aurorasoft.signum.protocol.wialon.deserializer.impl.parser;
 
 import by.aurorasoft.signum.ApplicationRunner;
-import by.aurorasoft.signum.entity.Message;
-import by.aurorasoft.signum.entity.Message.GpsCoordinate;
+import by.aurorasoft.signum.entity.MessageEntity;
+import by.aurorasoft.signum.entity.MessageEntity.GpsCoordinate;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.MessageParser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,8 +27,8 @@ public final class MessageParserTest {
                 + "keydrivercode;"
                 + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
 
-        final Message actual = this.messageParser.parse(givenMessage);
-        final Message expected = Message.builder()
+        final MessageEntity actual = this.messageParser.parse(givenMessage);
+        final MessageEntity expected = MessageEntity.builder()
                 .dateTime(parse("2022-11-15T14:56:43Z"))
                 .coordinate(new GpsCoordinate(57.406944F, 39.548332F))
                 .speed(100)

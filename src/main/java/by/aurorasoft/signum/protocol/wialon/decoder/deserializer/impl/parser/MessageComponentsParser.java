@@ -1,6 +1,6 @@
 package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser;
 
-import by.aurorasoft.signum.entity.Message.GpsCoordinate;
+import by.aurorasoft.signum.entity.MessageEntity.GpsCoordinate;
 
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;

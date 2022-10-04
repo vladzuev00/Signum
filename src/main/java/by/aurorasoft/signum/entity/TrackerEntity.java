@@ -13,11 +13,11 @@ import javax.persistence.Table;
 @Getter
 @ToString
 @Builder
-public class Tracker extends Entity {
+public class TrackerEntity extends BaseEntity {
 
     @Column(name = "imei")
     private String imei;
 
-    @Column(name = "phoneNumber")
+    @Column(name = "phone_number")
     private String phoneNumber;
 }

@@ -5,23 +5,18 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.Instant;
 
-import static javax.persistence.CascadeType.*;
-import static javax.persistence.FetchType.LAZY;
-import static javax.persistence.TemporalType.TIMESTAMP;
-
-@javax.persistence.Entity
+@Entity
 @Table(name = "messages")
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
 @Builder
-public class Message extends Entity {
-    @ManyToOne(fetch = LAZY, cascade = {PERSIST, MERGE, REFRESH})
+public class MessageEntity extends BaseEntity {
+    @ManyToOne
     @JoinColumn(name = "tracker_id")
-    private Tracker tracker;
+    private TrackerEntity tracker;
 
-    @Temporal(TIMESTAMP)
     @Column(name = "datetime")
     private Instant dateTime;
 
@@ -37,7 +32,7 @@ public class Message extends Entity {
     @Column(name = "altitude")
     private int altitude;
 
-    @Column(name = "amountSatellite")
+    @Column(name = "amount_satellite")
     private int amountSatellite;
 
     @Column(name = "hdop")
@@ -45,6 +40,15 @@ public class Message extends Entity {
 
     @Column(name = "params")
     private String parameters;
+
+    @Override
+    public String toString() {
+        return super.toString() + "[trackerId = " + this.tracker.getId() + ", "
+                + "dateTime = " + this.getDateTime() + ", coordinate = " + this.getCoordinate() + ", "
+                + "speed = " + this.getSpeed() + ", course = " + this.getCourse() + ", "
+                + "altitude = " + this.getAltitude() + ", amountSatellite = " + this.getAmountSatellite() + ", "
+                + "hdop = " + this.getHdop() + ", parameters = " + this.getParameters() + "]";
+    }
 
     @Embeddable
     @NoArgsConstructor
@@ -60,14 +64,5 @@ public class Message extends Entity {
 
         @Column(name = "longitude")
         private float longitude;
-    }
-
-    @Override
-    public String toString() {
-        return super.toString() + "[trackerId = " + this.tracker.getId() + ", "
-                + "dateTime = " + this.getDateTime() + ", coordinate = " + this.getCoordinate() + ", "
-                + "speed = " + this.getSpeed() + ", course = " + this.getCourse() + ", "
-                + "altitude = " + this.getAltitude() + ", amountSatellite = " + this.getAmountSatellite() + ", "
-                + "hdop = " + this.getHdop() + ", parameters = " + this.getParameters() + "]";
     }
 }

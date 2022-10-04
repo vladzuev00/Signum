@@ -1,6 +1,6 @@
 package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser;
 
-import by.aurorasoft.signum.entity.Message;
+import by.aurorasoft.signum.entity.MessageEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public final class MessageParser {
 
-    public Message parse(String source) {
+    public MessageEntity parse(String source) {
         final MessageComponentsParser parser = new MessageComponentsParser(source);
-        return Message.builder()
+        return MessageEntity.builder()
                 .dateTime(parser.parseDateTime())
                 .coordinate(parser.parseGpsCoordinate())
                 .speed(parser.parseSpeed())
