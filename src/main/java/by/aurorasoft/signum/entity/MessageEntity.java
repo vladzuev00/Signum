@@ -11,6 +11,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @Setter
 @Getter
+@ToString
 @Builder
 public class MessageEntity extends BaseEntity {
     @ManyToOne
@@ -40,15 +41,6 @@ public class MessageEntity extends BaseEntity {
 
     @Column(name = "params")
     private String parameters;
-
-    @Override
-    public String toString() {
-        return super.toString() + "[trackerId = " + this.tracker.getId() + ", "
-                + "dateTime = " + this.getDateTime() + ", coordinate = " + this.getCoordinate() + ", "
-                + "speed = " + this.getSpeed() + ", course = " + this.getCourse() + ", "
-                + "altitude = " + this.getAltitude() + ", amountSatellite = " + this.getAmountSatellite() + ", "
-                + "hdop = " + this.getHdop() + ", parameters = " + this.getParameters() + "]";
-    }
 
     @Embeddable
     @NoArgsConstructor

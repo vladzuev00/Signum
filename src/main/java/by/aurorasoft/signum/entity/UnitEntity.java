@@ -26,6 +26,6 @@ public class UnitEntity extends NamedEntity {
     @Override
     public String toString() {
         return super.toString() + "[name = " + this.getName() + ", userId = " + this.user.getId()
-                + ", trackerId = " + this.tracker.getId() + "]";
+                + ", tracker = " + this.tracker + "]";
     }
 }
