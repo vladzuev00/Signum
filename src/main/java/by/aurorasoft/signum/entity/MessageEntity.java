@@ -21,8 +21,11 @@ public class MessageEntity extends BaseEntity {
     @Column(name = "datetime")
     private Instant dateTime;
 
-    @Embedded
-    private GpsCoordinate coordinate;
+    @Column(name = "latitude")
+    private float latitude;
+
+    @Column(name = "longitude")
+    private float longitude;
 
     @Column(name = "speed")
     private int speed;
@@ -41,20 +44,4 @@ public class MessageEntity extends BaseEntity {
 
     @Column(name = "params")
     private String parameters;
-
-    @Embeddable
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Setter
-    @Getter
-    @EqualsAndHashCode
-    @ToString
-    public static final class GpsCoordinate {
-
-        @Column(name = "latitude")
-        private float latitude;
-
-        @Column(name = "longitude")
-        private float longitude;
-    }
 }

@@ -1,7 +1,6 @@
 package by.aurorasoft.signum.protocol.wialon.deserializer.impl;
 
 import by.aurorasoft.signum.entity.MessageEntity;
-import by.aurorasoft.signum.entity.MessageEntity.GpsCoordinate;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.PackageDeserializer;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.BlackBoxPackageDeserializer;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.MessageParser;
@@ -53,7 +52,8 @@ public final class BlackBoxPackageDeserializerTest {
         final List<MessageEntity> givenMessages = List.of(
                 MessageEntity.builder()
                         .dateTime(parse("2022-11-15T14:56:43Z"))
-                        .coordinate(new GpsCoordinate(57.406944F, 39.548332F))
+                        .latitude(57.406944F)
+                        .longitude(39.548332F)
                         .speed(100)
                         .course(15)
                         .altitude(10)
@@ -63,7 +63,8 @@ public final class BlackBoxPackageDeserializerTest {
                         .build(),
                 MessageEntity.builder()
                         .dateTime(parse("2022-11-16T14:56:44Z"))
-                        .coordinate(new GpsCoordinate(57.406944F, 39.548332F))
+                        .latitude(57.406944F)
+                        .longitude(39.548332F)
                         .speed(101)
                         .course(16)
                         .altitude(11)

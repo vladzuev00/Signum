@@ -12,7 +12,8 @@ public final class MessageParser {
         final MessageComponentsParser parser = new MessageComponentsParser(source);
         return MessageEntity.builder()
                 .dateTime(parser.parseDateTime())
-                .coordinate(parser.parseGpsCoordinate())
+                .latitude(parser.parseLatitude())
+                .longitude(parser.parseLongitude())
                 .speed(parser.parseSpeed())
                 .course(parser.parseCourse())
                 .altitude(parser.parseAltitude())

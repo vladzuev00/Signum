@@ -1,7 +1,6 @@
 package by.aurorasoft.signum.protocol.wialon.deserializer.impl;
 
 import by.aurorasoft.signum.entity.MessageEntity;
-import by.aurorasoft.signum.entity.MessageEntity.GpsCoordinate;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.PackageDeserializer;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.DataPackageDeserializer;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.MessageParser;
@@ -45,7 +44,8 @@ public final class DataPackageDeserializerTest {
                 + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
         final MessageEntity givenMessage = MessageEntity.builder()
                 .dateTime(parse("2022-11-15T14:56:43Z"))
-                .coordinate(new GpsCoordinate(57.406944F, 39.548332F))
+                .latitude(57.406944F)
+                .longitude(39.548332F)
                 .speed(100)
                 .course(15)
                 .altitude(10)
