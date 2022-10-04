@@ -6,11 +6,9 @@ import by.aurorasoft.signum.service.AuthorizationDeviceService;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.Attribute;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Component
-@Slf4j
 public final class LoginPackageHandler extends PackageHandler {
     private static final String RESPONSE_SUCCESS_AUTHORIZE = "#AL#1";
     private static final String RESPONSE_FAILURE_AUTHORIZE = "#AL#0";
