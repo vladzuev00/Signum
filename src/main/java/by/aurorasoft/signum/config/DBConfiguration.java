@@ -1,9 +1,8 @@
 package by.aurorasoft.signum.config;
 
-import by.aurorasoft.signum.config.property.DataSourceProperty;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,18 +11,25 @@ import javax.sql.DataSource;
 @Configuration
 public class DBConfiguration {
 
-    @Autowired
+    @Value("${db.datasource.url}")
+    private String url;
+
+    @Value("${db.datasource.username}")
+    private String username;
+
+    @Value("${db.datasource.password}")
+    private String password;
+
+    @Value("${db.datasource.driver-class-name}")
+    private String driverClassName;
+
     @Bean
-    public DataSource dataSource(DataSourceProperty dataSourceProperty) {
+    public DataSource dataSource() {
         final HikariConfig hikariConfig = new HikariConfig();
-//        hikariConfig.setDriverClassName(dataSourceProperty.getDriverClassName());
-//        hikariConfig.setJdbcUrl(dataSourceProperty.getUrl());
-//        hikariConfig.setUsername(dataSourceProperty.getUsername());
-//        hikariConfig.setPassword(dataSourceProperty.getPassword());
-        hikariConfig.setDriverClassName("org.postgresql.Driver");
-        hikariConfig.setJdbcUrl("jdbc:postgresql://localhost:5432/signum");
-        hikariConfig.setUsername("postgres");
-        hikariConfig.setPassword("root");
+        hikariConfig.setJdbcUrl(this.url);
+        hikariConfig.setUsername(this.username);
+        hikariConfig.setPassword(this.password);
+        hikariConfig.setDriverClassName(this.driverClassName);
         return new HikariDataSource(hikariConfig);
     }
 }
