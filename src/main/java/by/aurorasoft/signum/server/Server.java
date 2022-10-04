@@ -1,6 +1,6 @@
 package by.aurorasoft.signum.server;
 
-import by.aurorasoft.signum.config.ServerConfiguration;
+import by.aurorasoft.signum.config.ServerProperty;
 import by.aurorasoft.signum.protocol.wialon.decoder.WialonDecoder;
 import by.aurorasoft.signum.protocol.wialon.handler.RequestHandler;
 import by.aurorasoft.signum.server.exception.RunningServerException;
@@ -34,7 +34,7 @@ public final class Server implements AutoCloseable {
     private final int port;
 
     public Server(WialonDecoder requestDecoder, MessageToByteEncoder<String> responseEncoder,
-                  RequestHandler requestHandler, ServerConfiguration serverConfiguration) {
+                  RequestHandler requestHandler, ServerProperty serverConfiguration) {
         this.requestDecoder = requestDecoder;
         this.responseEncoder = responseEncoder;
         this.readTimeoutHandler = new ReadTimeoutHandler(serverConfiguration.getTimeoutSeconds(), SECONDS);

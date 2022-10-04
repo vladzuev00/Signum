@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @NoArgsConstructor
 @Setter
 @Getter
-public class ServerConfiguration {
+public class ServerProperty {
     private int port;
     private int connectionThreads;
     private int dataProcessThreads;
