@@ -3,7 +3,10 @@ package by.aurorasoft.signum.protocol.wialon.handler.packagehandler;
 import by.aurorasoft.signum.protocol.wialon.model.LoginPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import by.aurorasoft.signum.service.AuthorizationDeviceService;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.Attribute;
+import io.netty.util.AttributeKey;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,6 +29,9 @@ public final class LoginPackageHandlerTest {
     @Captor
     private ArgumentCaptor<LoginPackage> loginPackageArgumentCaptor;
 
+    @Captor
+    private ArgumentCaptor<String> stringArgumentCaptor;
+
     private PackageHandler packageHandler;
 
     @Before
@@ -33,10 +39,19 @@ public final class LoginPackageHandlerTest {
         this.packageHandler = new LoginPackageHandler(null, this.mockedService);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void handlerShouldHandlePackageAndAuthorizationShouldBeSuccess() {
-        final Package givenPackage = new LoginPackage("12345678912345678911", "password");
+        final String givenImei = "12345678912345678911";
+        final Package givenPackage = new LoginPackage(givenImei, "password");
+
         final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
+
+        final Channel givenChannel = mock(Channel.class);
+        when(givenContext.channel()).thenReturn(givenChannel);
+
+        final Attribute<String> givenImeiAttribute = mock(Attribute.class);
+        when(givenChannel.attr(any(AttributeKey.class))).thenReturn(givenImeiAttribute);
 
         when(this.mockedService.authorize(any(LoginPackage.class))).thenReturn(true);
 
@@ -46,13 +61,25 @@ public final class LoginPackageHandlerTest {
 
         verify(this.mockedService, times(1))
                 .authorize(this.loginPackageArgumentCaptor.capture());
+        verify(givenImeiAttribute, times(1)).set(this.stringArgumentCaptor.capture());
+
         assertSame(givenPackage, this.loginPackageArgumentCaptor.getValue());
+        assertSame(givenImei, this.stringArgumentCaptor.getValue());
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void handlerShouldHandlePackageAndAuthorizationShouldBeFailure() {
-        final Package givenPackage = new LoginPackage("12345678912345678911", "password");
+        final String givenImei = "12345678912345678911";
+        final Package givenPackage = new LoginPackage(givenImei, "password");
+
         final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
+
+        final Channel givenChannel = mock(Channel.class);
+        when(givenContext.channel()).thenReturn(givenChannel);
+
+        final Attribute<String> givenImeiAttribute = mock(Attribute.class);
+        when(givenChannel.attr(any(AttributeKey.class))).thenReturn(givenImeiAttribute);
 
         when(this.mockedService.authorize(any(LoginPackage.class))).thenReturn(false);
 
@@ -61,7 +88,10 @@ public final class LoginPackageHandlerTest {
         assertEquals(expected, actual);
 
         verify(this.mockedService, times(1)).authorize(this.loginPackageArgumentCaptor.capture());
+        verify(givenImeiAttribute, times(1)).set(this.stringArgumentCaptor.capture());
+
         assertSame(givenPackage, this.loginPackageArgumentCaptor.getValue());
+        assertSame(givenImei, this.stringArgumentCaptor.getValue());
     }
 
     @Test(expected = ClassCastException.class)
