@@ -2,7 +2,6 @@ package by.aurorasoft.signum.entity;
 
 import lombok.*;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -14,8 +13,6 @@ import javax.persistence.Table;
 @Getter
 @ToString
 @Builder
-public class UserEntity extends BaseEntity {
+public class UserEntity extends NamedEntity {
 
-    @Column(name = "name")
-    private String name;
 }

@@ -14,18 +14,15 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Setter
 @Getter
 @ToString
-public abstract class Entity {
+public abstract class BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "deleted")
-    private boolean deleted;
-
     @Override
-    public final boolean equals(Object otherObject) {
+    public boolean equals(Object otherObject) {
         if (this == otherObject) {
             return true;
         }
@@ -35,12 +32,12 @@ public abstract class Entity {
         if (this.getClass() != otherObject.getClass()) {
             return false;
         }
-        final Entity other = (Entity) otherObject;
+        final BaseEntity other = (BaseEntity) otherObject;
         return Objects.equals(this.getId(), other.getId());
     }
 
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         return Objects.hashCode(this.getId());
     }
 }

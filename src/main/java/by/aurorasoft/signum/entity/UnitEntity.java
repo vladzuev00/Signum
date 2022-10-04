@@ -13,10 +13,7 @@ import static javax.persistence.FetchType.LAZY;
 @Setter
 @Getter
 @Builder
-public class UnitEntity extends BaseEntity {
-
-    @Column(name = "name")
-    private String name;
+public class UnitEntity extends NamedEntity {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
