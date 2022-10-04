@@ -3,4 +3,11 @@ netty:
     port: 6000
     connectionThreads: 1
     dataProcessThreads: 10
-    timeoutSeconds: 5
+    timeoutSeconds: 50
+
+db:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/signum
+    username: postgres
+    password: root
+    driverClassName: org.postgresql.Driver

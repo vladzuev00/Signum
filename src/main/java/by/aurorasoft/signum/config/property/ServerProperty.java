@@ -1,4 +1,4 @@
-package by.aurorasoft.signum.config;
+package by.aurorasoft.signum.config.property;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

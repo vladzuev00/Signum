@@ -7,7 +7,7 @@ import javax.persistence.*;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
-@Table(name = "units")
+@Table(name = "unit")
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter

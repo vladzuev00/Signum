@@ -1,6 +1,6 @@
 package by.aurorasoft.signum.protocol.wialon.handler.packagehandler.data;
 
-import by.aurorasoft.signum.entity.MessageEntity;
+import by.aurorasoft.signum.dto.Message;
 import by.aurorasoft.signum.protocol.wialon.model.AbstractDataPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import by.aurorasoft.signum.service.MessageService;
@@ -28,7 +28,7 @@ public final class AbstractDataPackageHandlerTest {
     private MessageService mockedService;
 
     @Captor
-    private ArgumentCaptor<List<MessageEntity>> messagesArgumentCaptor;
+    private ArgumentCaptor<List<Message>> messagesArgumentCaptor;
 
     private AbstractDataPackageHandler<HandledPackage> packageHandler;
 
@@ -39,7 +39,8 @@ public final class AbstractDataPackageHandlerTest {
 
     @Test
     public void handlerShouldHandlePackage() {
-        final List<MessageEntity> givenMessages = List.of(createMessage(1), createMessage(2), createMessage(3));
+        final List<Message> givenMessages = List.of(Message.builder().build(), Message.builder().build(),
+                Message.builder().build());
         final HandledPackage givenPackage = new HandledPackage(givenMessages);
         final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
 
@@ -62,15 +63,9 @@ public final class AbstractDataPackageHandlerTest {
         this.packageHandler.doHandle(givenPackage, givenContext);
     }
 
-    private static MessageEntity createMessage(long id) {
-        final MessageEntity createdMessage = new MessageEntity();
-        createdMessage.setId(id);
-        return createdMessage;
-    }
-
     @SuppressWarnings("all")
     private static final class HandledPackage extends AbstractDataPackage {
-        public HandledPackage(List<MessageEntity> messages) {
+        public HandledPackage(List<Message> messages) {
             super(messages);
         }
     }

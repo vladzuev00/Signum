@@ -1,5 +1,7 @@
 package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser;
 
+import by.aurorasoft.signum.dto.Message.GpsCoordinate;
+
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
@@ -90,14 +92,12 @@ public final class MessageComponentsParser {
                 : NOT_DEFINED_DATE_TIME;
     }
 
-    public float parseLatitude() {
-        return this.parseGpsCoordinate(GROUP_NUMBER_LATITUDE_DEGREES, GROUP_NUMBER_LATITUDE_MINUTE,
+    public GpsCoordinate parseCoordinate() {
+        final float latitude = this.parseGpsCoordinate(GROUP_NUMBER_LATITUDE_DEGREES, GROUP_NUMBER_LATITUDE_MINUTE,
                 GROUP_NUMBER_LATITUDE_MINUTE_SHARE, GROUP_NUMBER_LATITUDE_TYPE, ALIAS_SOUTH_LATITUDE_TYPE);
-    }
-
-    public float parseLongitude() {
-        return this.parseGpsCoordinate(GROUP_NUMBER_LONGITUDE_DEGREES, GROUP_NUMBER_LONGITUDE_MINUTE,
+        final float longitude = this.parseGpsCoordinate(GROUP_NUMBER_LONGITUDE_DEGREES, GROUP_NUMBER_LONGITUDE_MINUTE,
                 GROUP_NUMBER_LONGITUDE_MINUTE_SHARE, GROUP_NUMBER_LONGITUDE_TYPE, ALIAS_WESTERN_TYPE);
+        return new GpsCoordinate(latitude, longitude);
     }
 
     public int parseSpeed() {

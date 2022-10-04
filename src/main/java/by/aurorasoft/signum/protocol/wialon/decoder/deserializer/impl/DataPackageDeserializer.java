@@ -1,6 +1,6 @@
 package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl;
 
-import by.aurorasoft.signum.entity.MessageEntity;
+import by.aurorasoft.signum.dto.Message;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.PackageDeserializer;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.MessageParser;
 import by.aurorasoft.signum.protocol.wialon.model.DataPackage;
@@ -19,7 +19,7 @@ public final class DataPackageDeserializer implements PackageDeserializer {
     @Override
     public DataPackage deserialize(String deserialized) {
         final String serializedMessage = removePrefix(deserialized, PACKAGE_PREFIX);
-        final MessageEntity message = this.messageParser.parse(serializedMessage);
+        final Message message = this.messageParser.parse(serializedMessage);
         return new DataPackage(singletonList(message));
     }
 }

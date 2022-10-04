@@ -6,7 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Table;
 
 @javax.persistence.Entity
-@Table(name = "messages")
+@Table(name = "tracker")
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter

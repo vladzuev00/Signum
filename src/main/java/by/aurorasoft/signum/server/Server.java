@@ -1,6 +1,6 @@
 package by.aurorasoft.signum.server;
 
-import by.aurorasoft.signum.config.ServerProperty;
+import by.aurorasoft.signum.config.property.ServerProperty;
 import by.aurorasoft.signum.protocol.wialon.decoder.WialonDecoder;
 import by.aurorasoft.signum.protocol.wialon.handler.RequestHandler;
 import by.aurorasoft.signum.server.exception.RunningServerException;

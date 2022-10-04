@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "messages")
+@Table(name = "message")
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
@@ -18,7 +18,7 @@ public class MessageEntity extends BaseEntity {
     @JoinColumn(name = "tracker_id")
     private TrackerEntity tracker;
 
-    @Column(name = "datetime")
+    @Column(name = "time")
     private Instant dateTime;
 
     @Column(name = "latitude")

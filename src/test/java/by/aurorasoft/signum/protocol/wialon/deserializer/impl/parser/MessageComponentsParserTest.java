@@ -1,5 +1,6 @@
 package by.aurorasoft.signum.protocol.wialon.deserializer.impl.parser;
 
+import by.aurorasoft.signum.dto.Message.GpsCoordinate;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.MessageComponentsParser;
 import org.junit.Test;
 
@@ -78,29 +79,16 @@ public final class MessageComponentsParserTest {
     }
 
     @Test
-    public void latitudeShouldBeParsed() {
+    public void coordinateShouldBeParsed() {
         final String givenMessage = "151122;145643;5544.6025;N;03739.6834;E;100;15;10;177;545.4554;17;18;"
                 + "5.5,4343.454544334,454.433,1;"
                 + "keydrivercode;"
                 + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
         final MessageComponentsParser parser = new MessageComponentsParser(givenMessage);
 
-        final float actual = parser.parseLatitude();
-        final float expected = 57.406944F;
-        assertEquals(expected, actual, 0.);
-    }
-
-    @Test
-    public void longitudeShouldBeParsed() {
-        final String givenMessage = "151122;145643;5544.6025;N;03739.6834;E;100;15;10;177;545.4554;17;18;"
-                + "5.5,4343.454544334,454.433,1;"
-                + "keydrivercode;"
-                + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
-        final MessageComponentsParser parser = new MessageComponentsParser(givenMessage);
-
-        final float actual = parser.parseLongitude();
-        final float expected = 39.548332F;
-        assertEquals(expected, actual, 0.);
+        final GpsCoordinate actual = parser.parseCoordinate();
+        final GpsCoordinate expected = new GpsCoordinate(57.406944F, 39.548332F);
+        assertEquals(expected, actual);
     }
 
     @Test
