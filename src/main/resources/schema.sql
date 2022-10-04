@@ -4,12 +4,20 @@ CREATE TABLE "user"(
                       deleted BOOLEAN NOT NULL DEFAULT false
 );
 
+CREATE UNIQUE INDEX unique_name_not_deleted_users
+ON "user"(name)
+WHERE deleted = false;
+
 CREATE TABLE tracker(
                         id SERIAL PRIMARY KEY,
                         imei VARCHAR(20) NOT NULL,
                         phone_number VARCHAR(20) NOT NULL,
                         deleted BOOLEAN NOT NULL DEFAULT false
 );
+
+CREATE UNIQUE INDEX unique_imei_not_deleted_trackers
+    ON tracker(imei)
+    WHERE deleted = false;
 
 CREATE TABLE unit(
                       id SERIAL PRIMARY KEY,
@@ -19,6 +27,10 @@ CREATE TABLE unit(
                       deleted BOOLEAN NOT NULL DEFAULT false
 
 );
+
+CREATE UNIQUE INDEX unique_name_not_deleted_units
+    ON unit(name)
+    WHERE deleted = false;
 
 CREATE TABLE message(
                          id BIGSERIAL PRIMARY KEY,
