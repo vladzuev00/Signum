@@ -4,7 +4,8 @@ import by.nhorushko.crudgeneric.v2.domain.AbstractDto;
 import lombok.Value;
 
 @Value
-public class UserDto implements AbstractDto<Long> {
+public class Unit implements AbstractDto<Long> {
     Long id;
-    String name;
+    User user;
+    Tracker tracker;
 }

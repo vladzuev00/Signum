@@ -4,8 +4,8 @@ import by.nhorushko.crudgeneric.v2.domain.AbstractDto;
 import lombok.Value;
 
 @Value
-public class ChannelUnitDto implements AbstractDto<Long> {
+public class Tracker implements AbstractDto<Long> {
     Long id;
-    UserDto user;
-    TrackerDto tracker;
+    String imei;
+    String phoneNumber;
 }

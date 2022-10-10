@@ -1,7 +1,7 @@
 package by.aurorasoft.signum.protocol.wialon.handler.packagehandler.data;
 
-import by.aurorasoft.signum.dto.MessageDto;
-import by.aurorasoft.signum.dto.MessageDto.GpsCoordinate;
+import by.aurorasoft.signum.dto.Message;
+import by.aurorasoft.signum.dto.Message.GpsCoordinate;
 import by.aurorasoft.signum.protocol.wialon.handler.contextworker.ContextWorker;
 import by.aurorasoft.signum.protocol.wialon.model.AbstractDataPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
@@ -36,7 +36,7 @@ public final class AbstractDataPackageHandlerTest {
     private ContextWorker mockedContextWorker;
 
     @Captor
-    private ArgumentCaptor<List<MessageDto>> messagesArgumentCaptor;
+    private ArgumentCaptor<List<Message>> messagesArgumentCaptor;
 
     @Captor
     private ArgumentCaptor<String> stringArgumentCaptor;
@@ -53,7 +53,7 @@ public final class AbstractDataPackageHandlerTest {
 
     @Test
     public void handlerShouldHandlePackage() {
-        final List<MessageDto> givenMessages = List.of(createMessage(), createMessage(), createMessage());
+        final List<Message> givenMessages = List.of(createMessage(), createMessage(), createMessage());
         final HandledPackage givenPackage = new HandledPackage(givenMessages);
         final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
 
@@ -86,7 +86,7 @@ public final class AbstractDataPackageHandlerTest {
 
     @SuppressWarnings("all")
     private static final class HandledPackage extends AbstractDataPackage {
-        public HandledPackage(List<MessageDto> messages) {
+        public HandledPackage(List<Message> messages) {
             super(messages);
         }
     }
@@ -103,8 +103,8 @@ public final class AbstractDataPackageHandlerTest {
         }
     }
 
-    private static MessageDto createMessage() {
-        return new MessageDto(now(), new GpsCoordinate(1, 2), 3, 4, 5, 6,
+    private static Message createMessage() {
+        return new Message(now(), new GpsCoordinate(1, 2), 3, 4, 5, 6,
                 7.F, "");
     }
 }

@@ -1,13 +1,13 @@
 package by.aurorasoft.signum.protocol.wialon.model;
 
-import by.aurorasoft.signum.dto.MessageDto;
+import by.aurorasoft.signum.dto.Message;
 
 import java.util.List;
 
 public final class DataPackage extends AbstractDataPackage {
     public static final String PACKAGE_PREFIX = "#D#";
 
-    public DataPackage(final List<MessageDto> messages) {
+    public DataPackage(final List<Message> messages) {
         super(messages);
     }
 }

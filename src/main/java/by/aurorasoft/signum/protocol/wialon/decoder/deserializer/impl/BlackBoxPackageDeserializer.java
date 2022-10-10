@@ -1,6 +1,6 @@
 package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl;
 
-import by.aurorasoft.signum.dto.MessageDto;
+import by.aurorasoft.signum.dto.Message;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.MessageParser;
 import by.aurorasoft.signum.protocol.wialon.model.BlackBoxPackage;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.PackageDeserializer;
@@ -25,7 +25,7 @@ public final class BlackBoxPackageDeserializer implements PackageDeserializer {
     public BlackBoxPackage deserialize(String deserialized) {
         final String message = removePrefix(deserialized, PACKAGE_PREFIX);
         final String[] serializedMessages = message.split(REGEX_MESSAGES_DELIMITER);
-        final List<MessageDto> messages = stream(serializedMessages)
+        final List<Message> messages = stream(serializedMessages)
                 .map(this.messageParser::parse)
                 .collect(toList());
         return new BlackBoxPackage(messages);

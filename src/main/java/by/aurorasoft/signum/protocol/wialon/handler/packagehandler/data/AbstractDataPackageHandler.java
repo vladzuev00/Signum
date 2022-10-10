@@ -1,7 +1,7 @@
 package by.aurorasoft.signum.protocol.wialon.handler.packagehandler.data;
 
-import by.aurorasoft.signum.dto.ChannelUnitDto;
-import by.aurorasoft.signum.dto.MessageDto;
+import by.aurorasoft.signum.dto.Unit;
+import by.aurorasoft.signum.dto.Message;
 import by.aurorasoft.signum.protocol.wialon.handler.contextworker.ContextWorker;
 import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.PackageHandler;
 import by.aurorasoft.signum.protocol.wialon.model.AbstractDataPackage;
@@ -26,9 +26,9 @@ public abstract class AbstractDataPackageHandler<T extends AbstractDataPackage> 
     @Override
     protected final String doHandle(Package requestPackage, ChannelHandlerContext context) {
         final T dataPackage = (T) requestPackage;
-        final List<MessageDto> messagesToBeSaved = dataPackage.getMessages();
-        final ChannelUnitDto unit = this.contextWorker.findUnit(context);
-        final List<MessageDto> savedMessages = this.messageService.saveAll(unit.getId(), messagesToBeSaved);
+        final List<Message> messagesToBeSaved = dataPackage.getMessages();
+        final Unit unit = this.contextWorker.findUnit(context);
+        final List<Message> savedMessages = this.messageService.saveAll(unit.getId(), messagesToBeSaved);
         return this.createResponse(savedMessages.size());
     }
 

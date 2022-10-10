@@ -1,6 +1,6 @@
 package by.aurorasoft.signum.protocol.wialon.handler.packagehandler;
 
-import by.aurorasoft.signum.dto.ChannelUnitDto;
+import by.aurorasoft.signum.dto.Unit;
 import by.aurorasoft.signum.protocol.wialon.handler.contextworker.ContextWorker;
 import by.aurorasoft.signum.protocol.wialon.model.LoginPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
@@ -28,7 +28,7 @@ public final class LoginPackageHandler extends PackageHandler {
     @Override
     protected String doHandle(Package requestPackage, ChannelHandlerContext context) {
         final LoginPackage loginPackage = (LoginPackage) requestPackage;
-        final Optional<ChannelUnitDto> optionalUnit = this.authorizationDeviceService.authorize(loginPackage);
+        final Optional<Unit> optionalUnit = this.authorizationDeviceService.authorize(loginPackage);
         if (optionalUnit.isEmpty()) {
             return RESPONSE_FAILURE_AUTHORIZE;
         }

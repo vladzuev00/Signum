@@ -1,8 +1,8 @@
 package by.aurorasoft.signum.protocol.wialon.deserializer.impl.parser;
 
 import by.aurorasoft.signum.base.AbstractContextTest;
-import by.aurorasoft.signum.dto.MessageDto;
-import by.aurorasoft.signum.dto.MessageDto.GpsCoordinate;
+import by.aurorasoft.signum.dto.Message;
+import by.aurorasoft.signum.dto.Message.GpsCoordinate;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.MessageParser;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +22,8 @@ public final class MessageParserTest extends AbstractContextTest {
                 + "keydrivercode;"
                 + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
 
-        final MessageDto actual = this.messageParser.parse(givenMessage);
-        final MessageDto expected = new MessageDto(parse("2022-11-15T14:56:43Z"),
+        final Message actual = this.messageParser.parse(givenMessage);
+        final Message expected = new Message(parse("2022-11-15T14:56:43Z"),
                 new GpsCoordinate(57.406944F, 39.548332F), 100, 15, 10,
                 177, 545.4554F,
                 "param-name:654321,param-name:65.4321,param-name:param-value");
