@@ -26,7 +26,7 @@ public abstract class AbstractDataPackageHandler<T extends AbstractDataPackage> 
     protected final String doHandle(Package requestPackage, ChannelHandlerContext context) {
         final T dataPackage = (T) requestPackage;
         final List<MessageDto> messages = dataPackage.getMessages();
-        final ChannelTracker tracker = this.contextWorker.findTracker(context);
+        final ChannelTracker tracker = this.contextWorker.findUnit(context);
         final int amountSavedMessages = this.messageService.save(messages, tracker);
         return this.createResponse(amountSavedMessages);
     }

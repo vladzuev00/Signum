@@ -58,7 +58,7 @@ public final class AbstractDataPackageHandlerTest {
         final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
 
         final String givenImei = "11111222223333344444";
-        when(this.mockedContextWorker.findTracker(any(ChannelHandlerContext.class))).thenReturn(givenImei);
+        when(this.mockedContextWorker.findUnit(any(ChannelHandlerContext.class))).thenReturn(givenImei);
 
         when(this.mockedService.save(anyList(), anyString())).thenReturn(givenMessages.size());
 
@@ -67,7 +67,7 @@ public final class AbstractDataPackageHandlerTest {
         assertEquals(expected, actual);
 
         verify(this.mockedContextWorker, times(1))
-                .findTracker(this.contextArgumentCaptor.capture());
+                .findUnit(this.contextArgumentCaptor.capture());
         verify(this.mockedService, times(1))
                 .save(this.messagesArgumentCaptor.capture(), this.stringArgumentCaptor.capture());
 

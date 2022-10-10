@@ -41,13 +41,13 @@ public final class RequestHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelInactive(ChannelHandlerContext context) {
-        final String trackerImei = this.trackerImeiFounder.findTracker(context);
+        final String trackerImei = this.trackerImeiFounder.findUnit(context);
         log.info(format(TEMPLATE_MESSAGE_INACTIVE_CHANNEL, trackerImei));
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext context, Throwable cause) {
-        final String trackerImei = this.trackerImeiFounder.findTracker(context);
+        final String trackerImei = this.trackerImeiFounder.findUnit(context);
         log.info(format(TEMPLATE_MESSAGE_EXCEPTION_CAUGHT, trackerImei, cause.getMessage()));
     }
 }

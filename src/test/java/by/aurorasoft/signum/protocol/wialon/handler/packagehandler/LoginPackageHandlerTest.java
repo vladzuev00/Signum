@@ -59,7 +59,7 @@ public final class LoginPackageHandlerTest {
         verify(this.mockedService, times(1))
                 .authorize(this.loginPackageArgumentCaptor.capture());
         verify(this.mockedContextWorker, times(1))
-                .putTracker(this.contextArgumentCaptor.capture(), this.stringArgumentCaptor.capture());
+                .putUnit(this.contextArgumentCaptor.capture(), this.stringArgumentCaptor.capture());
 
         assertSame(givenPackage, this.loginPackageArgumentCaptor.getValue());
         assertSame(givenContext, this.contextArgumentCaptor.getValue());
@@ -81,7 +81,7 @@ public final class LoginPackageHandlerTest {
 
         verify(this.mockedService, times(1)).authorize(this.loginPackageArgumentCaptor.capture());
         verify(this.mockedContextWorker, times(1))
-                .putTracker(this.contextArgumentCaptor.capture(), this.stringArgumentCaptor.capture());
+                .putUnit(this.contextArgumentCaptor.capture(), this.stringArgumentCaptor.capture());
 
         assertSame(givenPackage, this.loginPackageArgumentCaptor.getValue());
         assertSame(givenContext, this.contextArgumentCaptor.getValue());
