@@ -1,0 +1,20 @@
+netty:
+  server:
+    port: 6000
+    connectionThreads: 1
+    dataProcessThreads: 10
+    timeoutSeconds: 50
+
+
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:11.1:///integration-tests-db
+    username: postgres
+    password: root
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
+    hibernate:
+      ddl-auto: create

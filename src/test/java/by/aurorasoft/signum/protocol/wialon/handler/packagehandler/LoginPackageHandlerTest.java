@@ -1,12 +1,10 @@
 package by.aurorasoft.signum.protocol.wialon.handler.packagehandler;
 
+import by.aurorasoft.signum.protocol.wialon.handler.contextworker.ContextWorker;
 import by.aurorasoft.signum.protocol.wialon.model.LoginPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import by.aurorasoft.signum.service.AuthorizationDeviceService;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.util.Attribute;
-import io.netty.util.AttributeKey;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,32 +24,31 @@ public final class LoginPackageHandlerTest {
     @Mock
     private AuthorizationDeviceService mockedService;
 
+    @Mock
+    private ContextWorker mockedContextWorker;
+
     @Captor
     private ArgumentCaptor<LoginPackage> loginPackageArgumentCaptor;
 
     @Captor
     private ArgumentCaptor<String> stringArgumentCaptor;
 
+    @Captor
+    private ArgumentCaptor<ChannelHandlerContext> contextArgumentCaptor;
+
     private PackageHandler packageHandler;
 
     @Before
     public void initializePackageHandler() {
-        this.packageHandler = new LoginPackageHandler(null, this.mockedService);
+        this.packageHandler = new LoginPackageHandler(null, this.mockedService, this.mockedContextWorker);
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     public void handlerShouldHandlePackageAndAuthorizationShouldBeSuccess() {
         final String givenImei = "12345678912345678911";
         final Package givenPackage = new LoginPackage(givenImei, "password");
 
         final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
-
-        final Channel givenChannel = mock(Channel.class);
-        when(givenContext.channel()).thenReturn(givenChannel);
-
-        final Attribute<String> givenImeiAttribute = mock(Attribute.class);
-        when(givenChannel.attr(any(AttributeKey.class))).thenReturn(givenImeiAttribute);
 
         when(this.mockedService.authorize(any(LoginPackage.class))).thenReturn(true);
 
@@ -61,25 +58,20 @@ public final class LoginPackageHandlerTest {
 
         verify(this.mockedService, times(1))
                 .authorize(this.loginPackageArgumentCaptor.capture());
-        verify(givenImeiAttribute, times(1)).set(this.stringArgumentCaptor.capture());
+        verify(this.mockedContextWorker, times(1))
+                .putTracker(this.contextArgumentCaptor.capture(), this.stringArgumentCaptor.capture());
 
         assertSame(givenPackage, this.loginPackageArgumentCaptor.getValue());
+        assertSame(givenContext, this.contextArgumentCaptor.getValue());
         assertSame(givenImei, this.stringArgumentCaptor.getValue());
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     public void handlerShouldHandlePackageAndAuthorizationShouldBeFailure() {
         final String givenImei = "12345678912345678911";
         final Package givenPackage = new LoginPackage(givenImei, "password");
 
         final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
-
-        final Channel givenChannel = mock(Channel.class);
-        when(givenContext.channel()).thenReturn(givenChannel);
-
-        final Attribute<String> givenImeiAttribute = mock(Attribute.class);
-        when(givenChannel.attr(any(AttributeKey.class))).thenReturn(givenImeiAttribute);
 
         when(this.mockedService.authorize(any(LoginPackage.class))).thenReturn(false);
 
@@ -88,9 +80,11 @@ public final class LoginPackageHandlerTest {
         assertEquals(expected, actual);
 
         verify(this.mockedService, times(1)).authorize(this.loginPackageArgumentCaptor.capture());
-        verify(givenImeiAttribute, times(1)).set(this.stringArgumentCaptor.capture());
+        verify(this.mockedContextWorker, times(1))
+                .putTracker(this.contextArgumentCaptor.capture(), this.stringArgumentCaptor.capture());
 
         assertSame(givenPackage, this.loginPackageArgumentCaptor.getValue());
+        assertSame(givenContext, this.contextArgumentCaptor.getValue());
         assertSame(givenImei, this.stringArgumentCaptor.getValue());
     }
 

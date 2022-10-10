@@ -1,7 +1,7 @@
 package by.aurorasoft.signum.protocol.wialon.deserializer.impl;
 
-import by.aurorasoft.signum.dto.Message;
-import by.aurorasoft.signum.dto.Message.GpsCoordinate;
+import by.aurorasoft.signum.dto.MessageDto;
+import by.aurorasoft.signum.dto.MessageDto.GpsCoordinate;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.PackageDeserializer;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.BlackBoxPackageDeserializer;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.MessageParser;
@@ -50,27 +50,15 @@ public final class BlackBoxPackageDeserializerTest {
                 + "keydrivercode;"
                 + "param-name:1:654322,param-name:2:66.4321,param-name:3:param-value";
 
-        final List<Message> givenMessages = List.of(
-                Message.builder()
-                        .dateTime(parse("2022-11-15T14:56:43Z"))
-                        .coordinate(new GpsCoordinate(57.406944F, 39.548332F))
-                        .speed(100)
-                        .course(15)
-                        .altitude(10)
-                        .amountSatellite(177)
-                        .hdop(545.4554F)
-                        .parameters("param-name:654321,param-name:65.4321,param-name:param-value")
-                        .build(),
-                Message.builder()
-                        .dateTime(parse("2022-11-16T14:56:44Z"))
-                        .coordinate(new GpsCoordinate(57.406944F, 39.548332F))
-                        .speed(101)
-                        .course(16)
-                        .altitude(11)
-                        .amountSatellite(178)
-                        .hdop(545.4555F)
-                        .parameters("param-name:654322,param-name:66.4321,param-name:param-value")
-                        .build()
+        final List<MessageDto> givenMessages = List.of(
+                new MessageDto(parse("2022-11-15T14:56:43Z"),
+                        new GpsCoordinate(57.406944F, 39.548332F),
+                        100, 15, 10, 177, 545.4554F,
+                        "param-name:654321,param-name:65.4321,param-name:param-value"),
+                new MessageDto(parse("2022-11-16T14:56:44Z"),
+                        new GpsCoordinate(57.406944F, 39.548332F),
+                        101, 16, 11, 178, 545.4555F,
+                        "param-name:654322,param-name:66.4321,param-name:param-value")
         );
 
         when(this.mockedParser.parse(anyString()))

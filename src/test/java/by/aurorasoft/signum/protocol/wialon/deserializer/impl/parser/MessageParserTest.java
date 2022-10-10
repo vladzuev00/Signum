@@ -1,21 +1,16 @@
 package by.aurorasoft.signum.protocol.wialon.deserializer.impl.parser;
 
-import by.aurorasoft.signum.ApplicationRunner;
-import by.aurorasoft.signum.dto.Message;
-import by.aurorasoft.signum.dto.Message.GpsCoordinate;
+import by.aurorasoft.signum.base.AbstractContextTest;
+import by.aurorasoft.signum.dto.MessageDto;
+import by.aurorasoft.signum.dto.MessageDto.GpsCoordinate;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.MessageParser;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static java.time.Instant.parse;
 import static org.junit.Assert.assertEquals;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {ApplicationRunner.class})
-public final class MessageParserTest {
+public final class MessageParserTest extends AbstractContextTest {
 
     @Autowired
     private MessageParser messageParser;
@@ -27,17 +22,11 @@ public final class MessageParserTest {
                 + "keydrivercode;"
                 + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
 
-        final Message actual = this.messageParser.parse(givenMessage);
-        final Message expected = Message.builder()
-                .dateTime(parse("2022-11-15T14:56:43Z"))
-                .coordinate(new GpsCoordinate(57.406944F, 39.548332F))
-                .speed(100)
-                .course(15)
-                .altitude(10)
-                .amountSatellite(177)
-                .hdop(545.4554F)
-                .parameters("param-name:654321,param-name:65.4321,param-name:param-value")
-                .build();
+        final MessageDto actual = this.messageParser.parse(givenMessage);
+        final MessageDto expected = new MessageDto(parse("2022-11-15T14:56:43Z"),
+                new GpsCoordinate(57.406944F, 39.548332F), 100, 15, 10,
+                177, 545.4554F,
+                "param-name:654321,param-name:65.4321,param-name:param-value");
         assertEquals(expected, actual);
     }
 

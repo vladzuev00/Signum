@@ -5,9 +5,11 @@ netty:
     dataProcessThreads: 10
     timeoutSeconds: 50
 
-db:
+spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/signum
     username: postgres
     password: root
-    driverClassName: org.postgresql.Driver
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect

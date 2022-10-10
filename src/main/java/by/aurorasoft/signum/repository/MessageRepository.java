@@ -1,8 +1,8 @@
 package by.aurorasoft.signum.repository;
 
 import by.aurorasoft.signum.entity.MessageEntity;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MessageRepository extends CrudRepository<MessageEntity, Long> {
+public interface MessageRepository extends JpaRepository<MessageEntity, Long> {
 
 }

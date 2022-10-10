@@ -1,13 +1,13 @@
 package by.aurorasoft.signum.dto;
 
-import lombok.Builder;
+import by.nhorushko.crudgeneric.v2.domain.AbstractDto;
 import lombok.Value;
 
 import java.time.Instant;
 
 @Value
-@Builder
-public class Message {
+public class MessageDto implements AbstractDto<Long> {
+    Long id;
     Instant dateTime;
     GpsCoordinate coordinate;
     int speed;
