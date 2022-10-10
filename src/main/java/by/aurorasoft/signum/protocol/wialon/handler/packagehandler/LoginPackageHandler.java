@@ -1,11 +1,14 @@
 package by.aurorasoft.signum.protocol.wialon.handler.packagehandler;
 
+import by.aurorasoft.signum.dto.ChannelUnitDto;
 import by.aurorasoft.signum.protocol.wialon.handler.contextworker.ContextWorker;
 import by.aurorasoft.signum.protocol.wialon.model.LoginPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import by.aurorasoft.signum.service.AuthorizationDeviceService;
 import io.netty.channel.ChannelHandlerContext;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 public final class LoginPackageHandler extends PackageHandler {
@@ -25,11 +28,11 @@ public final class LoginPackageHandler extends PackageHandler {
     @Override
     protected String doHandle(Package requestPackage, ChannelHandlerContext context) {
         final LoginPackage loginPackage = (LoginPackage) requestPackage;
-        final Optional<ChannelTracker> optionalTracker = this.authorizationDeviceService.authorize(loginPackage);
-        if (optionalTracker.isEmpty()) {
+        final Optional<ChannelUnitDto> optionalUnit = this.authorizationDeviceService.authorize(loginPackage);
+        if (optionalUnit.isEmpty()) {
             return RESPONSE_FAILURE_AUTHORIZE;
         }
-        this.contextWorker.putUnit(context, optionalTracker.get());
+        this.contextWorker.putUnit(context, optionalUnit.get());
         return RESPONSE_SUCCESS_AUTHORIZE;
     }
 }
