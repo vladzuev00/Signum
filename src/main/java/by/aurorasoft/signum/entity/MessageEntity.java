@@ -16,7 +16,7 @@ import java.time.Instant;
 public class MessageEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "tracker_id")
-    private TrackerEntity tracker;
+    private UnitEntity unit;
 
     @Column(name = "time")
     private Instant dateTime;
