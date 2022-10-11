@@ -1,6 +1,5 @@
 package by.aurorasoft.signum.base;
 
-import by.aurorasoft.signum.crud.model.entity.BaseEntity;
 import com.yannbriancon.interceptor.HibernateQueryInterceptor;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -18,7 +17,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-import java.lang.reflect.Constructor;
 import java.util.TimeZone;
 
 import static org.junit.Assert.assertEquals;
@@ -59,18 +57,6 @@ public abstract class AbstractContextTest {
         this.entityManager.flush();
         System.out.println("======================= FINISH QUERY COUNTER ====================================");
         assertEquals("wrong count of queries", Long.valueOf(expected), this.getQueryCount());
-    }
-
-    protected static <EntityType extends BaseEntity> EntityType createEntity(Long id,
-                                                                             Class<? extends EntityType> entityType) {
-        try {
-            final Constructor<? extends EntityType> constructor = entityType.getConstructor();
-            final EntityType createEntity = constructor.newInstance();
-            createEntity.setId(id);
-            return createEntity;
-        } catch (final Exception cause) {
-            throw new RuntimeException(cause);
-        }
     }
 
     static class DBContainerInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {

@@ -6,10 +6,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.Optional;
-
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public final class TrackerRepositoryTest extends AbstractContextTest {
     @Autowired
@@ -27,11 +24,9 @@ public final class TrackerRepositoryTest extends AbstractContextTest {
     @Test
     public void trackerShouldBeFoundById() {
         super.startQueryCount();
-        final Optional<TrackerEntity> optionalTracker = this.repository.findById(1L);
+        final TrackerEntity tracker = this.repository.findById(1L).orElseThrow();
         super.checkQueryCount(1);
 
-        assertTrue(optionalTracker.isPresent());
-        final TrackerEntity tracker = optionalTracker.get();
         assertEquals(1, tracker.getId().longValue());
         assertEquals("11111222223333344444", tracker.getImei());
         assertEquals("448447045", tracker.getPhoneNumber());

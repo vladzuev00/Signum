@@ -8,10 +8,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.Optional;
-
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public final class UnitRepositoryTest extends AbstractContextTest {
 
@@ -24,8 +21,8 @@ public final class UnitRepositoryTest extends AbstractContextTest {
     public void unitShouldBeInserted() {
         final UnitEntity givenUnit = new UnitEntity(
                 "unit-name",
-                createEntity(1L, UserEntity.class),
-                createEntity(1L, TrackerEntity.class));
+                super.entityManager.getReference(UserEntity.class, 1L),
+                super.entityManager.getReference(TrackerEntity.class, 1L));
 
         super.startQueryCount();
         this.unitRepository.save(givenUnit);
@@ -36,11 +33,8 @@ public final class UnitRepositoryTest extends AbstractContextTest {
     @Test
     public void unitShouldBeFoundById() {
         super.startQueryCount();
-        final Optional<UnitEntity> optionalUnit = this.unitRepository.findById(1L);
+        final UnitEntity unit = this.unitRepository.findById(1L).orElseThrow();
         super.checkQueryCount(1);
-
-        assertTrue(optionalUnit.isPresent());
-        final UnitEntity unit = optionalUnit.get();
 
         assertEquals(1, unit.getId().longValue());
         assertEquals("unit-name", unit.getName());

@@ -7,37 +7,34 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.Optional;
-
 import static java.time.Instant.now;
 import static java.time.Instant.parse;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public final class MessageRepositoryTest extends AbstractContextTest {
 
     @Autowired
     private MessageRepository repository;
 
-    @Sql("classpath:sql/insert-unit.sql")
     @Test
+    @Sql("classpath:sql/insert-unit.sql")
     public void messageShouldBeInserted() {
-        final MessageEntity givenMessage = new MessageEntity(createEntity(1L, UnitEntity.class), now(), 5.5f,
-                6.6f, 10, 11, 12, 13, 7.7f, "name:value");
+        final MessageEntity givenMessage = new MessageEntity(
+                super.entityManager.getReference(UnitEntity.class, 1L),
+                now(), 5.5f, 6.6f, 10, 11, 12, 13,
+                7.7f, "name:value");
         super.startQueryCount();
         this.repository.save(givenMessage);
         super.checkQueryCount(1);
     }
 
-    @Sql("classpath:sql/insert-message.sql")
     @Test
+    @Sql("classpath:sql/insert-message.sql")
     public void messageShouldBeFoundById() {
         super.startQueryCount();
-        final Optional<MessageEntity> optionalMessage = this.repository.findById(1L);
+        final MessageEntity message = this.repository.findById(1L).orElseThrow();
         super.checkQueryCount(1);
 
-        assertTrue(optionalMessage.isPresent());
-        final MessageEntity message = optionalMessage.get();
         assertEquals(1, message.getId().longValue());
         assertEquals(1, message.getUnit().getId().longValue());
         assertEquals(parse("2000-02-18T04:05:06Z"), message.getDateTime());

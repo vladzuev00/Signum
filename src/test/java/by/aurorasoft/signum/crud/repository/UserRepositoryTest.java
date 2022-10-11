@@ -6,11 +6,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.Optional;
-
 import static java.util.Collections.emptyList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public final class UserRepositoryTest extends AbstractContextTest {
 
@@ -29,11 +26,9 @@ public final class UserRepositoryTest extends AbstractContextTest {
     @Test
     public void userShouldBeFoundById() {
         super.startQueryCount();
-        final Optional<UserEntity> optionalUser = this.repository.findById(1L);
+        final UserEntity user = this.repository.findById(1L).orElseThrow();
         super.checkQueryCount(1);
 
-        assertTrue(optionalUser.isPresent());
-        final UserEntity user = optionalUser.get();
         assertEquals(1, user.getId().longValue());
         assertEquals("vladzuev", user.getName());
         assertTrue(user.getUnits().isEmpty());
