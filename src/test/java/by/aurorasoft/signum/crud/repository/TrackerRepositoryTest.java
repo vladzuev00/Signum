@@ -27,12 +27,13 @@ public final class TrackerRepositoryTest extends AbstractContextTest {
     @Test
     public void trackerShouldBeFoundById() {
         super.startQueryCount();
-        final Optional<TrackerEntity> optionalFoundTracker = this.repository.findById(1L);
+        final Optional<TrackerEntity> optionalTracker = this.repository.findById(1L);
         super.checkQueryCount(1);
 
-        assertTrue(optionalFoundTracker.isPresent());
-        final TrackerEntity foundTracker = optionalFoundTracker.get();
-        assertEquals("11111222223333344444", foundTracker.getImei());
-        assertEquals("448447045", foundTracker.getPhoneNumber());
+        assertTrue(optionalTracker.isPresent());
+        final TrackerEntity tracker = optionalTracker.get();
+        assertEquals(1, tracker.getId().longValue());
+        assertEquals("11111222223333344444", tracker.getImei());
+        assertEquals("448447045", tracker.getPhoneNumber());
     }
 }

@@ -14,6 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Setter
 @Getter
+@ToString
 @Builder
 public class UnitEntity extends NamedEntity {
 
@@ -25,9 +26,9 @@ public class UnitEntity extends NamedEntity {
     @JoinColumn(name = "tracker_id")
     private TrackerEntity tracker;
 
-    @Override
-    public String toString() {
-        return super.toString() + "[name = " + this.getName() + ", userId = " + this.user.getId()
-                + ", tracker = " + this.tracker + "]";
+    public UnitEntity(String name, UserEntity user, TrackerEntity tracker) {
+        super(name);
+        this.user = user;
+        this.tracker = tracker;
     }
 }

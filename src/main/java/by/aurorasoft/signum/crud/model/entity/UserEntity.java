@@ -23,4 +23,9 @@ public class UserEntity extends NamedEntity {
 
     @OneToMany(mappedBy = "user")
     private List<UnitEntity> units;
+
+    public UserEntity(String name, List<UnitEntity> units) {
+        super(name);
+        this.units = units;
+    }
 }
