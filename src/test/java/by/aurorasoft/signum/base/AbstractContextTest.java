@@ -2,6 +2,7 @@ package by.aurorasoft.signum.base;
 
 import by.aurorasoft.signum.crud.model.entity.BaseEntity;
 import com.yannbriancon.interceptor.HibernateQueryInterceptor;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import java.lang.reflect.Constructor;
+import java.util.TimeZone;
 
 import static org.junit.Assert.assertEquals;
 
@@ -38,6 +40,11 @@ public abstract class AbstractContextTest {
 
     @Autowired
     protected HibernateQueryInterceptor queryInterceptor;
+
+    @BeforeClass
+    public static void setDefaultTimeZone() {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+    }
 
     protected final void startQueryCount() {
         System.out.println("======================= START QUERY COUNTER ====================================");
