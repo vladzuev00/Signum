@@ -1,6 +1,6 @@
 package by.aurorasoft.signum.protocol.wialon.model;
 
-import by.aurorasoft.signum.dto.Message;
+import by.aurorasoft.signum.crud.model.dto.Message;
 
 import java.util.List;
 

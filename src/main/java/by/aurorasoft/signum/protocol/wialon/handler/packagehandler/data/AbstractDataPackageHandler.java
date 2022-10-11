@@ -1,12 +1,12 @@
 package by.aurorasoft.signum.protocol.wialon.handler.packagehandler.data;
 
-import by.aurorasoft.signum.dto.Unit;
-import by.aurorasoft.signum.dto.Message;
+import by.aurorasoft.signum.crud.model.dto.Unit;
+import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.protocol.wialon.handler.contextworker.ContextWorker;
 import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.PackageHandler;
 import by.aurorasoft.signum.protocol.wialon.model.AbstractDataPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
-import by.aurorasoft.signum.service.MessageService;
+import by.aurorasoft.signum.crud.service.MessageService;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.List;

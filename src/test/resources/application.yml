@@ -9,12 +9,10 @@ netty:
 spring:
   datasource:
     url: jdbc:tc:postgresql:11.1:///integration-tests-db
-    username: postgres
-    password: root
-    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
   jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQL10Dialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
+    show-sql: true
+  sql:
+    init:
+      mode: always

@@ -1,6 +1,6 @@
 package by.aurorasoft.signum;
 
-import by.aurorasoft.signum.server.Server;
+import by.aurorasoft.signum.protocol.wialon.server.Server;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;

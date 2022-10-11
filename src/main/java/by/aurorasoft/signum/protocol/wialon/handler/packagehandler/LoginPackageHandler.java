@@ -1,10 +1,10 @@
 package by.aurorasoft.signum.protocol.wialon.handler.packagehandler;
 
-import by.aurorasoft.signum.dto.Unit;
+import by.aurorasoft.signum.crud.model.dto.Unit;
 import by.aurorasoft.signum.protocol.wialon.handler.contextworker.ContextWorker;
 import by.aurorasoft.signum.protocol.wialon.model.LoginPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
-import by.aurorasoft.signum.service.AuthorizationDeviceService;
+import by.aurorasoft.signum.protocol.wialon.service.AuthorizationDeviceService;
 import io.netty.channel.ChannelHandlerContext;
 import org.springframework.stereotype.Component;
 

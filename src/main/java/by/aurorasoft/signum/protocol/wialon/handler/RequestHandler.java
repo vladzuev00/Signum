@@ -1,6 +1,6 @@
 package by.aurorasoft.signum.protocol.wialon.handler;
 
-import by.aurorasoft.signum.dto.Unit;
+import by.aurorasoft.signum.crud.model.dto.Unit;
 import by.aurorasoft.signum.protocol.wialon.handler.contextworker.ContextWorker;
 import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.PackageHandler;
 import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.StarterPackageHandler;
@@ -43,7 +43,7 @@ public final class RequestHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelInactive(ChannelHandlerContext context) {
         final Unit unit = this.trackerImeiFounder.findUnit(context);
-        log.info(format(TEMPLATE_MESSAGE_INACTIVE_CHANNEL, unit.getTracker().getImei()));
+        //log.info(format(TEMPLATE_MESSAGE_INACTIVE_CHANNEL, unit.getTracker().getImei()));
     }
 
     @Override

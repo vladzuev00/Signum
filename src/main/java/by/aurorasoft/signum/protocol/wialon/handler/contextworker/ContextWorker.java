@@ -1,6 +1,6 @@
 package by.aurorasoft.signum.protocol.wialon.handler.contextworker;
 
-import by.aurorasoft.signum.dto.Unit;
+import by.aurorasoft.signum.crud.model.dto.Unit;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.Attribute;
