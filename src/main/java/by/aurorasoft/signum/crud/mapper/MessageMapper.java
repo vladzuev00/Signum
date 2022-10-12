@@ -18,6 +18,13 @@ public final class MessageMapper extends ExtAbstractMapper<MessageEntity, Messag
     }
 
     @Override
+    protected void mapSpecificFields(Message source, MessageEntity destination) {
+        final GpsCoordinate gpsCoordinate = source.getCoordinate();
+        destination.setLatitude(gpsCoordinate.getLatitude());
+        destination.setLongitude(gpsCoordinate.getLongitude());
+    }
+
+    @Override
     protected void setRelation(UnitEntity unit, MessageEntity message) {
         message.setUnit(unit);
     }

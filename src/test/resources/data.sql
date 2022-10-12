@@ -15,8 +15,8 @@ VALUES(1, '355234055650192', '+37257063997'),
 INSERT INTO unit(id, name, user_id, tracker_id)
 VALUES(1, 'unit_a', 1, 1),
       (2, 'unit_b', 2, 2),
-      (3, 'unit_b', 2, 3),
-      (4, 'unit_c', 3, 4);
+      (3, 'unit_c', 2, 3),
+      (4, 'unit_d', 3, 4);
 
 
 

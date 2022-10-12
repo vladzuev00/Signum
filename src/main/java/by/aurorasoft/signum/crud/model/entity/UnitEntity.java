@@ -5,6 +5,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import javax.sound.midi.Track;
 
 @Entity
 @Table(name = "unit")
@@ -28,6 +29,12 @@ public class UnitEntity extends NamedEntity {
 
     public UnitEntity(String name, UserEntity user, TrackerEntity tracker) {
         super(name);
+        this.user = user;
+        this.tracker = tracker;
+    }
+
+    public UnitEntity(Long id, String name, UserEntity user, TrackerEntity tracker) {
+        super(id, name);
         this.user = user;
         this.tracker = tracker;
     }

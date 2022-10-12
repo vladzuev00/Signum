@@ -1,5 +1,6 @@
 package by.aurorasoft.signum.base;
 
+import by.aurorasoft.signum.crud.model.entity.BaseEntity;
 import com.yannbriancon.interceptor.HibernateQueryInterceptor;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -17,6 +18,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import java.lang.reflect.Constructor;
 import java.util.TimeZone;
 
 import static org.junit.Assert.assertEquals;

@@ -28,4 +28,9 @@ public class UserEntity extends NamedEntity {
         super(name);
         this.units = units;
     }
+
+    public UserEntity(Long id, String name, List<UnitEntity> units) {
+        super(id, name);
+        this.units = units;
+    }
 }

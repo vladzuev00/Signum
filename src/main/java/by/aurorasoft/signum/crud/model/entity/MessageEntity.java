@@ -48,4 +48,19 @@ public class MessageEntity extends BaseEntity {
 
     @Column(name = "params")
     private String parameters;
+
+    public MessageEntity(Long id, UnitEntity unit, Instant dateTime, float latitude, float longitude, int speed,
+                         int course, int altitude, int amountSatellite, float hdop, String parameters) {
+        super(id);
+        this.unit = unit;
+        this.dateTime = dateTime;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.speed = speed;
+        this.course = course;
+        this.altitude = altitude;
+        this.amountSatellite = amountSatellite;
+        this.hdop = hdop;
+        this.parameters = parameters;
+    }
 }
