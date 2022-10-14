@@ -7,6 +7,8 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.time.Instant;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Table(name = "message")
 @SQLDelete(sql = "UPDATE message SET deleted = true WHERE id = ?")
@@ -18,7 +20,7 @@ import java.time.Instant;
 @ToString
 @Builder
 public class MessageEntity extends BaseEntity {
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "unit_id")
     private UnitEntity unit;
 

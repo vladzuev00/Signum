@@ -2,7 +2,12 @@ package by.aurorasoft.signum.protocol.wialon.server;
 
 import by.aurorasoft.signum.config.property.ServerProperty;
 import by.aurorasoft.signum.protocol.wialon.decoder.WialonDecoder;
+import by.aurorasoft.signum.protocol.wialon.decoder.impl.StarterPackageDecoder;
+import by.aurorasoft.signum.protocol.wialon.encoder.PackagePostfixAppendingEncoder;
+import by.aurorasoft.signum.protocol.wialon.handler.ExceptionHandler;
 import by.aurorasoft.signum.protocol.wialon.handler.RequestHandler;
+import by.aurorasoft.signum.protocol.wialon.handler.contextworker.ContextWorker;
+import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.StarterPackageHandler;
 import by.aurorasoft.signum.protocol.wialon.server.exception.RunningServerException;
 import by.aurorasoft.signum.protocol.wialon.server.exception.ServerShutDownException;
 import io.netty.bootstrap.ServerBootstrap;
@@ -12,7 +17,6 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -25,20 +29,20 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 @Component
 @Slf4j
 public final class Server implements AutoCloseable {
-    private final WialonDecoder requestDecoder;
-    private final MessageToByteEncoder<String> responseEncoder;
-    private final ReadTimeoutHandler readTimeoutHandler;
-    private final RequestHandler requestHandler;
+    private final StarterPackageDecoder starterPackageDecoder;
+    private final StarterPackageHandler starterPackageHandler;
+    private final ContextWorker contextWorker;
+    private final int timeoutSeconds;
     private final EventLoopGroup connectionLoopGroup;
     private final EventLoopGroup dataProcessLoopGroup;
     private final int port;
 
-    public Server(WialonDecoder requestDecoder, MessageToByteEncoder<String> responseEncoder,
-                  RequestHandler requestHandler, ServerProperty serverConfiguration) {
-        this.requestDecoder = requestDecoder;
-        this.responseEncoder = responseEncoder;
-        this.readTimeoutHandler = new ReadTimeoutHandler(serverConfiguration.getTimeoutSeconds(), SECONDS);
-        this.requestHandler = requestHandler;
+    public Server(StarterPackageDecoder starterPackageDecoder, StarterPackageHandler starterPackageHandler,
+                  ContextWorker contextWorker, ServerProperty serverConfiguration) {
+        this.starterPackageDecoder = starterPackageDecoder;
+        this.starterPackageHandler = starterPackageHandler;
+        this.contextWorker = contextWorker;
+        this.timeoutSeconds = serverConfiguration.getTimeoutSeconds();
         this.connectionLoopGroup = new NioEventLoopGroup(serverConfiguration.getConnectionThreads());
         this.dataProcessLoopGroup = new NioEventLoopGroup(serverConfiguration.getDataProcessThreads());
         this.port = serverConfiguration.getPort();
@@ -55,10 +59,11 @@ public final class Server implements AutoCloseable {
                         @Override
                         public void initChannel(SocketChannel socketChannel) {
                             socketChannel.pipeline().addLast(
-                                    Server.this.requestDecoder,
-                                    Server.this.readTimeoutHandler,
-                                    Server.this.responseEncoder,
-                                    Server.this.requestHandler);
+                                    Server.this.createRequestDecoder(),
+                                    Server.this.createReadTimeoutHandler(),
+                                    Server.this.createResponseEncoder(),
+                                    Server.this.createRequestHandler(),
+                                    Server.this.createExceptionHandler());
                         }
                     });
             final ChannelFuture channelFuture = serverBootstrap.bind().sync();
@@ -77,5 +82,25 @@ public final class Server implements AutoCloseable {
         } catch (final InterruptedException cause) {
             throw new ServerShutDownException(cause);
         }
+    }
+
+    private WialonDecoder createRequestDecoder() {
+        return new WialonDecoder(this.starterPackageDecoder);
+    }
+
+    private ReadTimeoutHandler createReadTimeoutHandler() {
+        return new ReadTimeoutHandler(this.timeoutSeconds, SECONDS);
+    }
+
+    private RequestHandler createRequestHandler() {
+        return new RequestHandler(this.starterPackageHandler, this.contextWorker);
+    }
+
+    private ExceptionHandler createExceptionHandler() {
+        return new ExceptionHandler(this.contextWorker);
+    }
+
+    private PackagePostfixAppendingEncoder createResponseEncoder() {
+        return new PackagePostfixAppendingEncoder();
     }
 }

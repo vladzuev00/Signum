@@ -1,9 +1,10 @@
 netty:
   server:
+    host: localhost
     port: 6000
     connectionThreads: 1
     dataProcessThreads: 10
-    timeoutSeconds: 50
+    timeoutSeconds: 200
 
 
 spring:

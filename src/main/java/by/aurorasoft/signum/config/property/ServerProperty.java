@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 @Setter
 @Getter
 public class ServerProperty {
+    private String host;
     private int port;
     private int connectionThreads;
     private int dataProcessThreads;

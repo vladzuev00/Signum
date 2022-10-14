@@ -1,31 +1,25 @@
 package by.aurorasoft.signum.protocol.wialon.handler;
 
-import by.aurorasoft.signum.crud.model.dto.Unit;
+import by.aurorasoft.signum.protocol.wialon.exception.AnswerableException;
 import by.aurorasoft.signum.protocol.wialon.handler.contextworker.ContextWorker;
 import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.PackageHandler;
 import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.StarterPackageHandler;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.handler.codec.DecoderException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
-import static java.lang.String.format;
-
-@Component
 @Slf4j
 public final class RequestHandler extends ChannelInboundHandlerAdapter {
     private static final String MESSAGE_ACTIVE_CHANNEL = "Tracker is connected.";
-    private static final String TEMPLATE_MESSAGE_INACTIVE_CHANNEL = "Tracker %s is disconnected";
-    private static final String TEMPLATE_MESSAGE_EXCEPTION_CAUGHT = "During working with connection to tracker '%s' "
-            + "was arisen exception: %s.";
 
     private final PackageHandler starterPackageHandler;
-    private final ContextWorker trackerImeiFounder;
+    private final ContextWorker contextWorker;
 
-    public RequestHandler(StarterPackageHandler starterPackageHandler, ContextWorker trackerImeiFounder) {
+    public RequestHandler(StarterPackageHandler starterPackageHandler, ContextWorker contextWorker) {
         this.starterPackageHandler = starterPackageHandler;
-        this.trackerImeiFounder = trackerImeiFounder;
+        this.contextWorker = contextWorker;
     }
 
     @Override
@@ -36,19 +30,25 @@ public final class RequestHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
+    public void exceptionCaught(ChannelHandlerContext context, Throwable exception) {
+        if (exception instanceof DecoderException) {  //exception in decoders are wrapped in DecoderException
+            exception = exception.getCause();
+        }
+        if (exception instanceof AnswerableException) {
+            final AnswerableException answerableException = (AnswerableException) exception;
+            context.writeAndFlush(answerableException.getAnswerToClient());
+        } else {
+            context.fireExceptionCaught(exception);
+        }
+    }
+
+    @Override
     public void channelActive(ChannelHandlerContext context) {
         log.info(MESSAGE_ACTIVE_CHANNEL);
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext context) {
-        final Unit unit = this.trackerImeiFounder.findUnit(context);
-        //log.info(format(TEMPLATE_MESSAGE_INACTIVE_CHANNEL, unit.getTracker().getImei()));
-    }
 
-    @Override
-    public void exceptionCaught(ChannelHandlerContext context, Throwable cause) {
-        final Unit unit = this.trackerImeiFounder.findUnit(context);
-        log.info(format(TEMPLATE_MESSAGE_EXCEPTION_CAUGHT, unit.getTracker().getImei(), cause.getMessage()));
     }
 }

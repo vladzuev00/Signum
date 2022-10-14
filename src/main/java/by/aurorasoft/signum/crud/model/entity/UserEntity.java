@@ -1,8 +1,7 @@
 package by.aurorasoft.signum.crud.model.entity;
 
 import lombok.*;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.*;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -22,6 +21,8 @@ import java.util.List;
 public class UserEntity extends NamedEntity {
 
     @OneToMany(mappedBy = "user")
+    @ToString.Exclude
+    @Fetch(FetchMode.SUBSELECT)
     private List<UnitEntity> units;
 
     public UserEntity(String name, List<UnitEntity> units) {

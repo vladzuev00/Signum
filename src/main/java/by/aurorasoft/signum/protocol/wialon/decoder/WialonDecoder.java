@@ -5,13 +5,11 @@ import by.aurorasoft.signum.protocol.wialon.model.Package;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ReplayingDecoder;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 import static java.util.stream.IntStream.range;
 
-@Component
 public final class WialonDecoder extends ReplayingDecoder<Package> {
     private static final char CHARACTER_OF_END_REQUEST_PACKAGE = '\n';
 

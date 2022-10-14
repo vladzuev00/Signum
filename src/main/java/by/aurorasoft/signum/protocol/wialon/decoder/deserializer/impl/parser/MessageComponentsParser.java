@@ -1,6 +1,7 @@
 package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser;
 
 import by.aurorasoft.signum.crud.model.dto.Message.GpsCoordinate;
+import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.exception.NotValidMessageException;
 
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
@@ -72,7 +73,7 @@ public final class MessageComponentsParser {
             //NA comes from retranslator
             + "(((\\d+(\\.\\d+)?),?)*|(NA));"          //analogInputs
             + "(.*);"                                  //driverKeyCode
-            + "((.+:[123]:.+,?)*)";                    //parameters
+            + "(([^:]+:[123]:[^:]+,?)*)";              //parameters
     private static final Pattern MESSAGE_PATTERN = compile(MESSAGE_REGEX);
 
     private final Matcher matcher;
@@ -81,7 +82,7 @@ public final class MessageComponentsParser {
     public MessageComponentsParser(String source) {
         this.matcher = MESSAGE_PATTERN.matcher(source);
         if (!this.matcher.matches()) {
-            throw new IllegalArgumentException("Given message '" + source + "' isn't valid.");
+            throw new NotValidMessageException("Given message '" + source + "' isn't valid.");
         }
     }
 

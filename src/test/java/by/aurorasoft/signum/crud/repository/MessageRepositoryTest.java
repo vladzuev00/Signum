@@ -17,10 +17,9 @@ public final class MessageRepositoryTest extends AbstractContextTest {
     private MessageRepository repository;
 
     @Test
-    @Sql("classpath:sql/insert-unit.sql")
     public void messageShouldBeInserted() {
-        final MessageEntity givenMessage = new MessageEntity(
-                super.entityManager.getReference(UnitEntity.class, 1L),
+        final MessageEntity givenMessage = new MessageEntity(null,
+                super.entityManager.getReference(UnitEntity.class, 25551L),
                 now(), 5.5f, 6.6f, 10, 11, 12, 13,
                 7.7f, "name:value");
         super.startQueryCount();
@@ -32,11 +31,11 @@ public final class MessageRepositoryTest extends AbstractContextTest {
     @Sql("classpath:sql/insert-message.sql")
     public void messageShouldBeFoundById() {
         super.startQueryCount();
-        final MessageEntity message = this.repository.findById(1L).orElseThrow();
+        final MessageEntity message = this.repository.findById(25551L).orElseThrow();
         super.checkQueryCount(1);
 
-        assertEquals(1, message.getId().longValue());
-        assertEquals(1, message.getUnit().getId().longValue());
+        assertEquals(25551, message.getId().longValue());
+        assertEquals(25551, message.getUnit().getId().longValue());
         assertEquals(parse("2000-02-18T04:05:06Z"), message.getDateTime());
         assertEquals(4.4, message.getLatitude(), 0.001);
         assertEquals(5.5, message.getLongitude(), 0.001);

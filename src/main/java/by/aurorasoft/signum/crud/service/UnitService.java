@@ -7,15 +7,17 @@ import by.aurorasoft.signum.crud.repository.UnitRepository;
 import by.nhorushko.crudgeneric.v2.service.AbstractCrudService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
-public final class UnitService extends AbstractCrudService<Long, UnitEntity, Unit> {
+public class UnitService extends AbstractCrudService<Long, UnitEntity, Unit> {
 
     public UnitService(UnitMapper mapper, UnitRepository repository) {
         super(mapper, repository);
     }
 
+    @Transactional
     public Optional<Unit> findByTrackerImei(String imei) {
         final UnitRepository unitRepository = (UnitRepository) super.repository;
         return unitRepository

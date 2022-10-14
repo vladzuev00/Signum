@@ -5,12 +5,20 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import javax.sound.midi.Track;
+
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "unit")
 @SQLDelete(sql = "UPDATE unit SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
+@NamedEntityGraph(
+        name = "Unit.user_and_tracker",
+        attributeNodes = {
+                @NamedAttributeNode(value = "user"),
+                @NamedAttributeNode(value = "tracker")
+        }
+)
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
@@ -19,11 +27,11 @@ import javax.sound.midi.Track;
 @Builder
 public class UnitEntity extends NamedEntity {
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    @OneToOne
+    @OneToOne(fetch = LAZY)
     @JoinColumn(name = "tracker_id")
     private TrackerEntity tracker;
 

@@ -3,7 +3,6 @@ package by.aurorasoft.signum.base;
 import by.aurorasoft.signum.crud.model.entity.BaseEntity;
 import com.yannbriancon.interceptor.HibernateQueryInterceptor;
 import org.junit.BeforeClass;
-import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +17,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-import java.lang.reflect.Constructor;
+import java.util.List;
 import java.util.TimeZone;
 
 import static org.junit.Assert.assertEquals;
@@ -28,12 +27,14 @@ import static org.junit.Assert.assertEquals;
 @SpringBootTest
 @ContextConfiguration(initializers = {AbstractContextTest.DBContainerInitializer.class})
 public abstract class AbstractContextTest {
-
-    @ClassRule
     public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:11.1")
             .withDatabaseName("integration-tests-db")
             .withUsername("sa")
             .withPassword("sa");
+
+    static {
+        postgreSQLContainer.start();
+    }
 
     @PersistenceContext
     protected EntityManager entityManager;
@@ -59,6 +60,21 @@ public abstract class AbstractContextTest {
         this.entityManager.flush();
         System.out.println("======================= FINISH QUERY COUNTER ====================================");
         assertEquals("wrong count of queries", Long.valueOf(expected), this.getQueryCount());
+    }
+
+    protected <EntityType extends BaseEntity> EntityType findEntityFromDB(Class<? extends EntityType> entityType,
+                                                                          Long id) {
+//        this.entityManager.flush();
+//        this.entityManager.clear();
+        return this.entityManager.find(entityType, id);
+    }
+
+    protected <EntityType extends BaseEntity> List<EntityType> findEntitiesFromDB(
+            Class<EntityType> entityType) {
+//        this.entityManager.flush();
+//        this.entityManager.clear();
+        return this.entityManager.createQuery("SELECT e FROM " + entityType.getName() + " e", entityType)
+                .getResultList();
     }
 
     static class DBContainerInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
