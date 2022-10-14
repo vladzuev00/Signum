@@ -23,7 +23,6 @@ import static javax.persistence.FetchType.LAZY;
 @AllArgsConstructor
 @Setter
 @Getter
-@ToString
 @Builder
 public class UnitEntity extends NamedEntity {
 
@@ -45,5 +44,10 @@ public class UnitEntity extends NamedEntity {
         super(id, name);
         this.user = user;
         this.tracker = tracker;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + "[userId = " + this.user.getId() + ", trackerId = " + this.tracker.getId() + "]";
     }
 }

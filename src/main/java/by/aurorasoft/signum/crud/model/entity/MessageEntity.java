@@ -17,7 +17,6 @@ import static javax.persistence.FetchType.LAZY;
 @AllArgsConstructor
 @Setter
 @Getter
-@ToString
 @Builder
 public class MessageEntity extends BaseEntity {
     @ManyToOne(fetch = LAZY)
@@ -64,5 +63,14 @@ public class MessageEntity extends BaseEntity {
         this.amountSatellite = amountSatellite;
         this.hdop = hdop;
         this.parameters = parameters;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + "[unitId = " + this.unit.getId() + ", dateTime = " + this.dateTime
+                + ", latitude = " + this.latitude + ", longitude = " + this.longitude
+                + ", speed = " + this.speed + ", course = " + this.course + ", altitude = " + this.altitude
+                + ", amountSatellite = " + this.amountSatellite + ", hdop = " + this.hdop
+                + ", parameters = " + this.parameters + "]";
     }
 }

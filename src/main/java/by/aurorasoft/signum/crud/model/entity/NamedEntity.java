@@ -10,7 +10,7 @@ import javax.persistence.MappedSuperclass;
 @AllArgsConstructor
 @Setter
 @Getter
-@ToString
+@ToString(callSuper = true)
 public abstract class NamedEntity extends BaseEntity {
 
     @Column(name = "name")

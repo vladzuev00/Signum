@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Setter
 @Getter
-@ToString
+@ToString(callSuper = true)
 @Builder
 public class TrackerEntity extends BaseEntity {
 
