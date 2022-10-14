@@ -3,7 +3,7 @@ package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser;
 import by.aurorasoft.signum.base.AbstractContextTest;
 import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.crud.model.dto.Message.GpsCoordinate;
-import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.MessageParser;
+import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.exception.NotValidMessageException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -30,7 +30,7 @@ public final class MessageParserTest extends AbstractContextTest {
         assertEquals(expected, actual);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NotValidMessageException.class)
     public void notValidMessageShouldNotBeParsed() {
         final String givenMessage = "not valid message";
         this.messageParser.parse(givenMessage);

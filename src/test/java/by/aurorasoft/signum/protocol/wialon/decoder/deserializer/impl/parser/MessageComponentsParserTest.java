@@ -1,6 +1,7 @@
 package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser;
 
 import by.aurorasoft.signum.crud.model.dto.Message.GpsCoordinate;
+import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.exception.NotValidMessageException;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
@@ -30,7 +31,7 @@ public final class MessageComponentsParserTest {
         new MessageComponentsParser(givenMessage);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NotValidMessageException.class)
     public void parserShouldNotBeCreatedWithNotValidMessage() {
         final String givenMessage = "not valid message";
         new MessageComponentsParser(givenMessage);
