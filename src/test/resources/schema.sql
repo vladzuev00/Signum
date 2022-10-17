@@ -48,11 +48,12 @@ CREATE TABLE message
     deleted          BOOLEAN      NOT NULL DEFAULT false
 );
 
-CREATE TYPE command_status AS ENUM ('DELIVERED', 'NOT_DELIVERED');
-
 CREATE TABLE command(
                         id BIGSERIAL PRIMARY KEY,
                         text TEXT NOT NULL,
-                        status command_status NOT NULL,
+                        status VARCHAR(64) NOT NULL,
                         tracker_id INTEGER NOT NULL REFERENCES tracker
 );
+
+ALTER TABLE command
+    ADD CONSTRAINT valid_command_status CHECK (status IN ('DELIVERED', 'NOT_DELIVERED'));

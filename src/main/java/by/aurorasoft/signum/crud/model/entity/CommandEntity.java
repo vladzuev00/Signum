@@ -20,19 +20,27 @@ public class CommandEntity extends BaseEntity {
     private String text;
 
     @Enumerated(STRING)
+    @Column(name = "status")
     private Status status;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "tracker_id")
     private TrackerEntity tracker;
 
-    public enum Status {
-        DELIVERED, NOT_DELIVERED
+    public CommandEntity(Long id, String text, Status status, TrackerEntity tracker) {
+        super(id);
+        this.text = text;
+        this.status = status;
+        this.tracker = tracker;
     }
 
     @Override
     public String toString() {
         return super.toString() + "[text = " + this.text + ", status = " + this.status
                 + ", trackerId = " + this.tracker.getId() + "]";
+    }
+
+    public enum Status {
+        DELIVERED, NOT_DELIVERED
     }
 }
