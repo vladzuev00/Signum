@@ -47,3 +47,12 @@ CREATE TABLE message
     params           TEXT         NOT NULL,
     deleted          BOOLEAN      NOT NULL DEFAULT false
 );
+
+CREATE TYPE command_status AS ENUM ('DELIVERED', 'NOT_DELIVERED');
+
+CREATE TABLE command(
+                        id BIGSERIAL PRIMARY KEY,
+                        text TEXT NOT NULL,
+                        status command_status NOT NULL,
+                        tracker_id INTEGER NOT NULL REFERENCES tracker
+);
