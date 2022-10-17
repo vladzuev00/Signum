@@ -5,7 +5,9 @@ import by.aurorasoft.signum.crud.model.dto.Tracker;
 import by.aurorasoft.signum.crud.model.entity.CommandEntity;
 import by.nhorushko.crudgeneric.v2.mapper.AbstractMapper;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
+@Component
 public final class CommandMapper extends AbstractMapper<CommandEntity, Command> {
 
     public CommandMapper(ModelMapper modelMapper) {
