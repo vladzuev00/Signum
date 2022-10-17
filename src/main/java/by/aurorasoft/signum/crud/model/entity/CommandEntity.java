@@ -14,7 +14,7 @@ import static javax.persistence.FetchType.LAZY;
 @Setter
 @Getter
 @Builder
-public class Command extends BaseEntity {
+public class CommandEntity extends BaseEntity {
 
     @Column(name = "text")
     private String text;
