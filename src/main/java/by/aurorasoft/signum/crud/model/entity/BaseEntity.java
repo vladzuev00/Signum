@@ -2,8 +2,6 @@ package by.aurorasoft.signum.crud.model.entity;
 
 import by.nhorushko.crudgeneric.v2.domain.AbstractEntity;
 import lombok.*;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
