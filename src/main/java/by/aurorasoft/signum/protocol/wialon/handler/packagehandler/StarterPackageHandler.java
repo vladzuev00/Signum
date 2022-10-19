@@ -4,6 +4,8 @@ import by.aurorasoft.signum.protocol.wialon.model.Package;
 import io.netty.channel.ChannelHandlerContext;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public final class StarterPackageHandler extends PackageHandler {
     public StarterPackageHandler(LoginPackageHandler nextHandler) {
@@ -11,7 +13,7 @@ public final class StarterPackageHandler extends PackageHandler {
     }
 
     @Override
-    protected String doHandle(Package requestPackage, ChannelHandlerContext context) {
+    protected Optional<String> doHandle(Package requestPackage, ChannelHandlerContext context) {
         throw new UnsupportedOperationException();
     }
 }

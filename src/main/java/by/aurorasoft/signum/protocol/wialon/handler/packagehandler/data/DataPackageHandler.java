@@ -1,6 +1,6 @@
 package by.aurorasoft.signum.protocol.wialon.handler.packagehandler.data;
 
-import by.aurorasoft.signum.protocol.wialon.handler.contextworker.ContextWorker;
+import by.aurorasoft.signum.protocol.wialon.contextmanager.ContextManager;
 import by.aurorasoft.signum.protocol.wialon.model.DataPackage;
 import by.aurorasoft.signum.crud.service.MessageService;
 import org.springframework.stereotype.Component;
@@ -12,7 +12,7 @@ public final class DataPackageHandler extends AbstractDataPackageHandler<DataPac
     private static final String RESPONSE_TEMPLATE = "#AD#%d\r\n";
 
     public DataPackageHandler(BlackBoxPackageHandler nextHandler, MessageService messageService,
-                              ContextWorker contextWorker) {
+                              ContextManager contextWorker) {
         super(DataPackage.class, nextHandler, messageService, contextWorker);
     }
 

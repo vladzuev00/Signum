@@ -17,6 +17,6 @@ public final class CommandMapper extends AbstractMapper<CommandEntity, Command> 
     @Override
     protected Command createDto(CommandEntity entity) {
         final Tracker tracker = super.modelMapper.map(entity.getTracker(), Tracker.class);
-        return new Command(entity.getId(), entity.getText(), entity.getStatus(), tracker);
+        return new Command(entity.getId(), entity.getText(), tracker);
     }
 }

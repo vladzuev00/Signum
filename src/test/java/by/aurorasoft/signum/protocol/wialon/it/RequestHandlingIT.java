@@ -40,7 +40,7 @@ public class RequestHandlingIT extends AbstractContextTest {
     @Before
     public void startServerAndClient() {
         if (!serverWasRan) {
-            new Thread(() -> this.server.run()).start();
+            new Thread(this.server::run).start();
             serverWasRan = true;
         }
         this.client = new Client(this.serverProperty);

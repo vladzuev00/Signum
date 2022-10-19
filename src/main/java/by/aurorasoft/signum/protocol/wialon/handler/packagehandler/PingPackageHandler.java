@@ -6,6 +6,10 @@ import by.aurorasoft.signum.protocol.wialon.model.PingPackage;
 import io.netty.channel.ChannelHandlerContext;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
+import static java.util.Optional.of;
+
 @Component
 public final class PingPackageHandler extends PackageHandler {
     private static final String RESPONSE_PACKAGE = "#AP#";
@@ -15,7 +19,7 @@ public final class PingPackageHandler extends PackageHandler {
     }
 
     @Override
-    protected String doHandle(Package requestPackage, ChannelHandlerContext context) {
-        return RESPONSE_PACKAGE;
+    protected Optional<String> doHandle(Package requestPackage, ChannelHandlerContext context) {
+        return of(RESPONSE_PACKAGE);
     }
 }

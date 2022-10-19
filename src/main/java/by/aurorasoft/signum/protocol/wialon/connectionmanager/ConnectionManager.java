@@ -1,7 +1,8 @@
 package by.aurorasoft.signum.protocol.wialon.connectionmanager;
 
+import by.aurorasoft.signum.crud.model.dto.Tracker;
 import by.aurorasoft.signum.crud.model.dto.Unit;
-import by.aurorasoft.signum.protocol.wialon.handler.contextworker.ContextWorker;
+import by.aurorasoft.signum.protocol.wialon.contextmanager.ContextManager;
 import io.netty.channel.ChannelHandlerContext;
 import org.springframework.stereotype.Component;
 
@@ -10,21 +11,21 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public final class ConnectionManager {
-    private final ContextWorker contextWorker;
-    private final Map<String, ChannelHandlerContext> trackerImeiToChannelHandlerContextMap;
+    private final ContextManager contextWorker;
+    private final Map<Long, ChannelHandlerContext> trackerIdToChannelHandlerContextMap;
 
-    public ConnectionManager(ContextWorker contextWorker) {
+    public ConnectionManager(ContextManager contextWorker) {
         this.contextWorker = contextWorker;
-        this.trackerImeiToChannelHandlerContextMap = new ConcurrentHashMap<>();
+        this.trackerIdToChannelHandlerContextMap = new ConcurrentHashMap<>();
     }
 
-    public void addContext(ChannelHandlerContext channelHandlerContext) {
-        final Unit associatedUnit = this.contextWorker.findUnit(channelHandlerContext);
-        final String trackerImei = associatedUnit.getTracker().getImei();
-        this.trackerImeiToChannelHandlerContextMap.put(trackerImei, channelHandlerContext);
+    public void addContext(ChannelHandlerContext context) {
+        final Unit associatedUnit = this.contextWorker.findUnit(context);
+        final Tracker tracker = associatedUnit.getTracker();
+        this.trackerIdToChannelHandlerContextMap.put(tracker.getId(), context);
     }
 
-    public ChannelHandlerContext findContext(String imei) {
-        return this.trackerImeiToChannelHandlerContextMap.get(imei);
+    public ChannelHandlerContext findContext(Tracker tracker) {
+        return this.trackerIdToChannelHandlerContextMap.get(tracker.getId());
     }
 }

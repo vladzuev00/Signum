@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
-import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Status.DELIVERED;
+import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Status.SUCCESS_DELIVERED;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
@@ -18,7 +18,7 @@ public final class CommandRepositoryTest extends AbstractContextTest {
 
     @Test
     public void commandShouldBeInserted() {
-        final CommandEntity givenCommand = new CommandEntity(null, "command", DELIVERED,
+        final CommandEntity givenCommand = new CommandEntity(null, "command", SUCCESS_DELIVERED,
                 super.entityManager.getReference(TrackerEntity.class, 25551L));
         super.startQueryCount();
         this.repository.save(givenCommand);
@@ -34,7 +34,7 @@ public final class CommandRepositoryTest extends AbstractContextTest {
 
         assertEquals(255, foundCommand.getId().longValue());
         assertEquals("command", foundCommand.getText());
-        assertSame(DELIVERED, foundCommand.getStatus());
+        assertSame(SUCCESS_DELIVERED, foundCommand.getStatus());
         assertEquals(25551, foundCommand.getTracker().getId().longValue());
     }
 }

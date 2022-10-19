@@ -5,8 +5,8 @@ import by.aurorasoft.signum.protocol.wialon.decoder.WialonDecoder;
 import by.aurorasoft.signum.protocol.wialon.decoder.impl.StarterPackageDecoder;
 import by.aurorasoft.signum.protocol.wialon.encoder.PackagePostfixAppendingEncoder;
 import by.aurorasoft.signum.protocol.wialon.handler.ExceptionHandler;
-import by.aurorasoft.signum.protocol.wialon.handler.RequestHandler;
-import by.aurorasoft.signum.protocol.wialon.handler.contextworker.ContextWorker;
+import by.aurorasoft.signum.protocol.wialon.handler.WialonHandler;
+import by.aurorasoft.signum.protocol.wialon.contextmanager.ContextManager;
 import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.StarterPackageHandler;
 import by.aurorasoft.signum.protocol.wialon.server.exception.RunningServerException;
 import by.aurorasoft.signum.protocol.wialon.server.exception.ServerShutDownException;
@@ -31,14 +31,14 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public final class Server implements AutoCloseable {
     private final StarterPackageDecoder starterPackageDecoder;
     private final StarterPackageHandler starterPackageHandler;
-    private final ContextWorker contextWorker;
+    private final ContextManager contextWorker;
     private final int timeoutSeconds;
     private final EventLoopGroup connectionLoopGroup;
     private final EventLoopGroup dataProcessLoopGroup;
     private final int port;
 
     public Server(StarterPackageDecoder starterPackageDecoder, StarterPackageHandler starterPackageHandler,
-                  ContextWorker contextWorker, ServerProperty serverConfiguration) {
+                  ContextManager contextWorker, ServerProperty serverConfiguration) {
         this.starterPackageDecoder = starterPackageDecoder;
         this.starterPackageHandler = starterPackageHandler;
         this.contextWorker = contextWorker;
@@ -92,8 +92,8 @@ public final class Server implements AutoCloseable {
         return new ReadTimeoutHandler(this.timeoutSeconds, SECONDS);
     }
 
-    private RequestHandler createRequestHandler() {
-        return new RequestHandler(this.starterPackageHandler, this.contextWorker);
+    private WialonHandler createRequestHandler() {
+        return new WialonHandler(this.starterPackageHandler, this.contextWorker);
     }
 
     private ExceptionHandler createExceptionHandler() {

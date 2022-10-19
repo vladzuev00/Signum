@@ -1,7 +1,7 @@
 package by.aurorasoft.signum.protocol.wialon.handler;
 
 import by.aurorasoft.signum.crud.model.dto.Unit;
-import by.aurorasoft.signum.protocol.wialon.handler.contextworker.ContextWorker;
+import by.aurorasoft.signum.protocol.wialon.contextmanager.ContextManager;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
@@ -13,9 +13,9 @@ public final class ExceptionHandler extends ChannelInboundHandlerAdapter {
     private static final String TEMPLATE_MESSAGE_EXCEPTION_CAUGHT = "During working with connection to tracker '%s' "
             + "was arisen exception: %s.";
 
-    private final ContextWorker contextWorker;
+    private final ContextManager contextWorker;
 
-    public ExceptionHandler(ContextWorker contextWorker) {
+    public ExceptionHandler(ContextManager contextWorker) {
         this.contextWorker = contextWorker;
     }
 

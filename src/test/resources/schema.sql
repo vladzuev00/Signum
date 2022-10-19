@@ -56,4 +56,5 @@ CREATE TABLE command(
 );
 
 ALTER TABLE command
-    ADD CONSTRAINT valid_command_status CHECK (status IN ('DELIVERED', 'NOT_DELIVERED'));
+    ADD CONSTRAINT valid_command_status
+        CHECK (status IN ('NEW', 'SENT', 'SUCCESS_ANSWERED', 'ERROR_ANSWERED', 'TIMEOUT_NOT_ANSWERED'));

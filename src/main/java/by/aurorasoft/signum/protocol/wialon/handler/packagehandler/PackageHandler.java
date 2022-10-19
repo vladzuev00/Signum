@@ -4,6 +4,8 @@ import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.exception.NoS
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import io.netty.channel.ChannelHandlerContext;
 
+import java.util.Optional;
+
 public abstract class PackageHandler {
     private final Class<? extends Package> packageType;
     private final PackageHandler nextHandler;
@@ -13,20 +15,20 @@ public abstract class PackageHandler {
         this.nextHandler = nextHandler;
     }
 
-    public final String handle(Package requestPackage, ChannelHandlerContext context) {
-        if (this.canHandle(requestPackage)) {
-            return this.doHandle(requestPackage, context);
+    public final Optional<String> handle(Package inboundPackage, ChannelHandlerContext context) {
+        if (this.canHandle(inboundPackage)) {
+            return this.doHandle(inboundPackage, context);
         }
-        return this.fireNextHandler(requestPackage, context);
+        return this.fireNextHandler(inboundPackage, context);
     }
 
-    protected abstract String doHandle(Package requestPackage, ChannelHandlerContext context);
+    protected abstract Optional<String> doHandle(Package requestPackage, ChannelHandlerContext context);
 
     private boolean canHandle(Package requestPackage) {
         return this.packageType != null && this.packageType.isInstance(requestPackage);
     }
 
-    private String fireNextHandler(Package requestPackage, ChannelHandlerContext context) {
+    private Optional<String> fireNextHandler(Package requestPackage, ChannelHandlerContext context) {
         if (this.nextHandler != null) {
             return this.nextHandler.handle(requestPackage, context);
         }

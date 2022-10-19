@@ -5,6 +5,9 @@ netty:
     connectionThreads: 1
     dataProcessThreads: 10
     timeoutSeconds: 50
+  context:
+    command:
+      minutes-waiting-response: 5
 
 spring:
   datasource:

@@ -4,7 +4,10 @@ netty:
     port: 6000
     connectionThreads: 1
     dataProcessThreads: 10
-    timeoutSeconds: 200
+    timeoutSeconds: 50
+  context:
+    command:
+      minutes-waiting-response: 5
 
 
 spring:

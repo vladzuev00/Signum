@@ -41,6 +41,6 @@ public class CommandEntity extends BaseEntity {
     }
 
     public enum Status {
-        DELIVERED, NOT_DELIVERED
+        NOT_DEFINED, NEW, SENT, SUCCESS_ANSWERED, ERROR_ANSWERED, TIMEOUT_NOT_ANSWERED
     }
 }
