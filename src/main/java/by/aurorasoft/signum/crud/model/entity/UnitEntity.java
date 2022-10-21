@@ -7,6 +7,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 
 import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "unit")
@@ -24,7 +25,12 @@ import static javax.persistence.FetchType.LAZY;
 @Setter
 @Getter
 @Builder
-public class UnitEntity extends NamedEntity {
+public class UnitEntity extends NamedEntity<Long> {
+
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
@@ -41,7 +47,8 @@ public class UnitEntity extends NamedEntity {
     }
 
     public UnitEntity(Long id, String name, UserEntity user, TrackerEntity tracker) {
-        super(id, name);
+        super(name);
+        this.id = id;
         this.user = user;
         this.tracker = tracker;
     }

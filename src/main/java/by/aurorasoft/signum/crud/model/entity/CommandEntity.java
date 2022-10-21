@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "command")
@@ -14,7 +15,12 @@ import static javax.persistence.FetchType.LAZY;
 @Setter
 @Getter
 @Builder
-public class CommandEntity extends BaseEntity {
+public class CommandEntity extends BaseEntity<Long> {
+
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
     @Column(name = "text")
     private String text;
@@ -27,20 +33,35 @@ public class CommandEntity extends BaseEntity {
     @JoinColumn(name = "tracker_id")
     private TrackerEntity tracker;
 
-    public CommandEntity(Long id, String text, Status status, TrackerEntity tracker) {
-        super(id);
-        this.text = text;
-        this.status = status;
-        this.tracker = tracker;
-    }
+    @Enumerated(STRING)
+    @Column(name = "type")
+    private Type type;
 
     @Override
     public String toString() {
-        return super.toString() + "[text = " + this.text + ", status = " + this.status
-                + ", trackerId = " + this.tracker.getId() + "]";
+        return  super.toString()
+                + "[text = " + this.text
+                + ", status = " + this.status
+                + ", trackerId = " + this.tracker.getId()
+                + ", type = " + this.type + "]";
     }
 
     public enum Status {
-        NOT_DEFINED, NEW, SENT, SUCCESS_ANSWERED, ERROR_ANSWERED, TIMEOUT_NOT_ANSWERED
+        NOT_DEFINED, NEW, SENT, SUCCESS, ERROR, TIMEOUT
+    }
+
+    public enum Type {
+
+        NOT_DEFINED,
+
+        /**
+         * indicates that command has been delivered by server to tracker
+         */
+        COMMAND,
+
+        /**
+         * indicates that command has been delivered by tracker to server
+         */
+        ANSWER
     }
 }

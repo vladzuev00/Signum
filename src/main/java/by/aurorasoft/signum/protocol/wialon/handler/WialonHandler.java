@@ -1,7 +1,7 @@
 package by.aurorasoft.signum.protocol.wialon.handler;
 
-import by.aurorasoft.signum.protocol.wialon.exception.AnswerableException;
-import by.aurorasoft.signum.protocol.wialon.contextmanager.ContextManager;
+import by.aurorasoft.signum.protocol.core.exception.AnswerableException;
+import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.PackageHandler;
 import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.StarterPackageHandler;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
@@ -9,8 +9,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.DecoderException;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Optional;
 
 import static java.lang.String.format;
 
@@ -32,8 +30,7 @@ public final class WialonHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext context, Object requestObject) {
         final Package requestPackage = (Package) requestObject;
         log.info(format(TEMPLATE_MESSAGE_START_HANDLING_PACKAGE, requestPackage));
-        final Optional<String> optionalResponsePackage = this.starterPackageHandler.handle(requestPackage, context);
-        optionalResponsePackage.ifPresent(context::writeAndFlush);
+        this.starterPackageHandler.handle(requestPackage, context);
     }
 
     @Override

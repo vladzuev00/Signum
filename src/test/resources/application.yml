@@ -5,9 +5,11 @@ netty:
     connectionThreads: 1
     dataProcessThreads: 10
     timeoutSeconds: 50
-  context:
-    command:
-      minutes-waiting-response: 5
+  contextManager:
+    lifecycleObserver:
+      waitingResponseTimeoutInMinutes: 5
+      threadPool:
+        size: 10
 
 
 spring:

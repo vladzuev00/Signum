@@ -4,10 +4,12 @@ netty:
     port: 6000
     connectionThreads: 1
     dataProcessThreads: 10
-    timeoutSeconds: 50
-  context:
-    command:
-      minutes-waiting-response: 5
+    timeoutSeconds: 300
+  contextManager:
+    lifecycleObserver:
+      waitingResponseTimeoutInMinutes: 5
+      threadPool:
+        size: 10
 
 spring:
   datasource:

@@ -52,9 +52,14 @@ CREATE TABLE command(
                         id BIGSERIAL PRIMARY KEY,
                         text TEXT NOT NULL,
                         status VARCHAR(64) NOT NULL,
-                        tracker_id INTEGER NOT NULL REFERENCES tracker
+                        tracker_id INTEGER NOT NULL REFERENCES tracker,
+                        type VARCHAR(64) NOT NULL
 );
 
 ALTER TABLE command
     ADD CONSTRAINT valid_command_status
         CHECK (status IN ('NEW', 'SENT', 'SUCCESS_ANSWERED', 'ERROR_ANSWERED', 'TIMEOUT_NOT_ANSWERED'));
+
+ALTER TABLE command
+    ADD CONSTRAINT valid_command_type
+        CHECK(type IN ('COMMAND', 'ANSWER'));

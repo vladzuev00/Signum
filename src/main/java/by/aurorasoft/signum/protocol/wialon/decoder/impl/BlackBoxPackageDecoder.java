@@ -9,7 +9,7 @@ import static by.aurorasoft.signum.protocol.wialon.model.BlackBoxPackage.PACKAGE
 @Component
 public final class BlackBoxPackageDecoder extends PackageDecoder {
 
-    public BlackBoxPackageDecoder(CommandPackageDecoder nextPackageDecoder,
+    public BlackBoxPackageDecoder(ResponseCommandPackageDecoder nextPackageDecoder,
                                   BlackBoxPackageDeserializer packageDeserializer) {
         super(nextPackageDecoder, PACKAGE_PREFIX, packageDeserializer);
     }

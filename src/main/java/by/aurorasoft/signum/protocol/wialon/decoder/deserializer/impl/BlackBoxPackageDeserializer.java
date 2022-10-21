@@ -3,7 +3,7 @@ package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl;
 import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.MessageParser;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.exception.NotValidMessageException;
-import by.aurorasoft.signum.protocol.wialon.exception.AnswerableException;
+import by.aurorasoft.signum.protocol.core.exception.AnswerableException;
 import by.aurorasoft.signum.protocol.wialon.model.BlackBoxPackage;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.PackageDeserializer;
 import lombok.RequiredArgsConstructor;

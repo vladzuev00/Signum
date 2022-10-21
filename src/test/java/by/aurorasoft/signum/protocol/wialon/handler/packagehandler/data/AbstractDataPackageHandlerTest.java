@@ -3,7 +3,7 @@ package by.aurorasoft.signum.protocol.wialon.handler.packagehandler.data;
 import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.crud.model.dto.Message.GpsCoordinate;
 import by.aurorasoft.signum.crud.model.dto.Unit;
-import by.aurorasoft.signum.protocol.wialon.contextmanager.ContextManager;
+import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import by.aurorasoft.signum.protocol.wialon.model.AbstractDataPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import by.aurorasoft.signum.crud.service.MessageService;
@@ -21,8 +21,6 @@ import java.util.List;
 
 import static java.lang.String.format;
 import static java.time.Instant.now;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.*;
 

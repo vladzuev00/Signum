@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.time.Instant;
 
 import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "message")
@@ -18,7 +19,12 @@ import static javax.persistence.FetchType.LAZY;
 @Setter
 @Getter
 @Builder
-public class MessageEntity extends BaseEntity {
+public class MessageEntity extends BaseEntity<Long> {
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "unit_id")
     private UnitEntity unit;
@@ -50,27 +56,19 @@ public class MessageEntity extends BaseEntity {
     @Column(name = "params")
     private String parameters;
 
-    public MessageEntity(Long id, UnitEntity unit, Instant dateTime, float latitude, float longitude, int speed,
-                         int course, int altitude, int amountSatellite, float hdop, String parameters) {
-        super(id);
-        this.unit = unit;
-        this.dateTime = dateTime;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.speed = speed;
-        this.course = course;
-        this.altitude = altitude;
-        this.amountSatellite = amountSatellite;
-        this.hdop = hdop;
-        this.parameters = parameters;
-    }
-
     @Override
     public String toString() {
-        return super.toString() + "[unitId = " + this.unit.getId() + ", dateTime = " + this.dateTime
-                + ", latitude = " + this.latitude + ", longitude = " + this.longitude
-                + ", speed = " + this.speed + ", course = " + this.course + ", altitude = " + this.altitude
-                + ", amountSatellite = " + this.amountSatellite + ", hdop = " + this.hdop
-                + ", parameters = " + this.parameters + "]";
+        return super.toString()
+                + "[unitId = " + this.unit.getId()
+                + ", dateTime = " + this.dateTime
+                + ", latitude = " + this.latitude
+                + ", longitude = " + this.longitude
+                + ", speed = " + this.speed
+                + ", course = " + this.course
+                + ", altitude = " + this.altitude
+                + ", amountSatellite = " + this.amountSatellite
+                + ", hdop = " + this.hdop
+                + ", parameters = " + this.parameters
+                + "]";
     }
 }

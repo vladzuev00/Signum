@@ -1,8 +1,7 @@
-package by.aurorasoft.signum.protocol.wialon.service;
+package by.aurorasoft.signum.protocol.core;
 
 import by.aurorasoft.signum.crud.model.dto.Unit;
 import by.aurorasoft.signum.crud.service.UnitService;
-import by.aurorasoft.signum.protocol.wialon.model.LoginPackage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +12,7 @@ import java.util.Optional;
 public class AuthorizationDeviceService {
     private final UnitService unitService;
 
-    public Optional<Unit> authorize(LoginPackage loginPackage) {
-        return this.unitService.findByTrackerImei(loginPackage.getImei());
+    public Optional<Unit> authorize(String imei) {
+        return this.unitService.findByTrackerImei(imei);
     }
 }

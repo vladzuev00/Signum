@@ -12,7 +12,7 @@ import static by.aurorasoft.signum.protocol.wialon.model.ResponseCommandPackage.
 import static java.lang.Byte.parseByte;
 
 @Component
-public final class CommandPackageDeserializer implements PackageDeserializer {
+public final class ResponseCommandPackageDeserializer implements PackageDeserializer {
 
     @Override
     public ResponseCommandPackage deserialize(String deserialized) {

@@ -1,12 +1,13 @@
 package by.aurorasoft.signum.crud.model.entity;
 
+import by.nhorushko.crudgeneric.v2.domain.AbstractEntity;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "tracker")
@@ -18,17 +19,16 @@ import javax.persistence.Table;
 @Getter
 @ToString(callSuper = true)
 @Builder
-public class TrackerEntity extends BaseEntity {
+public class TrackerEntity implements AbstractEntity<Long> {
+
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
     @Column(name = "imei")
     private String imei;
 
     @Column(name = "phone_number")
     private String phoneNumber;
-
-    public TrackerEntity(Long id, String imei, String phoneNumber) {
-        super(id);
-        this.imei = imei;
-        this.phoneNumber = phoneNumber;
-    }
 }

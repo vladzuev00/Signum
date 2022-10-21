@@ -1,6 +1,5 @@
 package by.aurorasoft.signum.base;
 
-import by.aurorasoft.signum.crud.model.entity.BaseEntity;
 import com.yannbriancon.interceptor.HibernateQueryInterceptor;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;

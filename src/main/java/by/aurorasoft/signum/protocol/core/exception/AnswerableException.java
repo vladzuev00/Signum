@@ -1,4 +1,4 @@
-package by.aurorasoft.signum.protocol.wialon.exception;
+package by.aurorasoft.signum.protocol.core.exception;
 
 public final class AnswerableException extends RuntimeException {
     private final String answerToClient;

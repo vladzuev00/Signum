@@ -3,10 +3,12 @@ package by.aurorasoft.signum.crud.model.entity;
 import lombok.*;
 import org.hibernate.annotations.*;
 
+import javax.persistence.*;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
+
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "app_user")
@@ -18,11 +20,14 @@ import java.util.List;
 @Getter
 @ToString
 @Builder
-public class UserEntity extends NamedEntity {
+public class UserEntity extends NamedEntity<Long> {
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
     @OneToMany(mappedBy = "user")
     @ToString.Exclude
-    @Fetch(FetchMode.SUBSELECT)
     private List<UnitEntity> units;
 
     public UserEntity(String name, List<UnitEntity> units) {
@@ -31,7 +36,8 @@ public class UserEntity extends NamedEntity {
     }
 
     public UserEntity(Long id, String name, List<UnitEntity> units) {
-        super(id, name);
+        super(name);
+        this.id = id;
         this.units = units;
     }
 }

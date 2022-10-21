@@ -1,7 +1,7 @@
 package by.aurorasoft.signum.protocol.wialon.handler;
 
 import by.aurorasoft.signum.crud.model.dto.Unit;
-import by.aurorasoft.signum.protocol.wialon.contextmanager.ContextManager;
+import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;

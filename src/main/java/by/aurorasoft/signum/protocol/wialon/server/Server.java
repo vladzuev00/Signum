@@ -6,7 +6,7 @@ import by.aurorasoft.signum.protocol.wialon.decoder.impl.StarterPackageDecoder;
 import by.aurorasoft.signum.protocol.wialon.encoder.PackagePostfixAppendingEncoder;
 import by.aurorasoft.signum.protocol.wialon.handler.ExceptionHandler;
 import by.aurorasoft.signum.protocol.wialon.handler.WialonHandler;
-import by.aurorasoft.signum.protocol.wialon.contextmanager.ContextManager;
+import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.StarterPackageHandler;
 import by.aurorasoft.signum.protocol.wialon.server.exception.RunningServerException;
 import by.aurorasoft.signum.protocol.wialon.server.exception.ServerShutDownException;

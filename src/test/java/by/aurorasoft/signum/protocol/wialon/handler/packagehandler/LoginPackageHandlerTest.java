@@ -1,10 +1,10 @@
 package by.aurorasoft.signum.protocol.wialon.handler.packagehandler;
 
 import by.aurorasoft.signum.crud.model.dto.Unit;
-import by.aurorasoft.signum.protocol.wialon.contextmanager.ContextManager;
+import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import by.aurorasoft.signum.protocol.wialon.model.LoginPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
-import by.aurorasoft.signum.protocol.wialon.service.AuthorizationDeviceService;
+import by.aurorasoft.signum.protocol.core.AuthorizationDeviceService;
 import io.netty.channel.ChannelHandlerContext;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,8 +17,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.Optional;
 
 import static java.util.Optional.empty;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
