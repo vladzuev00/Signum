@@ -3,51 +3,41 @@ package by.aurorasoft.signum.protocol.core.contextmanager;
 import by.aurorasoft.signum.crud.model.dto.Command;
 import by.aurorasoft.signum.crud.model.dto.Unit;
 import by.aurorasoft.signum.crud.service.CommandService;
+import by.aurorasoft.signum.protocol.wialon.service.sendcommand.CommandSenderService;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.Attribute;
 import io.netty.util.AttributeKey;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.concurrent.*;
 
 import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Status.*;
-import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Type.COMMAND;
 import static io.netty.util.AttributeKey.valueOf;
-import static java.lang.String.format;
+import static java.lang.Thread.interrupted;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
+//TODO: correct dependencies
 @Component
 public final class ContextManager {
     private static final AttributeKey<Unit> CHANNEL_ATTRIBUTE_KEY_UNIT
             = valueOf("unit");
-
-//    private static final AttributeKey<BlockingQueue<CommandWaitingResponse>>
-//            CHANNEL_ATTRIBUTE_KEY_COMMAND_WAITING_RESPONSE = valueOf("command_waiting_response");
-//    private static final Supplier<BlockingQueue<CommandWaitingResponse>> COMMAND_WAITING_RESPONSE_QUEUE_SUPPLIER
-//            = () -> new ArrayBlockingQueue<>(1);
-
-    private static final AttributeKey<Queue<Command>> ATTRIBUTE_KEY_COMMANDS_TO_BE_SENT
-            = valueOf("commands_to_be_sent");
     private static final AttributeKey<CommandWaitingResponse> ATTRIBUTE_KEY_COMMAND_WAITING_RESPONSE
             = valueOf("command_waiting_response");
 
-    private static final String TEMPLATE_SENT_COMMAND = "#M#%s";
-
     private final CommandService commandService;
-    private final ContextManager contextManager;
-    //TODO: seconds
-    private final int waitingResponseTimeoutInMinutes;
+    private final CommandSenderService commandSenderService;
+    private final int waitingResponseTimeoutInSeconds;
 
-    public ContextManager(CommandService commandService, ContextManager contextManager,
-                          @Value("${netty.contextManager.lifecycleObserver.waitingResponseTimeoutInMinutes}")
-                          int waitingResponseTimeoutInMinutes) {
+    public ContextManager(CommandService commandService,
+                          @Lazy CommandSenderService commandSenderService,
+                          @Value("${netty.contextManager.lifecycleObserver.waitingResponseTimeoutInSeconds}")
+                          int waitingResponseTimeoutInSeconds) {
         this.commandService = commandService;
-        this.contextManager = contextManager;
-        this.waitingResponseTimeoutInMinutes = waitingResponseTimeoutInMinutes;
+        this.commandSenderService = commandSenderService;
+        this.waitingResponseTimeoutInSeconds = waitingResponseTimeoutInSeconds;
     }
 
     public Unit findUnit(ChannelHandlerContext context) {
@@ -58,56 +48,31 @@ public final class ContextManager {
         putAttributeValue(context, CHANNEL_ATTRIBUTE_KEY_UNIT, unit);
     }
 
-    @SuppressWarnings("all")
-    public void addCommandToBeSent(Command command, ChannelHandlerContext context) {
-        initializeCommandsToBeSentAttribute(context);
-        synchronized (context) {
-            final CommandWaitingResponse commandWaitingResponse
-                    = findAttributeValue(context, ATTRIBUTE_KEY_COMMAND_WAITING_RESPONSE);
-            if (commandWaitingResponse == null) {
-                this.sendCommand(context, command);
-            } else {
-                final Queue<Command> commandsToBeSent
-                        = findAttributeValue(context, ATTRIBUTE_KEY_COMMANDS_TO_BE_SENT);
-                commandsToBeSent.add(command);
-            }
-        }
+    public boolean isExistCommandWaitingResponse(ChannelHandlerContext context) {
+        return findAttributeValue(context, ATTRIBUTE_KEY_COMMAND_WAITING_RESPONSE) != null;
     }
 
-//    /**
-//     * Operation is blocked while command waiting response in context.
-//     */
-//    public Command findCommandWaitingResponse(ChannelHandlerContext context) {
-//        final Queue<CommandWaitingResponse> commandsWaitingResponses
-//                = findAttributeValue(context, CHANNEL_ATTRIBUTE_KEY_COMMAND_WAITING_RESPONSE);
-//        final CommandWaitingResponse commandWaitingResponse = commandsWaitingResponses.poll();
-//        if (commandWaitingResponse == null) {
-//            throw new NoSuchElementException("Command waiting response wasn't found.");
-//        }
-//        commandWaitingResponse.cancelObserverTask();
-//        return commandWaitingResponse.getCommand();
-//    }
-//
-//    /**
-//     * Operation is blocked while other command waiting response in context.
-//     */
-//    public void putCommandWaitingResponse(ChannelHandlerContext context, Command command) {
-//        initializeCommandWaitingResponseQueue(context);
-//        try {
-//            final ScheduledFuture<?> observerLifecycleTask = context
-//                    .channel()
-//                    .eventLoop()
-//                    .schedule(this.createObserverLifecycleCommandTask(context, command),
-//                            this.waitingResponseTimeoutInMinutes, MINUTES);
-//            final CommandWaitingResponse commandWaitingResponse
-//                    = new CommandWaitingResponse(command, observerLifecycleTask);
-//            final BlockingQueue<CommandWaitingResponse> commandWaitingResponseQueue
-//                    = findAttributeValue(context, CHANNEL_ATTRIBUTE_KEY_COMMAND_WAITING_RESPONSE);
-//            commandWaitingResponseQueue.put(commandWaitingResponse);
-//        } catch (final InterruptedException cause) {
-//            throw new ContextManagingException(cause);
-//        }
-//    }
+    public void putCommandWaitingResponse(ChannelHandlerContext context, Command command) {
+        final ScheduledFuture<?> observerLifecycleTask = this.runObserverLifecycleCommandTask(context, command);
+        final CommandWaitingResponse commandWaitingResponse
+                = new CommandWaitingResponse(command, observerLifecycleTask);
+        putAttributeValue(context, ATTRIBUTE_KEY_COMMAND_WAITING_RESPONSE, commandWaitingResponse);
+    }
+
+    public Command findCommandWaitingResponse(ChannelHandlerContext context) {
+        final CommandWaitingResponse commandWaitingResponse
+                = findAttributeValue(context, ATTRIBUTE_KEY_COMMAND_WAITING_RESPONSE);
+        return commandWaitingResponse.getCommand();
+    }
+
+    public void onGetCommandResponse(ChannelHandlerContext context) {
+        final CommandWaitingResponse commandWaitingResponse
+                = findAttributeValue(context, ATTRIBUTE_KEY_COMMAND_WAITING_RESPONSE);
+        removeCommandWaitingResponse(context);
+        commandWaitingResponse.cancelObserverTask();
+        final Command command = commandWaitingResponse.getCommand();
+        this.commandSenderService.onSentCommandWasHandled(command.getTracker());
+    }
 
     private static <ValueType> ValueType findAttributeValue(ChannelHandlerContext context,
                                                             AttributeKey<ValueType> attributeKey) {
@@ -124,52 +89,27 @@ public final class ContextManager {
         attribute.set(value);
     }
 
-    @SuppressWarnings("all")
-    private static void initializeCommandsToBeSentAttribute(ChannelHandlerContext context) {
-        synchronized (context) {
-            final Queue<Command> commandsToBeSent = findAttributeValue(context, ATTRIBUTE_KEY_COMMANDS_TO_BE_SENT);
-            if (commandsToBeSent == null) {
-                putAttributeValue(context, ATTRIBUTE_KEY_COMMANDS_TO_BE_SENT, new LinkedList<>());
+    private ScheduledFuture<?> runObserverLifecycleCommandTask(ChannelHandlerContext context, Command command) {
+        return context
+                .channel()
+                .eventLoop()
+                .schedule(this.createObserverLifecycleCommandTask(context, command),
+                        this.waitingResponseTimeoutInSeconds, SECONDS);
+    }
+
+    private Runnable createObserverLifecycleCommandTask(ChannelHandlerContext context, Command command) {
+        return () -> {
+            if (!interrupted()) {
+                removeCommandWaitingResponse(context);
+                this.commandService.updateByGivenStatus(command, TIMEOUT);
+                this.commandSenderService.onSentCommandWasHandled(command.getTracker());
             }
-        }
+        };
     }
 
-    private void sendCommand(ChannelHandlerContext context, Command command) {
-        final Command savedCommand = this.commandService.save(command, NEW, COMMAND);
-        final String sentCommand = format(TEMPLATE_SENT_COMMAND, savedCommand.getText());
-
-        context.writeAndFlush(sentCommand)
-                .addListener(
-                        (ChannelFutureListener)
-                                future -> this.commandService.updateByGivenStatus(savedCommand, SENT));
+    private static void removeCommandWaitingResponse(ChannelHandlerContext context) {
+        putAttributeValue(context, ATTRIBUTE_KEY_COMMAND_WAITING_RESPONSE, null);
     }
-
-//    @SuppressWarnings("all")
-//    private static void initializeCommandWaitingResponseQueue(ChannelHandlerContext context) {
-//        synchronized (context) {
-//            final BlockingQueue<CommandWaitingResponse> commandWaitingResponseQueue
-//                    = findAttributeValue(context, CHANNEL_ATTRIBUTE_KEY_COMMAND_WAITING_RESPONSE);
-//            if (commandWaitingResponseQueue == null) {
-//                putAttributeValue(context, CHANNEL_ATTRIBUTE_KEY_COMMAND_WAITING_RESPONSE,
-//                        COMMAND_WAITING_RESPONSE_QUEUE_SUPPLIER.get());
-//            }
-//        }
-//    }
-//
-//    private Runnable createObserverLifecycleCommandTask(ChannelHandlerContext context, Command command) {
-//        return () -> {
-//            try {
-//                if (!interrupted()) {
-//                    final BlockingQueue<CommandWaitingResponse> commandsQueue
-//                            = findAttributeValue(context, CHANNEL_ATTRIBUTE_KEY_COMMAND_WAITING_RESPONSE);
-//                    commandsQueue.take();
-//                    this.commandService.save(command, TIMEOUT, COMMAND);
-//                }
-//            } catch (final InterruptedException cause) {
-//                throw new ContextManagingException(cause);
-//            }
-//        };
-//    }
 
     @lombok.Value
     private static class CommandWaitingResponse {

@@ -15,5 +15,5 @@ public interface CommandRepository extends JpaRepository<CommandEntity, Long> {
     void updateByStatus(@Param("id") Long id, @Param("newStatus") Status newStatus);
 
     @Query("SELECT c FROM CommandEntity c WHERE c.status IN (:statuses)")
-    List<CommandEntity> findCommandsByStatuses(@Param("statuses") List<CommandEntity.Status> statuses);
+    List<CommandEntity> findCommandsByStatuses(@Param("statuses") List<Status> statuses);
 }

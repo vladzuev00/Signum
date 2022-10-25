@@ -25,6 +25,7 @@ public final class ResponseCommandPackageHandler extends PackageHandler {
     protected void doHandle(Package inboundPackage, ChannelHandlerContext context) {
         final ResponseCommandPackage responseCommandPackage = (ResponseCommandPackage) inboundPackage;
         final Command commandWaitingResponse = this.contextManager.findCommandWaitingResponse(context);
+        this.contextManager.onGetCommandResponse(context);
         final CommandEntity.Status statusAnsweredCommand =
                 responseCommandPackage.getStatus() == ResponseCommandPackage.Status.SUCCESS
                         ? CommandEntity.Status.SUCCESS

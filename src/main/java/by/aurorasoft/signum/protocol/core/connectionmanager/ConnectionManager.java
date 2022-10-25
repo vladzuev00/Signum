@@ -12,18 +12,19 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.Optional.ofNullable;
 
+//TODO: correct dependencies
 @Component
 public final class ConnectionManager {
-    private final ContextManager contextWorker;
+    private final ContextManager contextManager;
     private final Map<Long, ChannelHandlerContext> trackerIdToContextMap;
 
-    public ConnectionManager(ContextManager contextWorker) {
-        this.contextWorker = contextWorker;
+    public ConnectionManager(ContextManager contextManager) {
+        this.contextManager = contextManager;
         this.trackerIdToContextMap = new ConcurrentHashMap<>();
     }
 
     public void addContext(ChannelHandlerContext context) {
-        final Unit associatedUnit = this.contextWorker.findUnit(context);
+        final Unit associatedUnit = this.contextManager.findUnit(context);
         final Tracker tracker = associatedUnit.getTracker();
         this.trackerIdToContextMap.merge(tracker.getId(), context, (oldContext, newContext) -> {
             oldContext.close();
