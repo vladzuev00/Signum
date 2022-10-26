@@ -1,6 +1,7 @@
 package by.aurorasoft.signum.crud.model.entity;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -51,23 +52,36 @@ public class MessageEntity extends BaseEntity<Long> {
     @Column(name = "amount_satellite")
     private int amountSatellite;
 
-    @Column(name = "hdop")
-    private float hdop;
+    @Column(name = "gsm_level")
+    private int gsmLevel;
 
-    @Column(name = "gsm_level_percent")
-    private byte gsmLevelPercent;
+    @Column(name = "onboard_voltage")
+    @ColumnTransformer(
+            read = "onboard_voltage::DECIMAL / 1000",
+            write = "? * 1000"
+    )
+    private float onboardVoltage;
 
-    @Column(name = "voltage")
-    private float voltage;
+    @Column(name = "eco_cornering")
+    @ColumnTransformer(
+            read = "eco_cornering::DECIMAL / 1000",
+            write = "? * 1000"
+    )
+    private float ecoCornering;
 
-    @Column(name = "corner_acceleration")
-    private float cornerAcceleration;
+    @Column(name = "eco_acceleration")
+    @ColumnTransformer(
+            read = "eco_acceleration::DECIMAL / 1000",
+            write = "? * 1000"
+    )
+    private float ecoAcceleration;
 
-    @Column(name = "acceleration_up")
-    private float accelerationUp;
-
-    @Column(name = "acceleration_down")
-    private float accelerationDown;
+    @Column(name = "eco_braking")
+    @ColumnTransformer(
+            read = "eco_braking::DECIMAL / 1000",
+            write = "? * 1000"
+    )
+    private float ecoBraking;
 
     @Override
     public String toString() {
@@ -80,12 +94,11 @@ public class MessageEntity extends BaseEntity<Long> {
                 + ", course = " + this.course
                 + ", altitude = " + this.altitude
                 + ", amountSatellite = " + this.amountSatellite
-                + ", hdop = " + this.hdop
-                + ", gsmLevelPercent = " + this.gsmLevelPercent
-                + ", voltage = " + this.voltage
-                + ", cornerAcceleration = " + this.cornerAcceleration
-                + ", accelerationUp = " + this.accelerationUp
-                + ", accelerationDown = " + this.accelerationDown
+                + ", gsmLevel = " + this.gsmLevel
+                + ", onboardVoltage = " + this.onboardVoltage
+                + ", ecoCornering = " + this.ecoCornering
+                + ", ecoAcceleration = " + this.ecoAcceleration
+                + ", ecoBraking = " + this.ecoBraking
                 + "]";
     }
 }

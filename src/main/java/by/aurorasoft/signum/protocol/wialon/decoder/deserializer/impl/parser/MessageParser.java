@@ -11,7 +11,7 @@ public final class MessageParser {
     public Message parse(String source) {
         final MessageComponentsParser parser = new MessageComponentsParser(source);
         return new Message(parser.parseDateTime(), parser.parseCoordinate(), parser.parseSpeed(),
-                parser.parseCourse(), parser.parseAltitude(), parser.parseAmountSatellite(), parser.parseHdop(),
+                parser.parseCourse(), parser.parseAltitude(), parser.parseAmountSatellite(),
                 parser.parseParameters());
     }
 }

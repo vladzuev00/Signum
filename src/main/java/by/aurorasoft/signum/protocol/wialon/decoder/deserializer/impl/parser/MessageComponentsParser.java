@@ -1,7 +1,7 @@
 package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser;
 
 import by.aurorasoft.signum.crud.model.dto.Message.GpsCoordinate;
-import by.aurorasoft.signum.crud.model.dto.Message.ParameterType;
+import by.aurorasoft.signum.crud.model.dto.Message.ParameterName;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.exception.NotValidMessageException;
 
 import java.time.Instant;
@@ -10,9 +10,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static by.aurorasoft.signum.crud.model.dto.Message.ParameterType.valueOf;
-import static by.aurorasoft.signum.crud.model.dto.Message.ParameterType.values;
-import static java.lang.Double.parseDouble;
+import static by.aurorasoft.signum.crud.model.dto.Message.ParameterName.values;
 import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 import static java.lang.Math.abs;
@@ -23,7 +21,6 @@ import static java.time.ZoneOffset.UTC;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.Arrays.stream;
 import static java.util.regex.Pattern.compile;
-import static java.util.stream.Collectors.toMap;
 
 public final class MessageComponentsParser {
     private static final int GROUP_NUMBER_DATE_TIME = 1;
@@ -137,7 +134,7 @@ public final class MessageComponentsParser {
         return !amountHdop.equals(NOT_DEFINED_HDOP_STRING) ? parseFloat(amountHdop) : NOT_DEFINED_HDOP;
     }
 
-    public Map<ParameterType, Float> parseParameters() {
+    public Map<ParameterName, Float> parseParameters() {
         final String parameters = this.matcher.group(GROUP_NUMBER_PARAMETERS);
 //        return stream(parameters.split(DELIMITER_PARAMETERS))
 //                .filter(MessageComponentsParser::isReceivedParameter)

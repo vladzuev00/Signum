@@ -118,6 +118,29 @@ ALTER TABLE message
 ALTER TABLE message
     RENAME COLUMN eco_cornering TO acceleration_down;
 
+ALTER TABLE message
+    DROP COLUMN hdop;
+
+ALTER TABLE message
+    RENAME COLUMN gsm_level_percent TO gsm_level;
+
+ALTER TABLE message
+    RENAME COLUMN voltage TO onboard_voltage;
+
+ALTER TABLE message
+    RENAME COLUMN corner_acceleration TO eco_cornering;
+
+ALTER TABLE message
+    RENAME COLUMN acceleration_up TO eco_acceleration;
+
+ALTER TABLE message
+    RENAME COLUMN acceleration_down TO eco_braking;
+
+ALTER TABLE message
+    DROP COLUMN params;
+
+
+
 
 
 

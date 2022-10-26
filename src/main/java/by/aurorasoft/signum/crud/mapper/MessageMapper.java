@@ -2,7 +2,7 @@ package by.aurorasoft.signum.crud.mapper;
 
 import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.crud.model.dto.Message.GpsCoordinate;
-import by.aurorasoft.signum.crud.model.dto.Message.ParameterType;
+import by.aurorasoft.signum.crud.model.dto.Message.ParameterName;
 import by.aurorasoft.signum.crud.model.entity.DeviceEntity;
 import by.aurorasoft.signum.crud.model.entity.MessageEntity;
 import by.nhorushko.crudgeneric.v2.mapper.ExtAbstractMapper;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import javax.persistence.EntityManager;
 import java.util.Map;
 
-import static by.aurorasoft.signum.crud.model.dto.Message.ParameterType.*;
+import static by.aurorasoft.signum.crud.model.dto.Message.ParameterName.*;
 
 @Component
 public final class MessageMapper extends ExtAbstractMapper<MessageEntity, Message, Long, DeviceEntity> {
@@ -42,7 +42,6 @@ public final class MessageMapper extends ExtAbstractMapper<MessageEntity, Messag
                 entity.getCourse(),
                 entity.getAltitude(),
                 entity.getAmountSatellite(),
-                entity.getHdop(),
                 mapParameters(entity));
     }
 
@@ -53,21 +52,21 @@ public final class MessageMapper extends ExtAbstractMapper<MessageEntity, Messag
     }
 
     private static void mapParameters(Message source, MessageEntity destination) {
-        final Map<ParameterType, Float> parameterTypesToValues = source.getParameterTypesToValues();
-        destination.setGsmLevelPercent(parameterTypesToValues.get(GSM_LEVEL).byteValue());
-        destination.setVoltage(parameterTypesToValues.get(VOLTAGE));
-        destination.setCornerAcceleration(parameterTypesToValues.get(CORNER_ACCELERATION));
-        destination.setAccelerationUp(parameterTypesToValues.get(ACCELERATION_UP));
-        destination.setAccelerationDown(parameterTypesToValues.get(ACCELERATION_DOWN));
+        final Map<ParameterName, Float> parameterTypesToValues = source.getParameterNamesToValues();
+        destination.setGsmLevel(parameterTypesToValues.get(GSM_LEVEL).byteValue());
+        destination.setOnboardVoltage(parameterTypesToValues.get(VOLTAGE));
+        destination.setEcoCornering(parameterTypesToValues.get(CORNER_ACCELERATION));
+        destination.setEcoAcceleration(parameterTypesToValues.get(ACCELERATION_UP));
+        destination.setEcoBraking(parameterTypesToValues.get(ACCELERATION_DOWN));
     }
 
-    private static Map<ParameterType, Float> mapParameters(MessageEntity entity) {
+    private static Map<ParameterName, Float> mapParameters(MessageEntity entity) {
         return Map.of(
-                GSM_LEVEL, (float) entity.getGsmLevelPercent(),
-                VOLTAGE, entity.getVoltage(),
-                CORNER_ACCELERATION, entity.getCornerAcceleration(),
-                ACCELERATION_UP, entity.getAccelerationUp(),
-                ACCELERATION_DOWN, entity.getAccelerationDown()
+                GSM_LEVEL, (float) entity.getGsmLevel(),
+                VOLTAGE, entity.getOnboardVoltage(),
+                CORNER_ACCELERATION, entity.getEcoCornering(),
+                ACCELERATION_UP, entity.getEcoAcceleration(),
+                ACCELERATION_DOWN, entity.getEcoBraking()
         );
     }
 }
