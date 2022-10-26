@@ -22,7 +22,8 @@ public final class UnitRepositoryTest extends AbstractContextTest {
         final UnitEntity givenUnit = new UnitEntity(
                 "unit-name",
                 super.entityManager.getReference(UserEntity.class, 25551L),
-                super.entityManager.getReference(DeviceEntity.class, 25555L));
+                super.entityManager.getReference(DeviceEntity.class, 25555L)
+        );
 
         super.startQueryCount();
         this.unitRepository.save(givenUnit);
