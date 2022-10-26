@@ -7,8 +7,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class TrackerMapper extends AbstractMapper<DeviceEntity, Device> {
-    public TrackerMapper(ModelMapper modelMapper) {
+public final class DeviceMapper extends AbstractMapper<DeviceEntity, Device> {
+    public DeviceMapper(ModelMapper modelMapper) {
         super(modelMapper, DeviceEntity.class, Device.class);
     }
 
