@@ -20,14 +20,15 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Getter
 @Builder
 public class MessageEntity extends BaseEntity<Long> {
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "unit_id")
-    private UnitEntity unit;
+    @JoinColumn(name = "device_id")
+    private DeviceEntity device;
 
     @Column(name = "time")
     private Instant dateTime;
@@ -53,13 +54,25 @@ public class MessageEntity extends BaseEntity<Long> {
     @Column(name = "hdop")
     private float hdop;
 
-    @Column(name = "params")
-    private String parameters;
+    @Column(name = "gsm_level_percent")
+    private byte gsmLevelPercent;
+
+    @Column(name = "voltage")
+    private float voltage;
+
+    @Column(name = "corner_acceleration")
+    private float cornerAcceleration;
+
+    @Column(name = "acceleration_up")
+    private float accelerationUp;
+
+    @Column(name = "acceleration_down")
+    private float accelerationDown;
 
     @Override
     public String toString() {
         return super.toString()
-                + "[unitId = " + this.unit.getId()
+                + "[deviceId = " + this.device.getId()
                 + ", dateTime = " + this.dateTime
                 + ", latitude = " + this.latitude
                 + ", longitude = " + this.longitude
@@ -68,7 +81,11 @@ public class MessageEntity extends BaseEntity<Long> {
                 + ", altitude = " + this.altitude
                 + ", amountSatellite = " + this.amountSatellite
                 + ", hdop = " + this.hdop
-                + ", parameters = " + this.parameters
+                + ", gsmLevelPercent = " + this.gsmLevelPercent
+                + ", voltage = " + this.voltage
+                + ", cornerAcceleration = " + this.cornerAcceleration
+                + ", accelerationUp = " + this.accelerationUp
+                + ", accelerationDown = " + this.accelerationDown
                 + "]";
     }
 }

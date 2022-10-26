@@ -8,17 +8,17 @@ import lombok.Value;
 public class Command implements AbstractDto<Long> {
     Long id;
     String text;
-    Tracker tracker;
+    Device device;
 
-    public Command(String text, Tracker tracker) {
+    public Command(String text, Device device) {
         this.id = null;
         this.text = text;
-        this.tracker = tracker;
+        this.device = device;
     }
 
-    public Command(Long id, String text, Tracker tracker) {
+    public Command(Long id, String text, Device device) {
         this.id = id;
         this.text = text;
-        this.tracker = tracker;
+        this.device = device;
     }
 }

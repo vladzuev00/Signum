@@ -1,6 +1,6 @@
 package by.aurorasoft.signum.crud.mapper;
 
-import by.aurorasoft.signum.crud.model.dto.Tracker;
+import by.aurorasoft.signum.crud.model.dto.Device;
 import by.aurorasoft.signum.crud.model.dto.Unit;
 import by.aurorasoft.signum.crud.model.dto.User;
 import by.aurorasoft.signum.crud.model.entity.UnitEntity;
@@ -18,7 +18,7 @@ public final class UnitMapper extends AbstractMapper<UnitEntity, Unit> {
     @Override
     protected Unit createDto(UnitEntity entity) {
         final User user = super.modelMapper.map(entity.getUser(), User.class);
-        final Tracker tracker = super.modelMapper.map(entity.getTracker(), Tracker.class);
+        final Device tracker = super.modelMapper.map(entity.getDevice(), Device.class);
         return new Unit(entity.getId(), entity.getName(), user, tracker);
     }
 }

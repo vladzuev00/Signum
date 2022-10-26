@@ -21,7 +21,7 @@ public class UnitService extends AbstractCrudService<Long, UnitEntity, Unit> {
     public Optional<Unit> findByTrackerImei(String imei) {
         final UnitRepository unitRepository = (UnitRepository) super.repository;
         return unitRepository
-                .findByTracker_imei(imei)
+                .findByDevice_imei(imei)
                 .map(super.mapper::toDto);
     }
 }

@@ -1,7 +1,7 @@
 package by.aurorasoft.signum.crud.repository;
 
 import by.aurorasoft.signum.base.AbstractContextTest;
-import by.aurorasoft.signum.crud.model.entity.TrackerEntity;
+import by.aurorasoft.signum.crud.model.entity.DeviceEntity;
 import by.aurorasoft.signum.crud.model.entity.UnitEntity;
 import by.aurorasoft.signum.crud.model.entity.UserEntity;
 import org.junit.Test;
@@ -22,7 +22,7 @@ public final class UnitRepositoryTest extends AbstractContextTest {
         final UnitEntity givenUnit = new UnitEntity(
                 "unit-name",
                 super.entityManager.getReference(UserEntity.class, 25551L),
-                super.entityManager.getReference(TrackerEntity.class, 25555L));
+                super.entityManager.getReference(DeviceEntity.class, 25555L));
 
         super.startQueryCount();
         this.unitRepository.save(givenUnit);
@@ -38,16 +38,16 @@ public final class UnitRepositoryTest extends AbstractContextTest {
         assertEquals(25551, unit.getId().longValue());
         assertEquals("unit_a", unit.getName());
         assertEquals(25551, unit.getUser().getId().longValue());
-        assertEquals(25551, unit.getTracker().getId().longValue());
+        assertEquals(25551, unit.getDevice().getId().longValue());
     }
 
     @Test
     @SuppressWarnings("all")
     public void unitShouldBeFoundByTrackerImeiAndUserAndTrackerShouldBeLoadedEagerly() {
         super.startQueryCount();
-        final UnitEntity unit = this.unitRepository.findByTracker_imei("355234055650192").orElseThrow();
+        final UnitEntity unit = this.unitRepository.findByDevice_imei("355234055650192").orElseThrow();
         unit.getUser().getName();
-        unit.getTracker().getImei();
+        unit.getDevice().getImei();
         super.checkQueryCount(1);
 
         assertEquals(25551, unit.getId().longValue());
@@ -55,7 +55,7 @@ public final class UnitRepositoryTest extends AbstractContextTest {
 
     @Test
     public void unitShouldNotBeFoundByTrackerImei() {
-        final Optional<UnitEntity> optionalUnit = this.unitRepository.findByTracker_imei("00000000000000000000");
+        final Optional<UnitEntity> optionalUnit = this.unitRepository.findByDevice_imei("00000000000000000000");
         assertTrue(optionalUnit.isEmpty());
     }
 }

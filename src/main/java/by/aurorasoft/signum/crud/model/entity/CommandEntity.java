@@ -30,8 +30,8 @@ public class CommandEntity extends BaseEntity<Long> {
     private Status status;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "tracker_id")
-    private TrackerEntity tracker;
+    @JoinColumn(name = "device_id")
+    private DeviceEntity device;
 
     @Enumerated(STRING)
     @Column(name = "type")
@@ -42,7 +42,7 @@ public class CommandEntity extends BaseEntity<Long> {
         return  super.toString()
                 + "[text = " + this.text
                 + ", status = " + this.status
-                + ", trackerId = " + this.tracker.getId()
+                + ", deviceId = " + this.device.getId()
                 + ", type = " + this.type + "]";
     }
 
@@ -55,12 +55,12 @@ public class CommandEntity extends BaseEntity<Long> {
         NOT_DEFINED,
 
         /**
-         * indicates that command has been delivered by server to tracker
+         * indicates that command has been delivered by server to device
          */
         COMMAND,
 
         /**
-         * indicates that command has been delivered by tracker to server
+         * indicates that command has been delivered by device to server
          */
         ANSWER
     }

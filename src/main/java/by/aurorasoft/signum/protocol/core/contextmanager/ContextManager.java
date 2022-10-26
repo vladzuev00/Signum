@@ -71,7 +71,7 @@ public final class ContextManager {
         removeCommandWaitingResponse(context);
         commandWaitingResponse.cancelObserverTask();
         final Command command = commandWaitingResponse.getCommand();
-        this.commandSenderService.onSentCommandWasHandled(command.getTracker());
+        this.commandSenderService.onSentCommandWasHandled(command.getDevice());
     }
 
     private static <ValueType> ValueType findAttributeValue(ChannelHandlerContext context,
@@ -102,7 +102,7 @@ public final class ContextManager {
             if (!interrupted()) {
                 removeCommandWaitingResponse(context);
                 this.commandService.updateByGivenStatus(command, TIMEOUT);
-                this.commandSenderService.onSentCommandWasHandled(command.getTracker());
+                this.commandSenderService.onSentCommandWasHandled(command.getDevice());
             }
         };
     }

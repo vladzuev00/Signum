@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Set;
 
 public interface CommandRepository extends JpaRepository<CommandEntity, Long> {
     @Modifying
@@ -15,5 +16,5 @@ public interface CommandRepository extends JpaRepository<CommandEntity, Long> {
     void updateByStatus(@Param("id") Long id, @Param("newStatus") Status newStatus);
 
     @Query("SELECT c FROM CommandEntity c WHERE c.status IN (:statuses)")
-    List<CommandEntity> findCommandsByStatuses(@Param("statuses") List<Status> statuses);
+    List<CommandEntity> findByStatuses(@Param("statuses") Set<Status> statuses);
 }

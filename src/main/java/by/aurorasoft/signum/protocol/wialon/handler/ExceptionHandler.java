@@ -22,7 +22,7 @@ public final class ExceptionHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void exceptionCaught(ChannelHandlerContext context, Throwable exception) {
         final Unit unit = this.contextWorker.findUnit(context);
-        log.error(format(TEMPLATE_MESSAGE_EXCEPTION_CAUGHT, unit.getTracker(), exception.getMessage()));
+        log.error(format(TEMPLATE_MESSAGE_EXCEPTION_CAUGHT, unit.getDevice(), exception.getMessage()));
         exception.printStackTrace();
         context.close();
     }

@@ -1,5 +1,7 @@
 package by.aurorasoft.signum.base;
 
+import by.nhorushko.crudgeneric.v2.domain.AbstractDto;
+import by.nhorushko.crudgeneric.v2.domain.AbstractEntity;
 import com.yannbriancon.interceptor.HibernateQueryInterceptor;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
@@ -61,20 +63,20 @@ public abstract class AbstractContextTest {
         assertEquals("wrong count of queries", Long.valueOf(expected), this.getQueryCount());
     }
 
-    protected <EntityType extends BaseEntity> EntityType findEntityFromDB(Class<? extends EntityType> entityType,
-                                                                          Long id) {
-//        this.entityManager.flush();
-//        this.entityManager.clear();
+    protected <IdType, EntityType extends AbstractEntity<IdType>> EntityType findEntityFromDB(
+            Class<? extends EntityType> entityType, IdType id) {
+        this.entityManager.flush();
+        this.entityManager.clear();
         return this.entityManager.find(entityType, id);
     }
-
-    protected <EntityType extends BaseEntity> List<EntityType> findEntitiesFromDB(
-            Class<EntityType> entityType) {
-//        this.entityManager.flush();
-//        this.entityManager.clear();
-        return this.entityManager.createQuery("SELECT e FROM " + entityType.getName() + " e", entityType)
-                .getResultList();
-    }
+//
+//    protected <EntityType extends BaseEntity> List<EntityType> findEntitiesFromDB(
+//            Class<EntityType> entityType) {
+////        this.entityManager.flush();
+////        this.entityManager.clear();
+//        return this.entityManager.createQuery("SELECT e FROM " + entityType.getName() + " e", entityType)
+//                .getResultList();
+//    }
 
     static class DBContainerInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 

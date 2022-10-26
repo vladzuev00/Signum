@@ -30,7 +30,7 @@ public final class RequestCommandPackageHandler extends PackageHandler {
     protected void doHandle(Package requestPackage, ChannelHandlerContext context) {
         final RequestCommandPackage requestCommandPackage = (RequestCommandPackage) requestPackage;
         final Unit unit = this.contextManager.findUnit(context);
-        final Command savedCommand = new Command(requestCommandPackage.getMessage(), unit.getTracker());
+        final Command savedCommand = new Command(requestCommandPackage.getMessage(), unit.getDevice());
         this.commandService.save(savedCommand, SUCCESS, ANSWER);
         context.writeAndFlush(RESPONSE_ABOUT_SUCCESS_TO_TRACKER);
     }

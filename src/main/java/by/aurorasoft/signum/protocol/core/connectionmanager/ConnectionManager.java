@@ -1,6 +1,6 @@
 package by.aurorasoft.signum.protocol.core.connectionmanager;
 
-import by.aurorasoft.signum.crud.model.dto.Tracker;
+import by.aurorasoft.signum.crud.model.dto.Device;
 import by.aurorasoft.signum.crud.model.dto.Unit;
 import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import io.netty.channel.ChannelHandlerContext;
@@ -25,14 +25,14 @@ public final class ConnectionManager {
 
     public void addContext(ChannelHandlerContext context) {
         final Unit associatedUnit = this.contextManager.findUnit(context);
-        final Tracker tracker = associatedUnit.getTracker();
+        final Device tracker = associatedUnit.getDevice();
         this.trackerIdToContextMap.merge(tracker.getId(), context, (oldContext, newContext) -> {
             oldContext.close();
             return newContext;
         });
     }
 
-    public Optional<ChannelHandlerContext> findContext(Tracker tracker) {
+    public Optional<ChannelHandlerContext> findContext(Device tracker) {
         return ofNullable(this.trackerIdToContextMap.get(tracker.getId()));
     }
 }

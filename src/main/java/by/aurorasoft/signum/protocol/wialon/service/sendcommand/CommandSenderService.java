@@ -1,7 +1,7 @@
 package by.aurorasoft.signum.protocol.wialon.service.sendcommand;
 
 import by.aurorasoft.signum.crud.model.dto.Command;
-import by.aurorasoft.signum.crud.model.dto.Tracker;
+import by.aurorasoft.signum.crud.model.dto.Device;
 import by.aurorasoft.signum.crud.service.CommandService;
 import by.aurorasoft.signum.protocol.core.connectionmanager.ConnectionManager;
 import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
@@ -26,7 +26,7 @@ public class CommandSenderService {
     private final CommandSerializer commandSerializer;
     private final ConnectionManager connectionManager;
     private final ContextManager contextManager;
-    private final Map<Tracker, Queue<Command>> commandsToBeSentLater;
+    private final Map<Device, Queue<Command>> commandsToBeSentLater;
 
     public CommandSenderService(CommandService commandService, CommandSerializer commandSerializer,
                                 ConnectionManager connectionManager, ContextManager contextManager) {
@@ -47,7 +47,7 @@ public class CommandSenderService {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public void onSentCommandWasHandled(Tracker tracker) {
+    public void onSentCommandWasHandled(Device tracker) {
         final Queue<Command> commandsToBeSent = this.commandsToBeSentLater.get(tracker);
         if (!isEmpty(commandsToBeSent)) {
             final Command commandToBeSent = commandsToBeSent.poll();
@@ -57,7 +57,7 @@ public class CommandSenderService {
 
     private void sendIfTrackerIsConnected(Command command) {
         final Optional<ChannelHandlerContext> optionalContext = this.connectionManager
-                .findContext(command.getTracker());
+                .findContext(command.getDevice());
         optionalContext.ifPresent(context -> this.sendToConnectedTracker(command, context));
     }
 
@@ -74,7 +74,7 @@ public class CommandSenderService {
 
     private void addCommandToSendLater(Command command) {
         this.commandsToBeSentLater.merge(
-                command.getTracker(),
+                command.getDevice(),
                 new LinkedList<>(List.of(command)),
                 CommandSenderService::append);
     }

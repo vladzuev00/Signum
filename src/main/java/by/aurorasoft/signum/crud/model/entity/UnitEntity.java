@@ -14,10 +14,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 @SQLDelete(sql = "UPDATE unit SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
 @NamedEntityGraph(
-        name = "Unit.user_and_tracker",
+        name = "Unit.user_and_device",
         attributeNodes = {
                 @NamedAttributeNode(value = "user"),
-                @NamedAttributeNode(value = "tracker")
+                @NamedAttributeNode(value = "device")
         }
 )
 @NoArgsConstructor
@@ -37,24 +37,24 @@ public class UnitEntity extends NamedEntity<Long> {
     private UserEntity user;
 
     @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "tracker_id")
-    private TrackerEntity tracker;
+    @JoinColumn(name = "device_id")
+    private DeviceEntity device;
 
-    public UnitEntity(String name, UserEntity user, TrackerEntity tracker) {
+    public UnitEntity(String name, UserEntity user, DeviceEntity device) {
         super(name);
         this.user = user;
-        this.tracker = tracker;
+        this.device = device;
     }
 
-    public UnitEntity(Long id, String name, UserEntity user, TrackerEntity tracker) {
+    public UnitEntity(Long id, String name, UserEntity user, DeviceEntity device) {
         super(name);
         this.id = id;
         this.user = user;
-        this.tracker = tracker;
+        this.device = device;
     }
 
     @Override
     public String toString() {
-        return super.toString() + "[userId = " + this.user.getId() + ", trackerId = " + this.tracker.getId() + "]";
+        return super.toString() + "[userId = " + this.user.getId() + ", deviceId = " + this.device.getId() + "]";
     }
 }

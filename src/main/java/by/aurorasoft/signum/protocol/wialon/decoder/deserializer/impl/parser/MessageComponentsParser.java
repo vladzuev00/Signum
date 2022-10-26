@@ -1,13 +1,18 @@
 package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser;
 
 import by.aurorasoft.signum.crud.model.dto.Message.GpsCoordinate;
+import by.aurorasoft.signum.crud.model.dto.Message.ParameterType;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.exception.NotValidMessageException;
 
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static by.aurorasoft.signum.crud.model.dto.Message.ParameterType.valueOf;
+import static by.aurorasoft.signum.crud.model.dto.Message.ParameterType.values;
+import static java.lang.Double.parseDouble;
 import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 import static java.lang.Math.abs;
@@ -16,7 +21,9 @@ import static java.time.Instant.ofEpochSecond;
 import static java.time.LocalDateTime.parse;
 import static java.time.ZoneOffset.UTC;
 import static java.time.format.DateTimeFormatter.ofPattern;
+import static java.util.Arrays.stream;
 import static java.util.regex.Pattern.compile;
+import static java.util.stream.Collectors.toMap;
 
 public final class MessageComponentsParser {
     private static final int GROUP_NUMBER_DATE_TIME = 1;
@@ -59,6 +66,8 @@ public final class MessageComponentsParser {
 
     private static final String NOT_DEFINED_AMOUNT_SATELLITE_STRING = "NA";
     private static final int NOT_DEFINED_AMOUNT_SATELLITE = 0;
+    private static final String DELIMITER_PARAMETERS = ",";
+    private static final String DELIMITER_PARAMETER_COMPONENTS = ":";
 
     private static final String MESSAGE_REGEX
             = "((\\d{6}|(NA));(\\d{6}|(NA)));"         //date, time
@@ -128,15 +137,15 @@ public final class MessageComponentsParser {
         return !amountHdop.equals(NOT_DEFINED_HDOP_STRING) ? parseFloat(amountHdop) : NOT_DEFINED_HDOP;
     }
 
-    /**
-     * Parses parameters without type.
-     * Example: count1:1:564,fuel:2:45.8,hw:3:V4.5 -> count1:564,fuel:45.8,hw:V4.5
-     *
-     * @return parameters without type.
-     */
-    public String parseParameters() {
+    public Map<ParameterType, Float> parseParameters() {
         final String parameters = this.matcher.group(GROUP_NUMBER_PARAMETERS);
-        return parameters.replaceAll(":[^:]+:", ":");
+//        return stream(parameters.split(DELIMITER_PARAMETERS))
+//                .filter(MessageComponentsParser::isReceivedParameter)
+//                .map(parameter -> parameter.split(DELIMITER_PARAMETER_COMPONENTS))
+//                .collect(toMap(
+//                        components -> valueOf(components[0]),
+//                        components -> parseDouble(components[2])));
+        return null;
     }
 
     private float parseGpsCoordinate(int groupNumberDegrees, int groupNumberMinute,
@@ -151,5 +160,9 @@ public final class MessageComponentsParser {
                 + minutes / 60.0
                 + minuteShare / 3600.0))
                 * (type.equals(aliasTypeToBeInverted) ? -1 : 1);
+    }
+
+    private static boolean isReceivedParameter(String parameter) {
+        return stream(values()).anyMatch(paramName -> parameter.startsWith(paramName.name()));
     }
 }

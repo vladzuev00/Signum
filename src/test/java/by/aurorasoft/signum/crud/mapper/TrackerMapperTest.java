@@ -1,8 +1,8 @@
 package by.aurorasoft.signum.crud.mapper;
 
 import by.aurorasoft.signum.base.AbstractContextTest;
-import by.aurorasoft.signum.crud.model.dto.Tracker;
-import by.aurorasoft.signum.crud.model.entity.TrackerEntity;
+import by.aurorasoft.signum.crud.model.dto.Device;
+import by.aurorasoft.signum.crud.model.entity.DeviceEntity;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,20 +15,20 @@ public final class TrackerMapperTest extends AbstractContextTest {
 
     @Test
     public void dtoShouldBeMappedToEntity() {
-        final Tracker givenTracker = new Tracker(255L, "11111222223333344444", "558447045");
-
-        final TrackerEntity actual = this.mapper.toEntity(givenTracker);
-        final TrackerEntity expected = new TrackerEntity(255L, "11111222223333344444", "558447045");
-        assertEquals(expected, actual);
+//        final Device givenTracker = new Device(255L, "11111222223333344444", "558447045");
+//
+//        final DeviceEntity actual = this.mapper.toEntity(givenTracker);
+//        final DeviceEntity expected = new DeviceEntity(255L, "11111222223333344444", "558447045");
+//        assertEquals(expected, actual);
     }
 
     @Test
     public void entityShouldBeMappedToDto() {
-        final TrackerEntity givenTracker = new TrackerEntity(255L, "11111222223333344444",
-                "558447045");
-
-        final Tracker actual = this.mapper.toDto(givenTracker);
-        final Tracker expected = new Tracker(255L, "11111222223333344444", "558447045");
-        assertEquals(expected, actual);
+//        final DeviceEntity givenTracker = new DeviceEntity(255L, "11111222223333344444",
+//                "558447045");
+//
+//        final Device actual = this.mapper.toDto(givenTracker);
+//        final Device expected = new Device(255L, "11111222223333344444", "558447045");
+//        assertEquals(expected, actual);
     }
 }

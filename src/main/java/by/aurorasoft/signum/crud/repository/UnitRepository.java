@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface UnitRepository extends JpaRepository<UnitEntity, Long> {
-    @EntityGraph(value = "Unit.user_and_tracker")
-    Optional<UnitEntity> findByTracker_imei(String imei);
+    @EntityGraph(value = "Unit.user_and_device")
+    Optional<UnitEntity> findByDevice_imei(String imei);
 }

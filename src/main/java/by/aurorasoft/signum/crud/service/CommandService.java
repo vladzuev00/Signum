@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class CommandService extends AbstractCrudService<Long, CommandEntity, Command> {
@@ -36,7 +37,7 @@ public class CommandService extends AbstractCrudService<Long, CommandEntity, Com
     @Transactional
     public List<Command> findCommandsByStatuses(Status... statuses) {
         final CommandRepository commandRepository = (CommandRepository) super.repository;
-        final List<CommandEntity> commandEntities = commandRepository.findCommandsByStatuses(List.of(statuses));
+        final List<CommandEntity> commandEntities = commandRepository.findByStatuses(Set.of(statuses));
         return super.mapper.toDto(commandEntities);
     }
 }

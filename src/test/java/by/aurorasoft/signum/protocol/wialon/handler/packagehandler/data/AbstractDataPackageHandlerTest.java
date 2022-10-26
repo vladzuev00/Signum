@@ -109,7 +109,8 @@ public final class AbstractDataPackageHandlerTest {
     }
 
     private static Message createMessage() {
-        return new Message(now(), new GpsCoordinate(1, 2), 3, 4, 5, 6,
-                7.F, "");
+//        return new Message(now(), new GpsCoordinate(1, 2), 3, 4, 5, 6,
+//                7.F, "");
+        return null;
     }
 }
