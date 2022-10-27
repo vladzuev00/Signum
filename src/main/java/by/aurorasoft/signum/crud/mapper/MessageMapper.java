@@ -52,12 +52,11 @@ public final class MessageMapper extends ExtAbstractMapper<MessageEntity, Messag
     }
 
     private static void mapParameters(Message source, MessageEntity destination) {
-        final Map<ParameterName, Float> parameterTypesToValues = source.getParameterNamesToValues();
-        destination.setGsmLevel(parameterTypesToValues.get(GSM_LEVEL).byteValue());
-        destination.setOnboardVoltage(parameterTypesToValues.get(VOLTAGE));
-        destination.setEcoCornering(parameterTypesToValues.get(CORNER_ACCELERATION));
-        destination.setEcoAcceleration(parameterTypesToValues.get(ACCELERATION_UP));
-        destination.setEcoBraking(parameterTypesToValues.get(ACCELERATION_DOWN));
+        destination.setGsmLevel(source.getParameter(GSM_LEVEL).intValue());
+        destination.setOnboardVoltage(source.getParameter(VOLTAGE));
+        destination.setEcoCornering(source.getParameter(CORNER_ACCELERATION));
+        destination.setEcoAcceleration(source.getParameter(ACCELERATION_UP));
+        destination.setEcoBraking(source.getParameter(ACCELERATION_DOWN));
     }
 
     private static Map<ParameterName, Float> mapParameters(MessageEntity entity) {

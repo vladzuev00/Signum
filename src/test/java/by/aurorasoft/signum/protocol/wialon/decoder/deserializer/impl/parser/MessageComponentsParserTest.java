@@ -1,12 +1,15 @@
 package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser;
 
 import by.aurorasoft.signum.crud.model.dto.Message.GpsCoordinate;
+import by.aurorasoft.signum.crud.model.dto.Message.ParameterName;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.exception.NotValidMessageException;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
 import java.time.Instant;
+import java.util.Map;
 
+import static by.aurorasoft.signum.crud.model.dto.Message.ParameterName.*;
 import static java.time.Instant.ofEpochSecond;
 import static java.time.Instant.parse;
 import static org.junit.Assert.assertEquals;
@@ -196,54 +199,33 @@ public final class MessageComponentsParserTest {
     }
 
     @Test
-    public void hdopShouldBeParsed() {
+    public void parametersShouldBeParsed() {
         final String givenMessage = "151122;145643;5544.6025;N;03739.6834;E;100;15;10;177;545.4554;17;18;"
                 + "5.5,4343.454544334,454.433,1;"
                 + "keydrivercode;"
-                + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
+                + "GSMCSQ:2:65,VPWR:2:65.4321,wln_crn_max:2:63.3,wln_accel_max:2:32.4,wln_brk_max:2:4.4";
         final MessageComponentsParser parser = new MessageComponentsParser(givenMessage);
 
-        final float actual = parser.parseHdop();
-        final float expected = 545.4554F;
-        assertEquals(expected, actual, 0.);
-    }
-
-    @Test
-    public void notDefinedHdopShouldBeParsed() {
-        final String givenMessage = "151122;145643;5544.6025;N;03739.6834;E;100;15;10;177;NA;17;18;"
-                + "5.5,4343.454544334,454.433,1;"
-                + "keydrivercode;"
-                + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
-        final MessageComponentsParser parser = new MessageComponentsParser(givenMessage);
-
-        final float actual = parser.parseHdop();
-        final float expected = 0.F;
-        assertEquals(expected, actual, 0.);
-    }
-
-    @Test
-    public void parametersShouldBeParsed() {
-//        final String givenMessage = "151122;145643;5544.6025;N;03739.6834;E;100;15;10;177;545.4554;17;18;"
-//                + "5.5,4343.454544334,454.433,1;"
-//                + "keydrivercode;"
-//                + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
-//        final MessageComponentsParser parser = new MessageComponentsParser(givenMessage);
-//
-//        final String actual = parser.parseParameters();
-//        final String expected = "param-name:654321,param-name:65.4321,param-name:param-value";
-//        assertEquals(expected, actual);
+        final Map<ParameterName, Float> actual = parser.parseParameters();
+        final Map<ParameterName, Float> expected = Map.of(
+                GSM_LEVEL, 65F,
+                VOLTAGE, 65.4321F,
+                CORNER_ACCELERATION, 63.3F,
+                ACCELERATION_UP, 32.4F,
+                ACCELERATION_DOWN, 4.4F
+        );
+        assertEquals(expected, actual);
     }
 
     @Test
     public void notDefinedParametersShouldBeParsed() {
-//        final String givenMessage = "151122;145643;5544.6025;N;03739.6834;E;100;15;10;177;545.4554;17;18;"
-//                + "5.5,4343.454544334,454.433,1;"
-//                + "keydrivercode;";
-//        final MessageComponentsParser parser = new MessageComponentsParser(givenMessage);
-//
-//        final String actual = parser.parseParameters();
-//        final String expected = "";
-//        assertEquals(expected, actual);
+        final String givenMessage = "151122;145643;5544.6025;N;03739.6834;E;100;15;10;177;545.4554;17;18;"
+                + "5.5,4343.454544334,454.433,1;"
+                + "keydrivercode;";
+        final MessageComponentsParser parser = new MessageComponentsParser(givenMessage);
+
+        final Map<ParameterName, Float> parsedParameters = parser.parseParameters();
+        assertTrue(parsedParameters.isEmpty());
     }
 
     private static String findMessageRegex()

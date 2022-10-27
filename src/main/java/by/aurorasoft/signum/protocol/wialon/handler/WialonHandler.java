@@ -19,11 +19,11 @@ public final class WialonHandler extends ChannelInboundHandlerAdapter {
     private static final String MESSAGE_ACTIVE_CHANNEL = "New tracker is connected.";
 
     private final PackageHandler starterPackageHandler;
-    private final ContextManager contextWorker;
+    private final ContextManager contextManager;
 
-    public WialonHandler(StarterPackageHandler starterPackageHandler, ContextManager contextWorker) {
+    public WialonHandler(StarterPackageHandler starterPackageHandler, ContextManager contextManager) {
         this.starterPackageHandler = starterPackageHandler;
-        this.contextWorker = contextWorker;
+        this.contextManager = contextManager;
     }
 
     @Override

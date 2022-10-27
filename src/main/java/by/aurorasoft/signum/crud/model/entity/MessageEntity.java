@@ -8,6 +8,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.time.Instant;
 
+import static by.aurorasoft.signum.utils.BoundingUtils.bound;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -15,6 +16,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "message")
 @SQLDelete(sql = "UPDATE message SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
+@EntityListeners(MessageEntity.ParametersBounder.class)
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
@@ -100,5 +102,24 @@ public class MessageEntity extends BaseEntity<Long> {
                 + ", ecoAcceleration = " + this.ecoAcceleration
                 + ", ecoBraking = " + this.ecoBraking
                 + "]";
+    }
+
+    static final class ParametersBounder {
+        private static final int MIN = -32;
+        private static final int MAX = 32;
+
+        public ParametersBounder() {
+
+        }
+
+        @PrePersist
+        @PreUpdate
+        public void boundParameters(MessageEntity message) {
+            message.gsmLevel = bound(message.gsmLevel, MIN, MAX);
+            message.onboardVoltage = bound(message.onboardVoltage, (float)MIN, (float)MAX);
+            message.ecoCornering = bound(message.ecoCornering, (float)MIN, (float)MAX);
+            message.ecoAcceleration = bound(message.ecoAcceleration, (float)MIN, (float)MAX);
+            message.ecoBraking = bound(message.ecoBraking, (float)MIN, (float)MAX);
+        }
     }
 }

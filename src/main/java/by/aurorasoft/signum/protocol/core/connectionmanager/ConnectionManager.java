@@ -16,23 +16,23 @@ import static java.util.Optional.ofNullable;
 @Component
 public final class ConnectionManager {
     private final ContextManager contextManager;
-    private final Map<Long, ChannelHandlerContext> trackerIdToContextMap;
+    private final Map<Long, ChannelHandlerContext> deviceIdToContextMap;
 
     public ConnectionManager(ContextManager contextManager) {
         this.contextManager = contextManager;
-        this.trackerIdToContextMap = new ConcurrentHashMap<>();
+        this.deviceIdToContextMap = new ConcurrentHashMap<>();
     }
 
     public void addContext(ChannelHandlerContext context) {
         final Unit associatedUnit = this.contextManager.findUnit(context);
-        final Device tracker = associatedUnit.getDevice();
-        this.trackerIdToContextMap.merge(tracker.getId(), context, (oldContext, newContext) -> {
+        final Device device = associatedUnit.getDevice();
+        this.deviceIdToContextMap.merge(device.getId(), context, (oldContext, newContext) -> {
             oldContext.close();
             return newContext;
         });
     }
 
-    public Optional<ChannelHandlerContext> findContext(Device tracker) {
-        return ofNullable(this.trackerIdToContextMap.get(tracker.getId()));
+    public Optional<ChannelHandlerContext> findContext(Device device) {
+        return ofNullable(this.deviceIdToContextMap.get(device.getId()));
     }
 }

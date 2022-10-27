@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static by.aurorasoft.signum.crud.model.dto.Message.ParameterName.values;
+import static by.aurorasoft.signum.crud.model.dto.Message.ParameterName.*;
 import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 import static java.lang.Math.abs;
@@ -21,6 +21,7 @@ import static java.time.ZoneOffset.UTC;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.Arrays.stream;
 import static java.util.regex.Pattern.compile;
+import static java.util.stream.Collectors.toMap;
 
 public final class MessageComponentsParser {
     private static final int GROUP_NUMBER_DATE_TIME = 1;
@@ -42,7 +43,6 @@ public final class MessageComponentsParser {
     private static final int GROUP_NUMBER_COURSE = 16;
     private static final int GROUP_NUMBER_ALTITUDE = 18;
     private static final int GROUP_NUMBER_AMOUNT_SATELLITE = 20;
-    private static final int GROUP_NUMBER_AMOUNT_HDOP = 22;
     private static final int GROUP_NUMBER_PARAMETERS = 35;
 
     private static final DateTimeFormatter DATE_FORMATTER = ofPattern("ddMMyy;HHmmss");
@@ -58,13 +58,30 @@ public final class MessageComponentsParser {
     private static final String NOT_DEFINED_ALTITUDE_STRING = "NA";
     private static final int NOT_DEFINED_ALTITUDE = 0;
 
-    private static final String NOT_DEFINED_HDOP_STRING = "NA";
-    private static final float NOT_DEFINED_HDOP = 0.F;
-
     private static final String NOT_DEFINED_AMOUNT_SATELLITE_STRING = "NA";
     private static final int NOT_DEFINED_AMOUNT_SATELLITE = 0;
     private static final String DELIMITER_PARAMETERS = ",";
     private static final String DELIMITER_PARAMETER_COMPONENTS = ":";
+
+    private static final Map<String, ParameterName> PARAMETER_IDENTIFICATION_TO_NAME_MAP
+            = Map.of(
+            "GSMCSQ", GSM_LEVEL,
+            "21", GSM_LEVEL,
+
+            "VPWR", VOLTAGE,
+            "66", VOLTAGE,
+
+            "wln_crn_max", CORNER_ACCELERATION,
+            "47", CORNER_ACCELERATION,
+
+            "wln_accel_max", ACCELERATION_UP,
+            "44", ACCELERATION_UP,
+
+            "wln_brk_max", ACCELERATION_DOWN,
+            "45", ACCELERATION_DOWN
+    );
+    private static final int COMPONENT_INDEX_PARAMETER_NAME = 0;
+    private static final int COMPOMENT_INDEX_PARAMETER_VALUE = 2;
 
     private static final String MESSAGE_REGEX
             = "((\\d{6}|(NA));(\\d{6}|(NA)));"         //date, time
@@ -129,20 +146,15 @@ public final class MessageComponentsParser {
                 : NOT_DEFINED_AMOUNT_SATELLITE;
     }
 
-    public float parseHdop() {
-        final String amountHdop = this.matcher.group(GROUP_NUMBER_AMOUNT_HDOP);
-        return !amountHdop.equals(NOT_DEFINED_HDOP_STRING) ? parseFloat(amountHdop) : NOT_DEFINED_HDOP;
-    }
 
     public Map<ParameterName, Float> parseParameters() {
         final String parameters = this.matcher.group(GROUP_NUMBER_PARAMETERS);
-//        return stream(parameters.split(DELIMITER_PARAMETERS))
-//                .filter(MessageComponentsParser::isReceivedParameter)
-//                .map(parameter -> parameter.split(DELIMITER_PARAMETER_COMPONENTS))
-//                .collect(toMap(
-//                        components -> valueOf(components[0]),
-//                        components -> parseDouble(components[2])));
-        return null;
+        return stream(parameters.split(DELIMITER_PARAMETERS))
+                .map(parameter -> parameter.split(DELIMITER_PARAMETER_COMPONENTS))
+                .filter(components -> PARAMETER_IDENTIFICATION_TO_NAME_MAP.containsKey(components[0]))
+                .collect(toMap(
+                        components -> PARAMETER_IDENTIFICATION_TO_NAME_MAP.get(components[COMPONENT_INDEX_PARAMETER_NAME]),
+                        components -> parseFloat(components[COMPOMENT_INDEX_PARAMETER_VALUE])));
     }
 
     private float parseGpsCoordinate(int groupNumberDegrees, int groupNumberMinute,
@@ -157,9 +169,5 @@ public final class MessageComponentsParser {
                 + minutes / 60.0
                 + minuteShare / 3600.0))
                 * (type.equals(aliasTypeToBeInverted) ? -1 : 1);
-    }
-
-    private static boolean isReceivedParameter(String parameter) {
-        return stream(values()).anyMatch(paramName -> parameter.startsWith(paramName.name()));
     }
 }
