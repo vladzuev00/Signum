@@ -4,7 +4,7 @@ import by.aurorasoft.signum.crud.model.dto.Unit;
 import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import by.aurorasoft.signum.protocol.wialon.model.LoginPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
-import by.aurorasoft.signum.protocol.core.AuthorizationDeviceService;
+import by.aurorasoft.signum.protocol.core.service.AuthorizationDeviceService;
 import io.netty.channel.ChannelHandlerContext;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,10 +14,6 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Optional;
-
-import static java.util.Optional.empty;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)

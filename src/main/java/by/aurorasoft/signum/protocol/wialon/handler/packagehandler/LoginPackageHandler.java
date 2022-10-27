@@ -5,7 +5,7 @@ import by.aurorasoft.signum.protocol.core.connectionmanager.ConnectionManager;
 import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import by.aurorasoft.signum.protocol.wialon.model.LoginPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
-import by.aurorasoft.signum.protocol.core.AuthorizationDeviceService;
+import by.aurorasoft.signum.protocol.core.service.AuthorizationDeviceService;
 import io.netty.channel.ChannelHandlerContext;
 import org.springframework.stereotype.Component;
 

@@ -1,9 +1,8 @@
-package by.aurorasoft.signum.protocol.core;
+package by.aurorasoft.signum.protocol.core.connectionmanager;
 
 import by.aurorasoft.signum.crud.model.dto.Device;
 import by.aurorasoft.signum.crud.model.dto.Unit;
 import by.aurorasoft.signum.crud.model.dto.User;
-import by.aurorasoft.signum.protocol.core.connectionmanager.ConnectionManager;
 import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import io.netty.channel.ChannelHandlerContext;
 import org.junit.Before;

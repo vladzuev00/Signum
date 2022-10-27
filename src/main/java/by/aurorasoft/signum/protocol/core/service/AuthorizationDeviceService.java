@@ -1,4 +1,4 @@
-package by.aurorasoft.signum.protocol.core;
+package by.aurorasoft.signum.protocol.core.service;
 
 import by.aurorasoft.signum.crud.model.dto.Unit;
 import by.aurorasoft.signum.crud.service.UnitService;
