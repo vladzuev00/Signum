@@ -13,13 +13,13 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "unit")
 @SQLDelete(sql = "UPDATE unit SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
-@NamedEntityGraph(
-        name = "Unit.user_and_device",
-        attributeNodes = {
-                @NamedAttributeNode(value = "user"),
-                @NamedAttributeNode(value = "device")
-        }
-)
+//@NamedEntityGraph(
+//        name = "Unit.user_and_device",
+//        attributeNodes = {
+//                @NamedAttributeNode(value = "user"),
+//                @NamedAttributeNode(value = "device")
+//        }
+//)
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
@@ -35,6 +35,12 @@ public class UnitEntity extends NamedEntity<Long> {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
+    public UnitEntity(Long id, String name, UserEntity user) {
+        super(name);
+        this.id = id;
+        this.user = user;
+    }
 
     @Override
     public String toString() {

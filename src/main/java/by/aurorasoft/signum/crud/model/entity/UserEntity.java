@@ -29,4 +29,10 @@ public class UserEntity extends NamedEntity<Long> {
     @OneToMany(mappedBy = "user")
     @ToString.Exclude
     private List<UnitEntity> units;
+
+    public UserEntity(Long id, String name, List<UnitEntity> units) {
+        super(name);
+        this.id = id;
+        this.units = units;
+    }
 }

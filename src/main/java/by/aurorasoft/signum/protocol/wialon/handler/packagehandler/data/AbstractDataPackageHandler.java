@@ -29,7 +29,8 @@ public abstract class AbstractDataPackageHandler<T extends AbstractDataPackage> 
         final T dataPackage = (T) requestPackage;
         final List<Message> messagesToBeSaved = dataPackage.getMessages();
         final Unit unit = this.contextManager.findUnit(context);
-        final Device device = unit.getDevice();
+//        final Device device = unit.getDevice();
+        final Device device = null;
         final List<Message> savedMessages = this.messageService.saveAll(device.getId(), messagesToBeSaved);
         context.writeAndFlush(this.createResponse(savedMessages.size()));
     }

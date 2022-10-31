@@ -25,7 +25,8 @@ public final class ConnectionManager {
 
     public void addContext(ChannelHandlerContext context) {
         final Unit associatedUnit = this.contextManager.findUnit(context);
-        final Device device = associatedUnit.getDevice();
+//        final Device device = associatedUnit.getDevice();
+        final Device device = null;
         this.deviceIdToContextMap.merge(device.getId(), context, (oldContext, newContext) -> {
             oldContext.close();
             return newContext;

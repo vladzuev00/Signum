@@ -69,7 +69,7 @@ public final class AbstractDataPackageHandlerTest {
         when(givenDevice.getId()).thenReturn(givenDeviceId);
 
         final Unit givenUnit = mock(Unit.class);
-        when(givenUnit.getDevice()).thenReturn(givenDevice);
+        //when(givenUnit.getDevice()).thenReturn(givenDevice);
 
         when(this.mockedContextManager.findUnit(any(ChannelHandlerContext.class))).thenReturn(givenUnit);
 

@@ -39,8 +39,7 @@ public final class LoginPackageHandler extends PackageHandler {
                 unit -> {
                     this.contextManager.putUnit(context, unit);
                     this.connectionManager.addContext(context);
-                    context.writeAndFlush(RESPONSE_SUCCESS_AUTHORIZE)
-                            .addListener();
+                    context.writeAndFlush(RESPONSE_SUCCESS_AUTHORIZE);
                 }
                 ,
                 () -> context.writeAndFlush(RESPONSE_FAILURE_AUTHORIZE)

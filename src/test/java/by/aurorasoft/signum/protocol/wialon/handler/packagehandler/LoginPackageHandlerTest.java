@@ -55,7 +55,7 @@ public final class LoginPackageHandlerTest {
     @Before
     public void initializePackageHandler() {
        this.packageHandler = new LoginPackageHandler(null, this.mockedAuthorizationDeviceService,
-               this.mockedContextManager, this.mockedConnectionManager, this.mockedCommandSenderService);
+               this.mockedContextManager, this.mockedConnectionManager);
     }
 
     @Test

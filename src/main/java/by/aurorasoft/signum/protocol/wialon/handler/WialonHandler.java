@@ -67,7 +67,8 @@ public final class WialonHandler extends ChannelInboundHandlerAdapter {
 
         final Unit unit = this.contextManager.findUnit(context);
         if (unit != null) {    //if unit was authorized
-            final Device device = unit.getDevice();
+//            final Device device = unit.getDevice();
+            final Device device = null;
             this.connectionManager.removeContext(device);
         }
     }

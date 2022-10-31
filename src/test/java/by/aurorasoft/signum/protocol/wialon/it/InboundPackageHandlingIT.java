@@ -276,7 +276,7 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
 
         final Device device = new Device(25551L, "355234055650192", "+37257063997", TRACKER);
         final ChannelHandlerContext context = this.connectionManager.findContext(device).orElseThrow();
-        this.contextManager.putCommandWaitingResponse(context, new Command(255L, "command", device));
+        //this.contextManager.putCommandWaitingResponse(context, new Command(255L, "command", device));
 
         final String givenResponse = "#AM#1\r\n";
         this.client.doResponse(givenResponse);

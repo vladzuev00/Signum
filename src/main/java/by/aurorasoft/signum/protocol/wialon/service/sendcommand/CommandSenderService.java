@@ -62,8 +62,10 @@ public class CommandSenderService {
     }
 
     private void sendIfTrackerIsConnected(Command command) {
+//        final Optional<ChannelHandlerContext> optionalContext = this.connectionManager
+//                .findContext(command.getDevice());
         final Optional<ChannelHandlerContext> optionalContext = this.connectionManager
-                .findContext(command.getDevice());
+                .findContext(null);
         optionalContext.ifPresent(context -> this.sendToConnectedTracker(command, context));
     }
 

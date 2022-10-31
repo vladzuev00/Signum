@@ -19,34 +19,34 @@ public class ApplicationRunner {
         final ConfigurableApplicationContext context = SpringApplication.run(ApplicationRunner.class, args);
         final Server server = context.getBean(Server.class);
 
-        new Thread(() -> {
-            try {
-                TimeUnit.MINUTES.sleep(1);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            final CommandSenderService sendCommandService = context.getBean(CommandSenderService.class);
-
-            final Device tracker = new Device(7L, "860906042912953", "448447045", BEACON);
-            final List<Command> commands = List.of(
-                    new Command(null, "TPASS: 11111;flush;", tracker),
-                    new Command(null, "TPASS: 11111;getver;", tracker),
-                    new Command(null, "TPASS: 11111;getparam 0505;", tracker),
-                    new Command(null, "TPASS: 11111;flush;", tracker),
-                    new Command(null, "TPASS: 11111;getver;", tracker),
-                    new Command(null, "TPASS: 11111;getparam 0505;", tracker),
-                    new Command(null, "TPASS: 11111;flush;", tracker),
-                    new Command(null, "TPASS: 11111;getver;", tracker),
-                    new Command(null, "TPASS: 11111;getparam 0505;", tracker),
-                    new Command(null, "TPASS: 11111;flush;", tracker),
-                    new Command(null, "TPASS: 11111;getver;", tracker),
-                    new Command(null, "TPASS: 11111;getparam 0505;", tracker),
-                    new Command(null, "TPASS: 11111;flush;", tracker),
-                    new Command(null, "TPASS: 11111;getver;", tracker),
-                    new Command(null, "TPASS: 11111;getparam 0505;", tracker)
-            );
-            sendCommandService.send(commands);
-        }).start();
+//        new Thread(() -> {
+//            try {
+//                TimeUnit.MINUTES.sleep(1);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+//            final CommandSenderService sendCommandService = context.getBean(CommandSenderService.class);
+//
+//            final Device tracker = new Device(7L, "860906042912953", "448447045", BEACON);
+//            final List<Command> commands = List.of(
+//                    new Command(null, "TPASS: 11111;flush;", tracker),
+//                    new Command(null, "TPASS: 11111;getver;", tracker),
+//                    new Command(null, "TPASS: 11111;getparam 0505;", tracker),
+//                    new Command(null, "TPASS: 11111;flush;", tracker),
+//                    new Command(null, "TPASS: 11111;getver;", tracker),
+//                    new Command(null, "TPASS: 11111;getparam 0505;", tracker),
+//                    new Command(null, "TPASS: 11111;flush;", tracker),
+//                    new Command(null, "TPASS: 11111;getver;", tracker),
+//                    new Command(null, "TPASS: 11111;getparam 0505;", tracker),
+//                    new Command(null, "TPASS: 11111;flush;", tracker),
+//                    new Command(null, "TPASS: 11111;getver;", tracker),
+//                    new Command(null, "TPASS: 11111;getparam 0505;", tracker),
+//                    new Command(null, "TPASS: 11111;flush;", tracker),
+//                    new Command(null, "TPASS: 11111;getver;", tracker),
+//                    new Command(null, "TPASS: 11111;getparam 0505;", tracker)
+//            );
+//            sendCommandService.send(commands);
+//        }).start();
 
         server.run();
     }
