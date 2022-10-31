@@ -81,7 +81,7 @@ public final class MessageComponentsParser {
             "45", ACCELERATION_DOWN
     );
     private static final int COMPONENT_INDEX_PARAMETER_NAME = 0;
-    private static final int COMPOMENT_INDEX_PARAMETER_VALUE = 2;
+    private static final int COMPONENT_INDEX_PARAMETER_VALUE = 2;
 
     private static final String MESSAGE_REGEX
             = "((\\d{6}|(NA));(\\d{6}|(NA)));"         //date, time
@@ -154,7 +154,7 @@ public final class MessageComponentsParser {
                 .filter(components -> PARAMETER_IDENTIFICATION_TO_NAME_MAP.containsKey(components[0]))
                 .collect(toMap(
                         components -> PARAMETER_IDENTIFICATION_TO_NAME_MAP.get(components[COMPONENT_INDEX_PARAMETER_NAME]),
-                        components -> parseFloat(components[COMPOMENT_INDEX_PARAMETER_VALUE])));
+                        components -> parseFloat(components[COMPONENT_INDEX_PARAMETER_VALUE])));
     }
 
     private float parseGpsCoordinate(int groupNumberDegrees, int groupNumberMinute,

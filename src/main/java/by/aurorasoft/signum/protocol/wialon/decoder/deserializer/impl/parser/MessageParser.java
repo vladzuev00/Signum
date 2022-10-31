@@ -1,17 +1,22 @@
 package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser;
 
 import by.aurorasoft.signum.crud.model.dto.Message;
-import lombok.RequiredArgsConstructor;
+import by.aurorasoft.signum.crud.model.dto.Message.ParameterName;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
+import static by.aurorasoft.signum.crud.model.dto.Message.ParameterName.GSM_LEVEL;
+
 @Component
-@RequiredArgsConstructor
 public final class MessageParser {
 
     public Message parse(String source) {
         final MessageComponentsParser parser = new MessageComponentsParser(source);
+        final Map<ParameterName, Float> parameters = parser.parseParameters();
+        parameters.computeIfPresent(GSM_LEVEL,
+                (parameterName, beforeConvertingValue) -> beforeConvertingValue * 100 / 6);
         return new Message(parser.parseDateTime(), parser.parseCoordinate(), parser.parseSpeed(),
-                parser.parseCourse(), parser.parseAltitude(), parser.parseAmountSatellite(),
-                parser.parseParameters());
+                parser.parseCourse(), parser.parseAltitude(), parser.parseAmountSatellite(), parameters);
     }
 }

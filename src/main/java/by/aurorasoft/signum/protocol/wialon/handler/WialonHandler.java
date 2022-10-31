@@ -1,5 +1,8 @@
 package by.aurorasoft.signum.protocol.wialon.handler;
 
+import by.aurorasoft.signum.crud.model.dto.Device;
+import by.aurorasoft.signum.crud.model.dto.Unit;
+import by.aurorasoft.signum.protocol.core.connectionmanager.ConnectionManager;
 import by.aurorasoft.signum.protocol.core.exception.AnswerableException;
 import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.PackageHandler;
@@ -16,14 +19,19 @@ import static java.lang.String.format;
 public final class WialonHandler extends ChannelInboundHandlerAdapter {
     private static final String TEMPLATE_MESSAGE_START_HANDLING_PACKAGE
             = "Start handling inbound package: '%s'.";
-    private static final String MESSAGE_ACTIVE_CHANNEL = "New tracker is connected.";
+    private static final String MESSAGE_ACTIVE_CHANNEL = "New device is connected.";
+    private static final String TEMPLATE_MESSAGE_INACTIVE_CHANNEL = "Device with imei '%s' is disconnected.";
+    private static final String NOT_DEFINED_DEVICE_IMEI_IN_MESSAGE = "not defined imei";
 
     private final PackageHandler starterPackageHandler;
     private final ContextManager contextManager;
+    private final ConnectionManager connectionManager;
 
-    public WialonHandler(StarterPackageHandler starterPackageHandler, ContextManager contextManager) {
+    public WialonHandler(StarterPackageHandler starterPackageHandler, ContextManager contextManager,
+                         ConnectionManager connectionManager) {
         this.starterPackageHandler = starterPackageHandler;
         this.contextManager = contextManager;
+        this.connectionManager = connectionManager;
     }
 
     @Override
@@ -53,6 +61,14 @@ public final class WialonHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelInactive(ChannelHandlerContext context) {
+        final String deviceImei = this.contextManager.findDeviceImei(context);
+        log.info(format(TEMPLATE_MESSAGE_INACTIVE_CHANNEL,
+                deviceImei != null ? deviceImei : NOT_DEFINED_DEVICE_IMEI_IN_MESSAGE));
 
+        final Unit unit = this.contextManager.findUnit(context);
+        if (unit != null) {    //if unit was authorized
+            final Device device = unit.getDevice();
+            this.connectionManager.removeContext(device);
+        }
     }
 }

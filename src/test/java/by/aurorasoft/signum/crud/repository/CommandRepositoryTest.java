@@ -14,6 +14,7 @@ import java.util.function.ToLongFunction;
 import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Status.*;
 import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Type.COMMAND;
 import static by.aurorasoft.signum.crud.model.entity.CommandEntity.builder;
+import static java.lang.Long.MIN_VALUE;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 
@@ -77,20 +78,22 @@ public final class CommandRepositoryTest extends AbstractContextTest {
     })
     public void commandsShouldBeFoundByStatuses() {
         super.startQueryCount();
-        final List<CommandEntity> foundCommands = this.repository.findByStatuses(Set.of(NEW, SENT));
+        final List<CommandEntity> foundCommands = this.repository
+                .findByDeviceIdAndStatuses(25552L, Set.of(SENT, SUCCESS));
         super.checkQueryCount(1);
 
         final List<Long> actual = foundCommands.stream()
                 .map(CommandEntity::getId)
                 .collect(toList());
-        final List<Long> expected = List.of(255L, 256L);
+        final List<Long> expected = List.of(256L, 257L);
         assertEquals(expected, actual);
     }
 
     @Test
     public void commandsShouldNotBeFoundByStatuses() {
         super.startQueryCount();
-        final List<CommandEntity> foundCommands = this.repository.findByStatuses(Set.of(NOT_DEFINED));
+        final List<CommandEntity> foundCommands = this.repository
+                .findByDeviceIdAndStatuses(MIN_VALUE, Set.of(NOT_DEFINED));
         super.checkQueryCount(1);
 
         assertTrue(foundCommands.isEmpty());

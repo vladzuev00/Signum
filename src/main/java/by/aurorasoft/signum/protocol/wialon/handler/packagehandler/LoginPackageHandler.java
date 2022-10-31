@@ -6,6 +6,8 @@ import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import by.aurorasoft.signum.protocol.wialon.model.LoginPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import by.aurorasoft.signum.protocol.core.service.AuthorizationDeviceService;
+import by.aurorasoft.signum.protocol.wialon.service.sendcommand.CommandSenderService;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import org.springframework.stereotype.Component;
 
@@ -19,24 +21,30 @@ public final class LoginPackageHandler extends PackageHandler {
     private final AuthorizationDeviceService authorizationDeviceService;
     private final ContextManager contextManager;
     private final ConnectionManager connectionManager;
+    private final CommandSenderService commandSenderService;
 
     public LoginPackageHandler(PingPackageHandler nextHandler, AuthorizationDeviceService authorizationDeviceService,
-                               ContextManager contextManager, ConnectionManager connectionManager) {
+                               ContextManager contextManager, ConnectionManager connectionManager,
+                               CommandSenderService commandSenderService) {
         super(LoginPackage.class, nextHandler);
         this.authorizationDeviceService = authorizationDeviceService;
         this.contextManager = contextManager;
         this.connectionManager = connectionManager;
+        this.commandSenderService = commandSenderService;
     }
 
     @Override
     protected void doHandle(Package requestPackage, ChannelHandlerContext context) {
         final LoginPackage loginPackage = (LoginPackage) requestPackage;
+        this.contextManager.putDeviceImei(context, loginPackage.getImei());
         final Optional<Unit> optionalUnit = this.authorizationDeviceService.authorize(loginPackage.getImei());
         optionalUnit.ifPresentOrElse(
                 unit -> {
                     this.contextManager.putUnit(context, unit);
                     this.connectionManager.addContext(context);
-                    context.writeAndFlush(RESPONSE_SUCCESS_AUTHORIZE);
+                    context.writeAndFlush(RESPONSE_SUCCESS_AUTHORIZE)
+                            .addListener((ChannelFutureListener)
+                                    future -> this.commandSenderService.resendCommands(unit.getDevice()));
                 }
                 ,
                 () -> context.writeAndFlush(RESPONSE_FAILURE_AUTHORIZE)

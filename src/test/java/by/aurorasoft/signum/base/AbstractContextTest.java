@@ -1,6 +1,5 @@
 package by.aurorasoft.signum.base;
 
-import by.nhorushko.crudgeneric.v2.domain.AbstractDto;
 import by.nhorushko.crudgeneric.v2.domain.AbstractEntity;
 import com.yannbriancon.interceptor.HibernateQueryInterceptor;
 import org.junit.BeforeClass;
@@ -69,14 +68,12 @@ public abstract class AbstractContextTest {
         this.entityManager.clear();
         return this.entityManager.find(entityType, id);
     }
-//
-//    protected <EntityType extends BaseEntity> List<EntityType> findEntitiesFromDB(
-//            Class<EntityType> entityType) {
-////        this.entityManager.flush();
-////        this.entityManager.clear();
-//        return this.entityManager.createQuery("SELECT e FROM " + entityType.getName() + " e", entityType)
-//                .getResultList();
-//    }
+
+    protected <EntityType extends AbstractEntity<?>> List<EntityType> findEntitiesFromDB(
+            Class<EntityType> entityType) {
+        return this.entityManager.createQuery("SELECT e FROM " + entityType.getName() + " e", entityType)
+                .getResultList();
+    }
 
     static class DBContainerInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 

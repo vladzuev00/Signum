@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import java.util.Queue;
 import java.util.concurrent.*;
 
 import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Status.*;
@@ -22,10 +23,12 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 //TODO: correct dependencies
 @Component
 public final class ContextManager {
-    private static final AttributeKey<Unit> CHANNEL_ATTRIBUTE_KEY_UNIT
-            = valueOf("unit");
+    private static final AttributeKey<String> ATTRIBUTE_KEY_DEVICE_IMEI = valueOf("device_imei");
+    private static final AttributeKey<Unit> ATTRIBUTE_KEY_UNIT = valueOf("unit");
     private static final AttributeKey<CommandWaitingResponse> ATTRIBUTE_KEY_COMMAND_WAITING_RESPONSE
             = valueOf("command_waiting_response");
+    private static final AttributeKey<Queue<Command>> ATTRIBUTE_KEY_COMMANDS_TO_BE_SENT
+            = valueOf("commands_to_be_sent");
 
     private final CommandService commandService;
     private final CommandSenderService commandSenderService;
@@ -40,12 +43,20 @@ public final class ContextManager {
         this.waitingResponseTimeoutInSeconds = waitingResponseTimeoutInSeconds;
     }
 
+    public void putDeviceImei(ChannelHandlerContext context, String imei) {
+        putAttributeValue(context, ATTRIBUTE_KEY_DEVICE_IMEI, imei);
+    }
+
+    public String findDeviceImei(ChannelHandlerContext context) {
+        return findAttributeValue(context, ATTRIBUTE_KEY_DEVICE_IMEI);
+    }
+
     public Unit findUnit(ChannelHandlerContext context) {
-        return findAttributeValue(context, CHANNEL_ATTRIBUTE_KEY_UNIT);
+        return findAttributeValue(context, ATTRIBUTE_KEY_UNIT);
     }
 
     public void putUnit(ChannelHandlerContext context, Unit unit) {
-        putAttributeValue(context, CHANNEL_ATTRIBUTE_KEY_UNIT, unit);
+        putAttributeValue(context, ATTRIBUTE_KEY_UNIT, unit);
     }
 
     public boolean isExistCommandWaitingResponse(ChannelHandlerContext context) {
@@ -70,8 +81,23 @@ public final class ContextManager {
                 = findAttributeValue(context, ATTRIBUTE_KEY_COMMAND_WAITING_RESPONSE);
         removeCommandWaitingResponse(context);
         commandWaitingResponse.cancelObserverTask();
-        final Command command = commandWaitingResponse.getCommand();
-        this.commandSenderService.onSentCommandWasHandled(command.getDevice());
+        this.commandSenderService.onSentCommandWasHandled(context);
+    }
+
+    public void putCommandToBeSent(ChannelHandlerContext context, Command command) {
+        initializeCommandsToBeSentAttributeIfNecessary(context);
+        final Queue<Command> commandsToBeSent = findAttributeValue(context, ATTRIBUTE_KEY_COMMANDS_TO_BE_SENT);
+        commandsToBeSent.add(command);
+    }
+
+    public Command findCommandToBeSent(ChannelHandlerContext context) {
+        final Queue<Command> commandsToBeSent = findAttributeValue(context, ATTRIBUTE_KEY_COMMANDS_TO_BE_SENT);
+        return commandsToBeSent.poll();
+    }
+
+    public boolean isExistCommandToBeSent(ChannelHandlerContext context) {
+        final Queue<Command> commandsToBeSent = findAttributeValue(context, ATTRIBUTE_KEY_COMMANDS_TO_BE_SENT);
+        return !commandsToBeSent.isEmpty();
     }
 
     private static <ValueType> ValueType findAttributeValue(ChannelHandlerContext context,
@@ -102,13 +128,24 @@ public final class ContextManager {
             if (!interrupted()) {
                 removeCommandWaitingResponse(context);
                 this.commandService.updateByGivenStatus(command, TIMEOUT);
-                this.commandSenderService.onSentCommandWasHandled(command.getDevice());
+                this.commandSenderService.onSentCommandWasHandled(context);
             }
         };
     }
 
     private static void removeCommandWaitingResponse(ChannelHandlerContext context) {
         putAttributeValue(context, ATTRIBUTE_KEY_COMMAND_WAITING_RESPONSE, null);
+    }
+
+    @SuppressWarnings("all")
+    private static void initializeCommandsToBeSentAttributeIfNecessary(ChannelHandlerContext context) {
+        if (findAttributeValue(context, ATTRIBUTE_KEY_COMMANDS_TO_BE_SENT) == null) {
+            synchronized (context) {
+                if (findAttributeValue(context, ATTRIBUTE_KEY_COMMANDS_TO_BE_SENT) == null) {
+                    putAttributeValue(context, ATTRIBUTE_KEY_COMMANDS_TO_BE_SENT, new ConcurrentLinkedQueue<>());
+                }
+            }
+        }
     }
 
     @lombok.Value

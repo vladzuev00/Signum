@@ -15,6 +15,7 @@ public interface CommandRepository extends JpaRepository<CommandEntity, Long> {
     @Query("UPDATE CommandEntity c SET c.status = :newStatus WHERE c.id = :id")
     void updateByStatus(@Param("id") Long id, @Param("newStatus") Status newStatus);
 
-    @Query("SELECT c FROM CommandEntity c WHERE c.status IN (:statuses)")
-    List<CommandEntity> findByStatuses(@Param("statuses") Set<Status> statuses);
+    @Query("SELECT c FROM CommandEntity c WHERE c.device.id = :deviceId AND c.status IN (:statuses)")
+    List<CommandEntity> findByDeviceIdAndStatuses(@Param("deviceId") Long deviceId,
+                                                  @Param("statuses") Set<Status> statuses);
 }

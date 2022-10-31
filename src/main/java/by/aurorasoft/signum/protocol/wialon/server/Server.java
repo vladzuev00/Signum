@@ -1,6 +1,7 @@
 package by.aurorasoft.signum.protocol.wialon.server;
 
 import by.aurorasoft.signum.config.property.ServerProperty;
+import by.aurorasoft.signum.protocol.core.connectionmanager.ConnectionManager;
 import by.aurorasoft.signum.protocol.wialon.decoder.WialonDecoder;
 import by.aurorasoft.signum.protocol.wialon.decoder.impl.StarterPackageDecoder;
 import by.aurorasoft.signum.protocol.wialon.encoder.PackagePostfixAppendingEncoder;
@@ -32,16 +33,19 @@ public final class Server implements AutoCloseable {
     private final StarterPackageDecoder starterPackageDecoder;
     private final StarterPackageHandler starterPackageHandler;
     private final ContextManager contextWorker;
+    private final ConnectionManager connectionManager;
     private final int timeoutSeconds;
     private final EventLoopGroup connectionLoopGroup;
     private final EventLoopGroup dataProcessLoopGroup;
     private final int port;
 
     public Server(StarterPackageDecoder starterPackageDecoder, StarterPackageHandler starterPackageHandler,
-                  ContextManager contextWorker, ServerProperty serverConfiguration) {
+                  ContextManager contextWorker, ConnectionManager connectionManager,
+                  ServerProperty serverConfiguration) {
         this.starterPackageDecoder = starterPackageDecoder;
         this.starterPackageHandler = starterPackageHandler;
         this.contextWorker = contextWorker;
+        this.connectionManager = connectionManager;
         this.timeoutSeconds = serverConfiguration.getTimeoutSeconds();
         this.connectionLoopGroup = new NioEventLoopGroup(serverConfiguration.getConnectionThreads());
         this.dataProcessLoopGroup = new NioEventLoopGroup(serverConfiguration.getDataProcessThreads());
@@ -93,7 +97,7 @@ public final class Server implements AutoCloseable {
     }
 
     private WialonHandler createRequestHandler() {
-        return new WialonHandler(this.starterPackageHandler, this.contextWorker);
+        return new WialonHandler(this.starterPackageHandler, this.contextWorker, this.connectionManager);
     }
 
     private ExceptionHandler createExceptionHandler() {

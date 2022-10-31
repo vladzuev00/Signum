@@ -46,17 +46,19 @@ public final class CommandServiceTest extends AbstractContextTest {
             "INSERT INTO command(id, text, status, device_id, type) VALUES(257, 'command', 'SUCCESS', 25552, 'ANSWER')"
     })
     public void commandsShouldBeFoundByStatuses() {
-        final List<Command> foundCommands = this.service.findCommandsByStatuses(SENT, NEW);
+        final Device givenDevice = new Device(25552L, "355026070842667", "+3197011460885", TRACKER);
+        final List<Command> foundCommands = this.service.findCommandsByDeviceAndStatuses(givenDevice, SENT, SUCCESS);
         final List<Long> actual = foundCommands.stream()
                 .map(Command::getId)
                 .collect(toList());
-        final List<Long> expected = List.of(255L, 256L);
+        final List<Long> expected = List.of(256L, 257L);
         assertEquals(expected, actual);
     }
 
     @Test
     public void commandsShouldNotBeFoundByStatuses() {
-        final List<Command> foundCommands = this.service.findCommandsByStatuses(NOT_DEFINED);
+        final Device givenDevice = new Device(25552L, "355026070842667", "+3197011460885", TRACKER);
+        final List<Command> foundCommands = this.service.findCommandsByDeviceAndStatuses(givenDevice, NOT_DEFINED);
         assertTrue(foundCommands.isEmpty());
     }
 }

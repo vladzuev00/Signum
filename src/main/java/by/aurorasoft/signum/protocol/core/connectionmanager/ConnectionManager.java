@@ -35,4 +35,8 @@ public final class ConnectionManager {
     public Optional<ChannelHandlerContext> findContext(Device device) {
         return ofNullable(this.deviceIdToContextMap.get(device.getId()));
     }
+
+    public void removeContext(Device device) {
+        this.deviceIdToContextMap.remove(device.getId());
+    }
 }

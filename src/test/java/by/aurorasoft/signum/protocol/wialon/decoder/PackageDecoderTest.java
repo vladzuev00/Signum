@@ -29,10 +29,10 @@ public final class PackageDecoderTest {
     @Mock
     private PackageDeserializer mockedDeserializer;
 
+    private PackageDecoder decoder;
+
     @Captor
     private ArgumentCaptor<String> stringArgumentCaptor;
-
-    private PackageDecoder decoder;
 
     @Before
     public void initializeDecoder() {

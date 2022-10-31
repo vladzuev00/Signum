@@ -37,6 +37,9 @@ public final class ContextManagerTest {
     @Captor
     private ArgumentCaptor<Unit> unitArgumentCaptor;
 
+    @Captor
+    private ArgumentCaptor<String> stringArgumentCaptor;
+
     @Before
     public void initializeContextManager() {
         this.contextManager = new ContextManager(this.mockedCommandService, this.mockedCommandSenderService,
@@ -75,7 +78,45 @@ public final class ContextManagerTest {
         final Unit givenUnit = mock(Unit.class);
         this.contextManager.putUnit(givenContext, givenUnit);
 
-        verify(givenAttribute, times(1)).set(this.unitArgumentCaptor.capture());
+        verify(givenAttribute, times(1))
+                .set(this.unitArgumentCaptor.capture());
         assertSame(givenUnit, this.unitArgumentCaptor.getValue());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void deviceImeiShouldBeFound() {
+        final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
+
+        final Channel givenChannel = mock(Channel.class);
+        when(givenContext.channel()).thenReturn(givenChannel);
+
+        final Attribute<String> givenAttribute = mock(Attribute.class);
+        when(givenChannel.attr(any(AttributeKey.class))).thenReturn(givenAttribute);
+
+        final String givenImei = "11112222333344445555";
+        when(givenAttribute.get()).thenReturn(givenImei);
+
+        final String actual = this.contextManager.findDeviceImei(givenContext);
+        assertSame(givenImei, actual);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void deviceImeiShouldBePut() {
+        final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
+
+        final Channel givenChannel = mock(Channel.class);
+        when(givenContext.channel()).thenReturn(givenChannel);
+
+        final Attribute<String> givenAttribute = mock(Attribute.class);
+        when(givenChannel.attr(any(AttributeKey.class))).thenReturn(givenAttribute);
+
+        final String givenImei = "11112222333344445555";
+        this.contextManager.putDeviceImei(givenContext, givenImei);
+
+        verify(givenAttribute, times(1))
+                .set(this.stringArgumentCaptor.capture());
+        assertSame(givenImei, this.stringArgumentCaptor.getValue());
     }
 }

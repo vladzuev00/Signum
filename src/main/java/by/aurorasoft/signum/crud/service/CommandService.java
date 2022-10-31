@@ -2,6 +2,7 @@ package by.aurorasoft.signum.crud.service;
 
 import by.aurorasoft.signum.crud.mapper.CommandMapper;
 import by.aurorasoft.signum.crud.model.dto.Command;
+import by.aurorasoft.signum.crud.model.dto.Device;
 import by.aurorasoft.signum.crud.model.entity.CommandEntity;
 import by.aurorasoft.signum.crud.model.entity.CommandEntity.Status;
 import by.aurorasoft.signum.crud.model.entity.CommandEntity.Type;
@@ -35,9 +36,10 @@ public class CommandService extends AbstractCrudService<Long, CommandEntity, Com
     }
 
     @Transactional
-    public List<Command> findCommandsByStatuses(Status... statuses) {
+    public List<Command> findCommandsByDeviceAndStatuses(Device device, Status... statuses) {
         final CommandRepository commandRepository = (CommandRepository) super.repository;
-        final List<CommandEntity> commandEntities = commandRepository.findByStatuses(Set.of(statuses));
+        final List<CommandEntity> commandEntities = commandRepository
+                .findByDeviceIdAndStatuses(device.getId(), Set.of(statuses));
         return super.mapper.toDto(commandEntities);
     }
 }
