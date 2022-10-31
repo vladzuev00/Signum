@@ -36,25 +36,8 @@ public class UnitEntity extends NamedEntity<Long> {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "device_id")
-    private DeviceEntity device;
-
-    public UnitEntity(String name, UserEntity user, DeviceEntity device) {
-        super(name);
-        this.user = user;
-        this.device = device;
-    }
-
-    public UnitEntity(Long id, String name, UserEntity user, DeviceEntity device) {
-        super(name);
-        this.id = id;
-        this.user = user;
-        this.device = device;
-    }
-
     @Override
     public String toString() {
-        return super.toString() + "[userId = " + this.user.getId() + ", deviceId = " + this.device.getId() + "]";
+        return super.toString() + "[userId = " + this.user.getId() + "]";
     }
 }

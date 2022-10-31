@@ -21,16 +21,13 @@ public final class LoginPackageHandler extends PackageHandler {
     private final AuthorizationDeviceService authorizationDeviceService;
     private final ContextManager contextManager;
     private final ConnectionManager connectionManager;
-    private final CommandSenderService commandSenderService;
 
     public LoginPackageHandler(PingPackageHandler nextHandler, AuthorizationDeviceService authorizationDeviceService,
-                               ContextManager contextManager, ConnectionManager connectionManager,
-                               CommandSenderService commandSenderService) {
+                               ContextManager contextManager, ConnectionManager connectionManager) {
         super(LoginPackage.class, nextHandler);
         this.authorizationDeviceService = authorizationDeviceService;
         this.contextManager = contextManager;
         this.connectionManager = connectionManager;
-        this.commandSenderService = commandSenderService;
     }
 
     @Override
@@ -43,8 +40,7 @@ public final class LoginPackageHandler extends PackageHandler {
                     this.contextManager.putUnit(context, unit);
                     this.connectionManager.addContext(context);
                     context.writeAndFlush(RESPONSE_SUCCESS_AUTHORIZE)
-                            .addListener((ChannelFutureListener)
-                                    future -> this.commandSenderService.resendCommands(unit.getDevice()));
+                            .addListener();
                 }
                 ,
                 () -> context.writeAndFlush(RESPONSE_FAILURE_AUTHORIZE)

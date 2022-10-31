@@ -69,7 +69,7 @@ public abstract class AbstractContextTest {
         return this.entityManager.find(entityType, id);
     }
 
-    protected <EntityType extends AbstractEntity<?>> List<EntityType> findEntitiesFromDB(
+    protected <EntityType extends AbstractEntity<?>> List<EntityType> findEntities(
             Class<EntityType> entityType) {
         return this.entityManager.createQuery("SELECT e FROM " + entityType.getName() + " e", entityType)
                 .getResultList();

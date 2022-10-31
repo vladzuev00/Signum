@@ -2,9 +2,15 @@ package by.aurorasoft.signum.protocol.wialon.it;
 
 import by.aurorasoft.signum.base.AbstractContextTest;
 import by.aurorasoft.signum.config.property.ServerProperty;
+import by.aurorasoft.signum.crud.model.dto.Command;
+import by.aurorasoft.signum.crud.model.dto.Device;
+import by.aurorasoft.signum.crud.model.entity.CommandEntity;
 import by.aurorasoft.signum.crud.model.entity.DeviceEntity;
 import by.aurorasoft.signum.crud.model.entity.MessageEntity;
+import by.aurorasoft.signum.protocol.core.connectionmanager.ConnectionManager;
+import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import by.aurorasoft.signum.protocol.wialon.server.Server;
+import io.netty.channel.ChannelHandlerContext;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,10 +24,15 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
+import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Status.SUCCESS;
+import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Type.ANSWER;
+import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Type.COMMAND;
+import static by.aurorasoft.signum.crud.model.entity.DeviceEntity.Type.TRACKER;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.Instant.parse;
 import static java.util.concurrent.Executors.newSingleThreadExecutor;
-import static org.junit.Assert.assertEquals;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.junit.Assert.*;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORTED;
 
@@ -34,6 +45,12 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
 
     @Autowired
     private ServerProperty serverProperty;
+
+    @Autowired
+    private ContextManager contextManager;
+
+    @Autowired
+    private ConnectionManager connectionManager;
 
     private Client client;
 
@@ -94,7 +111,7 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String expectedResponse = "#AD#1\r\n";
         assertEquals(expectedResponse, actualResponse);
 
-        final List<MessageEntity> messagesFromDB = super.findEntitiesFromDB(MessageEntity.class);
+        final List<MessageEntity> messagesFromDB = super.findEntities(MessageEntity.class);
         assertEquals(1, messagesFromDB.size());
 
         final MessageEntity actualSavedMessage = messagesFromDB.get(0);
@@ -157,7 +174,7 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String expectedResponse = "#AB#2\r\n";
         assertEquals(expectedResponse, actualResponse);
 
-        final List<MessageEntity> messagesFromDB = super.findEntitiesFromDB(MessageEntity.class);
+        final List<MessageEntity> messagesFromDB = super.findEntities(MessageEntity.class);
         assertEquals(2, messagesFromDB.size());
 
         final MessageEntity actualFirstSavedMessage = messagesFromDB.get(0);
@@ -221,8 +238,66 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
     }
 
     @Test
-    public void requestCommandPackageShouldBeHandled() {
+    @Transactional(propagation = NOT_SUPPORTED)
+    @Sql(statements = "DELETE FROM command", executionPhase = AFTER_TEST_METHOD)
+    public void requestCommandPackageShouldBeHandled() throws Exception {
+        final String requestLoginPackage = "#L#355234055650192;NA\r\n";
+        final String responseLoginPackage = this.client.doRequest(requestLoginPackage).get();
+        assertEquals(RESPONSE_LOGIN_PACKAGE_SUCCESS_AUTHORIZATION, responseLoginPackage);
 
+        final String givenRequest = "#M#command\r\n";
+
+        final String actualResponse = this.client.doRequest(givenRequest).get();
+        final String expectedResponse = "#AM#1\r\n";
+        assertEquals(expectedResponse, actualResponse);
+
+        final List<CommandEntity> commandsFromDB = super.findEntities(CommandEntity.class);
+        assertEquals(1, commandsFromDB.size());
+
+        final CommandEntity actualSavedCommand = commandsFromDB.get(0);
+        final CommandEntity expectedSavedCommand = CommandEntity.builder()
+                .text("command")
+                .status(SUCCESS)
+                .device(super.entityManager.getReference(DeviceEntity.class, 25551L))
+                .type(ANSWER)
+                .build();
+        checkEqualsExceptId(expectedSavedCommand, actualSavedCommand);
+    }
+
+    @Test
+    @Sql(statements = "INSERT INTO command(id, text, status, device_id, type) VALUES (255, 'command', 'SENT', 25551, 'COMMAND')")
+    @Transactional(propagation = NOT_SUPPORTED)
+    @Sql(statements = "DELETE FROM command", executionPhase = AFTER_TEST_METHOD)
+    public void responseCommandPackageShouldBeHandledSuccess()
+            throws Exception {
+        final String requestLoginPackage = "#L#355234055650192;NA\r\n";
+        final String responseLoginPackage = this.client.doRequest(requestLoginPackage).get();
+        assertEquals(RESPONSE_LOGIN_PACKAGE_SUCCESS_AUTHORIZATION, responseLoginPackage);
+
+        final Device device = new Device(25551L, "355234055650192", "+37257063997", TRACKER);
+        final ChannelHandlerContext context = this.connectionManager.findContext(device).orElseThrow();
+        this.contextManager.putCommandWaitingResponse(context, new Command(255L, "command", device));
+
+        final String givenResponse = "#AM#1\r\n";
+        this.client.doResponse(givenResponse);
+
+        SECONDS.sleep(1);
+
+        assertFalse(this.contextManager.isExistCommandWaitingResponse(context));
+
+        final List<CommandEntity> commandsFromDB = super.findEntities(CommandEntity.class);
+        assertEquals(1, commandsFromDB.size());
+
+        final CommandEntity actualSavedCommand = commandsFromDB.get(0);
+        final CommandEntity expectedSavedCommand = CommandEntity.builder()
+                .text("command")
+                .status(SUCCESS)
+                .device(DeviceEntity.builder()
+                        .id(25551L)
+                        .build())
+                .type(COMMAND)
+                .build();
+        checkEqualsExceptId(expectedSavedCommand, actualSavedCommand);
     }
 
     private static void checkEqualsExceptId(MessageEntity expected, MessageEntity actual) {
@@ -239,6 +314,13 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         assertEquals(expected.getEcoCornering(), actual.getEcoCornering(), 0.);
         assertEquals(expected.getEcoAcceleration(), actual.getEcoAcceleration(), 0.);
         assertEquals(expected.getEcoBraking(), actual.getEcoBraking(), 0.);
+    }
+
+    private static void checkEqualsExceptId(CommandEntity expected, CommandEntity actual) {
+        assertEquals(expected.getText(), actual.getText());
+        assertSame(expected.getStatus(), actual.getStatus());
+        assertEquals(expected.getDevice().getId(), actual.getDevice().getId());
+        assertSame(expected.getStatus(), actual.getStatus());
     }
 
     private static final class Client implements AutoCloseable {
@@ -271,6 +353,15 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
 
                 return responseBuilder.toString();
             });
+        }
+
+        public void doResponse(String response) {
+            try {
+                final OutputStream outputStream = this.socket.getOutputStream();
+                outputStream.write(response.getBytes(UTF_8));
+            } catch (IOException cause) {
+                throw new RuntimeException(cause);
+            }
         }
 
         @Override

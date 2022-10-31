@@ -54,7 +54,7 @@ public class CommandSenderService {
     @SuppressWarnings("all")
     public void onSentCommandWasHandled(ChannelHandlerContext context) {
         synchronized (context) {
-            if (!this.contextManager.isExistCommandToBeSent(context)) {
+            if (this.contextManager.isExistCommandToBeSent(context)) {
                 final Command commandToBeSent = this.contextManager.findCommandToBeSent(context);
                 this.sendIfTrackerIsConnected(commandToBeSent);
             }

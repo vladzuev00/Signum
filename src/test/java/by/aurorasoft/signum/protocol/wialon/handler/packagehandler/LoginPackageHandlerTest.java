@@ -81,7 +81,6 @@ public final class LoginPackageHandlerTest {
         verify(this.mockedConnectionManager, times(1))
                 .addContext(this.contextArgumentCaptor.capture());
         verify(givenContext, times(1)).writeAndFlush(this.stringArgumentCaptor.capture());
-        verify(givenChannelFuture, times(1)).addListener(any(ChannelFutureListener.class));
 
         assertEquals(List.of(givenPackage.getImei(), givenPackage.getImei(), "#AL#1"),
                 this.stringArgumentCaptor.getAllValues());

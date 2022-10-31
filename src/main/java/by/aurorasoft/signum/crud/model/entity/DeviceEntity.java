@@ -8,6 +8,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 
 import static javax.persistence.EnumType.STRING;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -18,7 +19,6 @@ import static javax.persistence.GenerationType.IDENTITY;
 @AllArgsConstructor
 @Setter
 @Getter
-@ToString(callSuper = true)
 @Builder
 public class DeviceEntity implements AbstractEntity<Long> {
 
@@ -37,7 +37,17 @@ public class DeviceEntity implements AbstractEntity<Long> {
     @Column(name = "type")
     private Type type;
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "unit_id")
+    private UnitEntity unit;
+
     public enum Type {
         NOT_DEFINED, TRACKER, BEACON
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + "[imei = " + this.imei + ", phoneNumber = " + this.phoneNumber
+                + ", type = " + this.type + ", unitId = " + this.unit.getId() + "]";
     }
 }

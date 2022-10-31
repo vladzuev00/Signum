@@ -97,7 +97,7 @@ public final class ContextManager {
 
     public boolean isExistCommandToBeSent(ChannelHandlerContext context) {
         final Queue<Command> commandsToBeSent = findAttributeValue(context, ATTRIBUTE_KEY_COMMANDS_TO_BE_SENT);
-        return !commandsToBeSent.isEmpty();
+        return commandsToBeSent != null && !commandsToBeSent.isEmpty();
     }
 
     private static <ValueType> ValueType findAttributeValue(ChannelHandlerContext context,
