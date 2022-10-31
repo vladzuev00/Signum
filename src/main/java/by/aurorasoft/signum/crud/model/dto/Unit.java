@@ -8,5 +8,4 @@ public class Unit implements AbstractDto<Long> {
     Long id;
     String name;
     User user;
-    Device device;
 }

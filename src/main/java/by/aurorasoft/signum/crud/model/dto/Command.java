@@ -8,17 +8,17 @@ import lombok.Value;
 public class Command implements AbstractDto<Long> {
     Long id;
     String text;
-    Device device;
+    Long deviceId;
 
-    public Command(String text, Device device) {
+    public Command(String text, Long deviceId) {
         this.id = null;
         this.text = text;
-        this.device = device;
+        this.deviceId = deviceId;
     }
 
-    public Command(Long id, String text, Device device) {
+    public Command(Long id, String text, Long deviceId) {
         this.id = id;
         this.text = text;
-        this.device = device;
+        this.deviceId = deviceId;
     }
 }
