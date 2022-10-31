@@ -30,17 +30,16 @@ public class CommandService extends AbstractCrudService<Long, CommandEntity, Com
     }
 
     @Transactional
-    public void updateByGivenStatus(Command command, Status newStatus) {
+    public void updateByStatus(Command command, Status newStatus) {
         final CommandRepository commandRepository = (CommandRepository) super.repository;
-//        commandRepository.updateByStatus(command.getId(), newStatus);
+        commandRepository.updateByStatus(command.getId(), newStatus);
     }
 
     @Transactional
     public List<Command> findCommandsByDeviceAndStatuses(Device device, Status... statuses) {
         final CommandRepository commandRepository = (CommandRepository) super.repository;
-//        final List<CommandEntity> commandEntities = commandRepository
-//                .findByDeviceIdAndStatuses(device.getId(), Set.of(statuses));
-//        return super.mapper.toDto(commandEntities);
-        return null;
+        final List<CommandEntity> commandEntities = commandRepository
+                .findByDeviceIdAndStatuses(device.getId(), Set.of(statuses));
+        return super.mapper.toDto(commandEntities);
     }
 }

@@ -62,15 +62,15 @@ public final class RequestCommandPackageHandlerTest {
         final Unit givenUnit = mock(Unit.class);
         final Device givenDevice = new Device(255L, "11112222333344445555", "448446945", TRACKER);
 //        when(givenUnit.getDevice()).thenReturn(givenDevice);
-        when(this.mockedContextManager.findUnit(any(ChannelHandlerContext.class)))
-                .thenReturn(givenUnit);
+//        when(this.mockedContextManager.findUnit(any(ChannelHandlerContext.class)))
+//                .thenReturn(givenUnit);
 
         final RequestCommandPackage givenPackage = new RequestCommandPackage("message");
         final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
         this.packageHandler.doHandle(givenPackage, givenContext);
 
-        verify(this.mockedContextManager, times(1))
-                .findUnit(this.contextArgumentCaptor.capture());
+//        verify(this.mockedContextManager, times(1))
+//                .findUnit(this.contextArgumentCaptor.capture());
         verify(this.mockedCommandService, times(1)).save(
                 this.commandArgumentCaptor.capture(),
                 this.commandStatusArgumentCaptor.capture(),

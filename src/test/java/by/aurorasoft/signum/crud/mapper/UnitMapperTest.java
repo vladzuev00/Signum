@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public final class UnitMapperTest extends AbstractContextTest {
 
@@ -30,9 +31,11 @@ public final class UnitMapperTest extends AbstractContextTest {
     public void dtoShouldBeMappedToEntity() {
         final Unit givenUnit = new Unit(255L, "unit_a", new User(256L, "user_1"));
 
-        final UnitEntity actual = this.mapper.toEntity(givenUnit);
-        final UnitEntity expected = new UnitEntity(255L, "unit_a",
-                new UserEntity(256L, "user_1", null));
-        assertEquals(expected, actual);
+        final UnitEntity resultEntity = this.mapper.toEntity(givenUnit);
+        assertEquals(255, resultEntity.getId().longValue());
+        assertEquals("unit_a", resultEntity.getName());
+        assertEquals(256,  resultEntity.getUser().getId().longValue());
+        assertEquals("user_1", resultEntity.getUser().getName());
+        assertNull(resultEntity.getUser().getUnits());
     }
 }

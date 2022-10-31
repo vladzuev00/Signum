@@ -275,8 +275,8 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         assertEquals(RESPONSE_LOGIN_PACKAGE_SUCCESS_AUTHORIZATION, responseLoginPackage);
 
         final Device device = new Device(25551L, "355234055650192", "+37257063997", TRACKER);
-        final ChannelHandlerContext context = this.connectionManager.findContext(device).orElseThrow();
-        //this.contextManager.putCommandWaitingResponse(context, new Command(255L, "command", device));
+        final ChannelHandlerContext context = this.connectionManager.findContextByDeviceId(device.getId()).orElseThrow();
+        this.contextManager.putCommandWaitingResponse(context, new Command(255L, "command", device.getId()));
 
         final String givenResponse = "#AM#1\r\n";
         this.client.doResponse(givenResponse);
@@ -292,9 +292,7 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final CommandEntity expectedSavedCommand = CommandEntity.builder()
                 .text("command")
                 .status(SUCCESS)
-                .device(DeviceEntity.builder()
-                        .id(25551L)
-                        .build())
+                .device(super.entityManager.getReference(DeviceEntity.class, 25551L))
                 .type(COMMAND)
                 .build();
         checkEqualsExceptId(expectedSavedCommand, actualSavedCommand);

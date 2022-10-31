@@ -1,7 +1,6 @@
 package by.aurorasoft.signum.protocol.wialon.handler.packagehandler.data;
 
 import by.aurorasoft.signum.crud.model.dto.Device;
-import by.aurorasoft.signum.crud.model.dto.Unit;
 import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.PackageHandler;
@@ -16,8 +15,8 @@ public abstract class AbstractDataPackageHandler<T extends AbstractDataPackage> 
     private final MessageService messageService;
     private final ContextManager contextManager;
 
-    public AbstractDataPackageHandler(Class<T> packageType, PackageHandler nextHandler, MessageService messageService,
-                                      ContextManager contextManager) {
+    public AbstractDataPackageHandler(Class<T> packageType, PackageHandler nextHandler,
+                                      MessageService messageService, ContextManager contextManager) {
         super(packageType, nextHandler);
         this.messageService = messageService;
         this.contextManager = contextManager;
@@ -28,9 +27,7 @@ public abstract class AbstractDataPackageHandler<T extends AbstractDataPackage> 
     protected final void doHandle(Package requestPackage, ChannelHandlerContext context) {
         final T dataPackage = (T) requestPackage;
         final List<Message> messagesToBeSaved = dataPackage.getMessages();
-        final Unit unit = this.contextManager.findUnit(context);
-//        final Device device = unit.getDevice();
-        final Device device = null;
+        final Device device = this.contextManager.findDevice(context);
         final List<Message> savedMessages = this.messageService.saveAll(device.getId(), messagesToBeSaved);
         context.writeAndFlush(this.createResponse(savedMessages.size()));
     }

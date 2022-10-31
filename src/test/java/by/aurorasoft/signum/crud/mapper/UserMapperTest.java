@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public final class UserMapperTest extends AbstractContextTest {
 
@@ -18,9 +19,10 @@ public final class UserMapperTest extends AbstractContextTest {
     public void dtoShouldBeMappedToEntity() {
         final User givenUser = new User(255L, "user_a");
 
-        final UserEntity actual = this.mapper.toEntity(givenUser);
-        final UserEntity expected = new UserEntity(255L, "user_a", null);
-        assertEquals(expected, actual);
+        final UserEntity resultEntity = this.mapper.toEntity(givenUser);
+        assertEquals(255, resultEntity.getId().longValue());
+        assertEquals("user_a", resultEntity.getName());
+        assertNull(resultEntity.getUnits());
     }
 
     @Test

@@ -1,7 +1,7 @@
 package by.aurorasoft.signum.protocol.core.contextmanager;
 
 import by.aurorasoft.signum.crud.model.dto.Command;
-import by.aurorasoft.signum.crud.model.dto.Unit;
+import by.aurorasoft.signum.crud.model.dto.Device;
 import by.aurorasoft.signum.crud.service.CommandService;
 import by.aurorasoft.signum.protocol.wialon.service.sendcommand.CommandSenderService;
 import io.netty.channel.Channel;
@@ -24,7 +24,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 @Component
 public final class ContextManager {
     private static final AttributeKey<String> ATTRIBUTE_KEY_DEVICE_IMEI = valueOf("device_imei");
-    private static final AttributeKey<Unit> ATTRIBUTE_KEY_UNIT = valueOf("unit");
+    private static final AttributeKey<Device> ATTRIBUTE_KEY_DEVICE = valueOf("device");
     private static final AttributeKey<CommandWaitingResponse> ATTRIBUTE_KEY_COMMAND_WAITING_RESPONSE
             = valueOf("command_waiting_response");
     private static final AttributeKey<Queue<Command>> ATTRIBUTE_KEY_COMMANDS_TO_BE_SENT
@@ -51,12 +51,12 @@ public final class ContextManager {
         return findAttributeValue(context, ATTRIBUTE_KEY_DEVICE_IMEI);
     }
 
-    public Unit findUnit(ChannelHandlerContext context) {
-        return findAttributeValue(context, ATTRIBUTE_KEY_UNIT);
+    public Device findDevice(ChannelHandlerContext context) {
+        return findAttributeValue(context, ATTRIBUTE_KEY_DEVICE);
     }
 
-    public void putUnit(ChannelHandlerContext context, Unit unit) {
-        putAttributeValue(context, ATTRIBUTE_KEY_UNIT, unit);
+    public void putDevice(ChannelHandlerContext context, Device device) {
+        putAttributeValue(context, ATTRIBUTE_KEY_DEVICE, device);
     }
 
     public boolean isExistCommandWaitingResponse(ChannelHandlerContext context) {
@@ -127,7 +127,7 @@ public final class ContextManager {
         return () -> {
             if (!interrupted()) {
                 removeCommandWaitingResponse(context);
-                this.commandService.updateByGivenStatus(command, TIMEOUT);
+                this.commandService.updateByStatus(command, TIMEOUT);
                 this.commandSenderService.onSentCommandWasHandled(context);
             }
         };

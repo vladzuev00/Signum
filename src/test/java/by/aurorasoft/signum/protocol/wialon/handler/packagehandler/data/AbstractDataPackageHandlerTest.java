@@ -71,7 +71,7 @@ public final class AbstractDataPackageHandlerTest {
         final Unit givenUnit = mock(Unit.class);
         //when(givenUnit.getDevice()).thenReturn(givenDevice);
 
-        when(this.mockedContextManager.findUnit(any(ChannelHandlerContext.class))).thenReturn(givenUnit);
+//        when(this.mockedContextManager.findUnit(any(ChannelHandlerContext.class))).thenReturn(givenUnit);
 
         final List<Message> givenSavedMessages = mock(List.class);
         final int givenAmountSavedMessages = givenMessages.size();
@@ -80,8 +80,8 @@ public final class AbstractDataPackageHandlerTest {
 
         this.packageHandler.doHandle(givenPackage, givenContext);
 
-        verify(this.mockedContextManager, times(1))
-                .findUnit(this.contextArgumentCaptor.capture());
+//        verify(this.mockedContextManager, times(1))
+//                .findUnit(this.contextArgumentCaptor.capture());
         verify(this.mockedService, times(1))
                 .saveAll(this.longArgumentCaptor.capture(), this.messagesArgumentCaptor.capture());
         verify(givenContext, times(1))

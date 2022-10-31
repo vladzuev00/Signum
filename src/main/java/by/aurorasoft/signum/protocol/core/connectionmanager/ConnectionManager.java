@@ -1,7 +1,6 @@
 package by.aurorasoft.signum.protocol.core.connectionmanager;
 
 import by.aurorasoft.signum.crud.model.dto.Device;
-import by.aurorasoft.signum.crud.model.dto.Unit;
 import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import io.netty.channel.ChannelHandlerContext;
 import org.springframework.stereotype.Component;
@@ -24,20 +23,18 @@ public final class ConnectionManager {
     }
 
     public void addContext(ChannelHandlerContext context) {
-        final Unit associatedUnit = this.contextManager.findUnit(context);
-//        final Device device = associatedUnit.getDevice();
-        final Device device = null;
-        this.deviceIdToContextMap.merge(device.getId(), context, (oldContext, newContext) -> {
+        final Device associatedDevice = this.contextManager.findDevice(context);
+        this.deviceIdToContextMap.merge(associatedDevice.getId(), context, (oldContext, newContext) -> {
             oldContext.close();
             return newContext;
         });
     }
 
-    public Optional<ChannelHandlerContext> findContext(Device device) {
-        return ofNullable(this.deviceIdToContextMap.get(device.getId()));
+    public Optional<ChannelHandlerContext> findContextByDeviceId(Long deviceId) {
+        return ofNullable(this.deviceIdToContextMap.get(deviceId));
     }
 
-    public void removeContext(Device device) {
-        this.deviceIdToContextMap.remove(device.getId());
+    public void removeContextByDeviceId(Long deviceId) {
+        this.deviceIdToContextMap.remove(deviceId);
     }
 }

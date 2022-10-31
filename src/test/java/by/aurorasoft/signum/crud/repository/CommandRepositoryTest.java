@@ -9,7 +9,6 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 import java.util.Set;
-import java.util.function.ToLongFunction;
 
 import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Status.*;
 import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Type.COMMAND;
@@ -19,8 +18,6 @@ import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 
 public final class CommandRepositoryTest extends AbstractContextTest {
-    private static final ToLongFunction<CommandEntity> COMMAND_TO_DEVICE_ID_FUNCTION
-            = command -> command.getDevice().getId();
 
     @Autowired
     private CommandRepository repository;
@@ -49,7 +46,7 @@ public final class CommandRepositoryTest extends AbstractContextTest {
         assertEquals(255, foundCommand.getId().longValue());
         assertEquals("command", foundCommand.getText());
         assertSame(NEW, foundCommand.getStatus());
-        assertEquals(25551, COMMAND_TO_DEVICE_ID_FUNCTION.applyAsLong(foundCommand));
+        assertEquals(25551, foundCommand.getDevice().getId().longValue());
         assertSame(COMMAND, foundCommand.getType());
     }
 
@@ -58,14 +55,14 @@ public final class CommandRepositoryTest extends AbstractContextTest {
             = "INSERT INTO command(id, text, status, device_id, type) VALUES(255, 'command', 'NEW', 25551, 'COMMAND')")
     public void commandShouldBeUpdatedByStatus() {
         super.startQueryCount();
-//        this.repository.updateByStatus(255L, SENT);
+        this.repository.updateByStatus(255L, SENT);
         super.checkQueryCount(1);
 
         final CommandEntity updatedCommand = this.repository.findById(255L).orElseThrow();
         assertEquals(255, updatedCommand.getId().longValue());
         assertEquals("command", updatedCommand.getText());
         assertSame(SENT, updatedCommand.getStatus());
-        assertEquals(25551, COMMAND_TO_DEVICE_ID_FUNCTION.applyAsLong(updatedCommand));
+        assertEquals(25551, updatedCommand.getDevice().getId().longValue());
         assertSame(COMMAND, updatedCommand.getType());
     }
 
@@ -78,24 +75,24 @@ public final class CommandRepositoryTest extends AbstractContextTest {
     })
     public void commandsShouldBeFoundByStatuses() {
         super.startQueryCount();
-//        final List<CommandEntity> foundCommands = this.repository
-//                .findByDeviceIdAndStatuses(25552L, Set.of(SENT, SUCCESS));
-//        super.checkQueryCount(1);
-//
-//        final List<Long> actual = foundCommands.stream()
-//                .map(CommandEntity::getId)
-//                .collect(toList());
-//        final List<Long> expected = List.of(256L, 257L);
-//        assertEquals(expected, actual);
+        final List<CommandEntity> foundCommands = this.repository
+                .findByDeviceIdAndStatuses(25552L, Set.of(SENT, SUCCESS));
+        super.checkQueryCount(1);
+
+        final List<Long> actual = foundCommands.stream()
+                .map(CommandEntity::getId)
+                .collect(toList());
+        final List<Long> expected = List.of(256L, 257L);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void commandsShouldNotBeFoundByStatuses() {
-//        super.startQueryCount();
-//        final List<CommandEntity> foundCommands = this.repository
-//                .findByDeviceIdAndStatuses(MIN_VALUE, Set.of(NOT_DEFINED));
-//        super.checkQueryCount(1);
-//
-//        assertTrue(foundCommands.isEmpty());
+        super.startQueryCount();
+        final List<CommandEntity> foundCommands = this.repository
+                .findByDeviceIdAndStatuses(MIN_VALUE, Set.of(NOT_DEFINED));
+        super.checkQueryCount(1);
+
+        assertTrue(foundCommands.isEmpty());
     }
 }

@@ -30,6 +30,6 @@ public final class ResponseCommandPackageHandler extends PackageHandler {
                 responseCommandPackage.getStatus() == ResponseCommandPackage.Status.SUCCESS
                         ? CommandEntity.Status.SUCCESS
                         : CommandEntity.Status.ERROR;
-        this.commandService.updateByGivenStatus(commandWaitingResponse, statusAnsweredCommand);
+        this.commandService.updateByStatus(commandWaitingResponse, statusAnsweredCommand);
     }
 }

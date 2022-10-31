@@ -1,5 +1,6 @@
 package by.aurorasoft.signum.protocol.wialon.handler;
 
+import by.aurorasoft.signum.crud.model.dto.Device;
 import by.aurorasoft.signum.crud.model.dto.Unit;
 import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import io.netty.channel.ChannelHandlerContext;
@@ -21,8 +22,8 @@ public final class ExceptionHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext context, Throwable exception) {
-        final Unit unit = this.contextWorker.findUnit(context);
-//        log.error(format(TEMPLATE_MESSAGE_EXCEPTION_CAUGHT, unit.getDevice(), exception.getMessage()));
+        final String imei = this.contextWorker.findDeviceImei(context);
+        log.error(format(TEMPLATE_MESSAGE_EXCEPTION_CAUGHT, imei, exception.getMessage()));
         exception.printStackTrace();
         context.close();
     }

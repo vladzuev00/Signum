@@ -7,16 +7,11 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.function.ToLongFunction;
-
 import static java.time.Instant.now;
 import static java.time.Instant.parse;
 import static org.junit.Assert.assertEquals;
 
 public final class MessageRepositoryTest extends AbstractContextTest {
-    private static final ToLongFunction<MessageEntity> MESSAGE_TO_DEVICE_ID_FUNCTION
-            = message -> message.getDevice().getId();
-
     @Autowired
     private MessageRepository repository;
 
@@ -57,7 +52,7 @@ public final class MessageRepositoryTest extends AbstractContextTest {
         assertEquals(11, foundMessage.getCourse());
         assertEquals(12, foundMessage.getAltitude());
         assertEquals(13, foundMessage.getAmountSatellite());
-        assertEquals(25551, MESSAGE_TO_DEVICE_ID_FUNCTION.applyAsLong(foundMessage));
+        assertEquals(25551, foundMessage.getDevice().getId().longValue());
         assertEquals(44, foundMessage.getGsmLevel());
         assertEquals(1.5, foundMessage.getOnboardVoltage(), 0.001);
         assertEquals(1.6, foundMessage.getEcoCornering(), 0.001);

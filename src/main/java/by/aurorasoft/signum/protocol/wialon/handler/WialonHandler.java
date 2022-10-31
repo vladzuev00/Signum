@@ -1,7 +1,6 @@
 package by.aurorasoft.signum.protocol.wialon.handler;
 
 import by.aurorasoft.signum.crud.model.dto.Device;
-import by.aurorasoft.signum.crud.model.dto.Unit;
 import by.aurorasoft.signum.protocol.core.connectionmanager.ConnectionManager;
 import by.aurorasoft.signum.protocol.core.exception.AnswerableException;
 import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
@@ -65,11 +64,9 @@ public final class WialonHandler extends ChannelInboundHandlerAdapter {
         log.info(format(TEMPLATE_MESSAGE_INACTIVE_CHANNEL,
                 deviceImei != null ? deviceImei : NOT_DEFINED_DEVICE_IMEI_IN_MESSAGE));
 
-        final Unit unit = this.contextManager.findUnit(context);
-        if (unit != null) {    //if unit was authorized
-//            final Device device = unit.getDevice();
-            final Device device = null;
-            this.connectionManager.removeContext(device);
+        final Device device = this.contextManager.findDevice(context);
+        if (device != null) {       //if device was authorized
+            this.connectionManager.removeContextByDeviceId(device.getId());
         }
     }
 }

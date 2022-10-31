@@ -64,7 +64,7 @@ public final class ResponseCommandPackageHandlerTest {
         verify(this.mockedContextManager, times(1))
                 .onGetCommandResponse(this.contextArgumentCaptor.capture());
         verify(this.mockedCommandService, times(1))
-                .updateByGivenStatus(
+                .updateByStatus(
                         this.commandArgumentCaptor.capture(),
                         this.commandStatusArgumentCaptor.capture());
 
@@ -88,7 +88,7 @@ public final class ResponseCommandPackageHandlerTest {
         verify(this.mockedContextManager, times(1))
                 .onGetCommandResponse(this.contextArgumentCaptor.capture());
         verify(this.mockedCommandService, times(1))
-                .updateByGivenStatus(
+                .updateByStatus(
                         this.commandArgumentCaptor.capture(),
                         this.commandStatusArgumentCaptor.capture());
 
