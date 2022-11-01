@@ -4,7 +4,7 @@ import by.aurorasoft.signum.crud.model.dto.Device;
 import by.aurorasoft.signum.protocol.wialon.model.LoginPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import by.aurorasoft.signum.protocol.core.service.AuthorizationDeviceService;
-import by.aurorasoft.signum.protocol.wialon.service.sendcommand.CommandSenderService;
+import by.aurorasoft.signum.protocol.core.service.CommandSenderService;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import org.springframework.stereotype.Component;
@@ -31,7 +31,7 @@ public final class LoginPackageHandler extends PackageHandler {
     protected void doHandle(Package requestPackage, ChannelHandlerContext context) {
         final LoginPackage loginPackage = (LoginPackage) requestPackage;
         final Optional<Device> optionalDevice = this.authorizationDeviceService
-                .authorize(context, loginPackage.getImei());
+                .authorize(loginPackage.getImei(), context);
         final String response = optionalDevice.isPresent()
                 ? RESPONSE_SUCCESS_AUTHORIZE
                 : RESPONSE_FAILURE_AUTHORIZE;

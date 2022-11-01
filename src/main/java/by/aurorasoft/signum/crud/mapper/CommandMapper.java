@@ -1,7 +1,6 @@
 package by.aurorasoft.signum.crud.mapper;
 
 import by.aurorasoft.signum.crud.model.dto.Command;
-import by.aurorasoft.signum.crud.model.dto.Device;
 import by.aurorasoft.signum.crud.model.entity.CommandEntity;
 import by.aurorasoft.signum.crud.model.entity.DeviceEntity;
 import by.nhorushko.crudgeneric.v2.mapper.AbstractMapper;
@@ -21,8 +20,8 @@ public final class CommandMapper extends AbstractMapper<CommandEntity, Command> 
 
     @Override
     protected void mapSpecificFields(Command source, CommandEntity destination) {
-        destination.setStatus(CommandEntity.Status.NOT_DEFINED);
-        destination.setType(CommandEntity.Type.NOT_DEFINED);
+        destination.setStatus(Command.Status.NOT_DEFINED);
+        destination.setType(Command.Type.NOT_DEFINED);
         destination.setDevice(this.entityManager.getReference(DeviceEntity.class, source.getDeviceId()));
     }
 

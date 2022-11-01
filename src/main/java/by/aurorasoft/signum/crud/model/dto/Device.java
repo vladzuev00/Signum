@@ -1,6 +1,5 @@
 package by.aurorasoft.signum.crud.model.dto;
 
-import by.aurorasoft.signum.crud.model.entity.DeviceEntity.Type;
 import by.nhorushko.crudgeneric.v2.domain.AbstractDto;
 import lombok.Value;
 
@@ -10,4 +9,8 @@ public class Device implements AbstractDto<Long> {
     String imei;
     String phoneNumber;
     Type type;
+
+    public enum Type {
+        NOT_DEFINED, TRACKER, BEACON
+    }
 }

@@ -17,12 +17,12 @@ public class AuthorizationDeviceService {
     private final DeviceService deviceService;
     private final ConnectionManager connectionManager;
 
-    public Optional<Device> authorize(ChannelHandlerContext context, String imei) {
+    public Optional<Device> authorize(String imei, ChannelHandlerContext context) {
         this.contextManager.putDeviceImei(context, imei);
         final Optional<Device> optionalDevice = this.deviceService.findByImei(imei);
         optionalDevice.ifPresent(device -> {
             this.contextManager.putDevice(context, device);
-            this.connectionManager.addContext(context);
+            this.connectionManager.add(context);
         });
         return optionalDevice;
     }

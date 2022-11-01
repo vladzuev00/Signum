@@ -9,8 +9,8 @@ import by.aurorasoft.signum.protocol.wialon.model.RequestCommandPackage;
 import io.netty.channel.ChannelHandlerContext;
 import org.springframework.stereotype.Component;
 
-import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Status.SUCCESS;
-import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Type.ANSWER;
+import static by.aurorasoft.signum.crud.model.dto.Command.Status.SUCCESS;
+import static by.aurorasoft.signum.crud.model.dto.Command.Type.ANSWER;
 
 @Component
 public final class RequestCommandPackageHandler extends PackageHandler {

@@ -6,10 +6,10 @@ import by.aurorasoft.signum.crud.model.entity.UnitEntity;
 import by.aurorasoft.signum.crud.repository.UnitRepository;
 import by.nhorushko.crudgeneric.v2.service.AbstractCrudService;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class UnitService extends AbstractCrudService<Long, UnitEntity, Unit> {
 
     public UnitService(UnitMapper mapper, UnitRepository repository) {

@@ -4,7 +4,7 @@ import by.aurorasoft.signum.crud.model.dto.Device;
 import by.aurorasoft.signum.protocol.wialon.model.LoginPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import by.aurorasoft.signum.protocol.core.service.AuthorizationDeviceService;
-import by.aurorasoft.signum.protocol.wialon.service.sendcommand.CommandSenderService;
+import by.aurorasoft.signum.protocol.core.service.CommandSenderService;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import org.junit.Before;
@@ -18,7 +18,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.List;
 import java.util.Optional;
 
-import static by.aurorasoft.signum.crud.model.entity.DeviceEntity.Type.TRACKER;
+import static by.aurorasoft.signum.crud.model.dto.Device.Type.TRACKER;
 import static java.util.Optional.empty;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
@@ -54,7 +54,7 @@ public final class LoginPackageHandlerTest {
         final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
 
         final Device givenDevice = new Device(255L, givenPackage.getImei(), "448883634", TRACKER);
-        when(this.mockedAuthorizationDeviceService.authorize(any(ChannelHandlerContext.class), anyString()))
+        when(this.mockedAuthorizationDeviceService.authorize(anyString(), any(ChannelHandlerContext.class)))
                 .thenReturn(Optional.of(givenDevice));
 
         final ChannelFuture givenChannelFuture = mock(ChannelFuture.class);
@@ -63,7 +63,7 @@ public final class LoginPackageHandlerTest {
         this.packageHandler.doHandle(givenPackage, givenContext);
 
         verify(this.mockedAuthorizationDeviceService, times(1))
-                .authorize(this.contextArgumentCaptor.capture(), this.stringArgumentCaptor.capture());
+                .authorize(this.stringArgumentCaptor.capture(), this.contextArgumentCaptor.capture());
         verify(givenContext, times(1)).writeAndFlush(this.stringArgumentCaptor.capture());
 
         assertSame(givenContext, this.contextArgumentCaptor.getValue());
@@ -76,7 +76,7 @@ public final class LoginPackageHandlerTest {
 
         final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
 
-        when(this.mockedAuthorizationDeviceService.authorize(any(ChannelHandlerContext.class), anyString()))
+        when(this.mockedAuthorizationDeviceService.authorize(anyString(), any(ChannelHandlerContext.class)))
                 .thenReturn(empty());
 
         final ChannelFuture givenChannelFuture = mock(ChannelFuture.class);
@@ -85,7 +85,7 @@ public final class LoginPackageHandlerTest {
         this.packageHandler.doHandle(givenPackage, givenContext);
 
         verify(this.mockedAuthorizationDeviceService, times(1))
-                .authorize(this.contextArgumentCaptor.capture(), this.stringArgumentCaptor.capture());
+                .authorize(this.stringArgumentCaptor.capture(), this.contextArgumentCaptor.capture());
         verify(givenContext, times(1)).writeAndFlush(this.stringArgumentCaptor.capture());
 
         assertSame(givenContext, this.contextArgumentCaptor.getValue());

@@ -1,6 +1,10 @@
 package by.aurorasoft.signum.crud.model.entity;
 
+import by.aurorasoft.signum.crud.model.dto.Command.Status;
+import by.aurorasoft.signum.crud.model.dto.Command.Type;
+import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import lombok.*;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 
@@ -10,6 +14,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "command")
+@TypeDef(
+        name = "pgsql_enum",
+        typeClass = PostgreSQLEnumType.class
+)
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
@@ -27,6 +35,7 @@ public class CommandEntity extends BaseEntity<Long> {
 
     @Enumerated(STRING)
     @Column(name = "status")
+    @org.hibernate.annotations.Type(type = "pgsql_enum")
     private Status status;
 
     @ManyToOne(fetch = LAZY)
@@ -35,6 +44,7 @@ public class CommandEntity extends BaseEntity<Long> {
 
     @Enumerated(STRING)
     @Column(name = "type")
+    @org.hibernate.annotations.Type(type = "pgsql_enum")
     private Type type;
 
     @Override
@@ -44,24 +54,5 @@ public class CommandEntity extends BaseEntity<Long> {
                 + ", status = " + this.status
                 + ", deviceId = " + this.device.getId()
                 + ", type = " + this.type + "]";
-    }
-
-    public enum Status {
-        NOT_DEFINED, NEW, SENT, SUCCESS, ERROR, TIMEOUT
-    }
-
-    public enum Type {
-
-        NOT_DEFINED,
-
-        /**
-         * indicates that command has been delivered by server to device
-         */
-        COMMAND,
-
-        /**
-         * indicates that command has been delivered by device to server
-         */
-        ANSWER
     }
 }

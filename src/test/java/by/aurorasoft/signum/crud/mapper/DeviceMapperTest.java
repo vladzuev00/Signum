@@ -6,7 +6,7 @@ import by.aurorasoft.signum.crud.model.entity.DeviceEntity;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static by.aurorasoft.signum.crud.model.entity.DeviceEntity.Type.TRACKER;
+import static by.aurorasoft.signum.crud.model.dto.Device.Type.TRACKER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 

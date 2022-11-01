@@ -2,7 +2,7 @@ package by.aurorasoft.signum;
 
 import by.aurorasoft.signum.crud.model.dto.Command;
 import by.aurorasoft.signum.protocol.wialon.server.Server;
-import by.aurorasoft.signum.protocol.wialon.service.sendcommand.CommandSenderService;
+import by.aurorasoft.signum.protocol.core.service.CommandSenderService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;

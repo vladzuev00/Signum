@@ -2,7 +2,7 @@ package by.aurorasoft.signum.protocol.core.contextmanager;
 
 import by.aurorasoft.signum.crud.model.dto.Device;
 import by.aurorasoft.signum.crud.service.CommandService;
-import by.aurorasoft.signum.protocol.wialon.service.sendcommand.CommandSenderService;
+import by.aurorasoft.signum.protocol.core.service.CommandSenderService;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.Attribute;

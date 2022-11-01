@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static by.aurorasoft.signum.crud.model.entity.DeviceEntity.Type.TRACKER;
+import static by.aurorasoft.signum.crud.model.dto.Device.Type.TRACKER;
 import static java.lang.Long.MIN_VALUE;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -46,7 +46,7 @@ public final class ConnectionManagerTest {
         when(this.mockedContextManager.findDevice(any(ChannelHandlerContext.class))).thenReturn(givenDevice);
 
         final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
-        this.connectionManager.addContext(givenContext);
+        this.connectionManager.add(givenContext);
 
         final Map<Long, ChannelHandlerContext> actual = findDeviceIdToContextMap(this.connectionManager);
         final Map<Long, ChannelHandlerContext> expected = Map.of(givenDevice.getId(), givenContext);
@@ -66,10 +66,10 @@ public final class ConnectionManagerTest {
         when(this.mockedContextManager.findDevice(any(ChannelHandlerContext.class))).thenReturn(givenDevice);
 
         final ChannelHandlerContext givenFirstContext = mock(ChannelHandlerContext.class);
-        this.connectionManager.addContext(givenFirstContext);
+        this.connectionManager.add(givenFirstContext);
 
         final ChannelHandlerContext givenSecondContext = mock(ChannelHandlerContext.class);
-        this.connectionManager.addContext(givenSecondContext);
+        this.connectionManager.add(givenSecondContext);
 
         final Map<Long, ChannelHandlerContext> actual = findDeviceIdToContextMap(
                 this.connectionManager);
@@ -96,7 +96,7 @@ public final class ConnectionManagerTest {
         deviceIdToContextMap.put(givenDevice.getId(), givenContext);
 
         final Optional<ChannelHandlerContext> optionalContext = this.connectionManager
-                .findContextByDeviceId(givenDevice.getId());
+                .find(givenDevice.getId());
         assertTrue(optionalContext.isPresent());
         final ChannelHandlerContext actual = optionalContext.get();
         assertSame(givenContext, actual);
@@ -105,7 +105,7 @@ public final class ConnectionManagerTest {
     @Test
     public void contextShouldNotBeFound() {
         final Optional<ChannelHandlerContext> optionalContext = this.connectionManager
-                .findContextByDeviceId(MIN_VALUE);
+                .find(MIN_VALUE);
         assertTrue(optionalContext.isEmpty());
     }
 

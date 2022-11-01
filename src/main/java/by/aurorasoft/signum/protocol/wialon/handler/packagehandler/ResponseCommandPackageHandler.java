@@ -1,7 +1,6 @@
 package by.aurorasoft.signum.protocol.wialon.handler.packagehandler;
 
 import by.aurorasoft.signum.crud.model.dto.Command;
-import by.aurorasoft.signum.crud.model.entity.CommandEntity;
 import by.aurorasoft.signum.crud.service.CommandService;
 import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import by.aurorasoft.signum.protocol.wialon.model.ResponseCommandPackage;
@@ -30,11 +29,11 @@ public final class ResponseCommandPackageHandler extends PackageHandler {
                 .findCommandWaitingResponse(context);
         optionalCommandWaitingResponse.ifPresent(commandWaitingResponse -> {
             this.contextManager.onGetCommandResponse(context);
-            final CommandEntity.Status statusAnsweredCommand =
+            final Command.Status statusAnsweredCommand =
                     responseCommandPackage.getStatus() == ResponseCommandPackage.Status.SUCCESS
-                            ? CommandEntity.Status.SUCCESS
-                            : CommandEntity.Status.ERROR;
-            this.commandService.updateByStatus(commandWaitingResponse, statusAnsweredCommand);
+                            ? Command.Status.SUCCESS
+                            : Command.Status.ERROR;
+            this.commandService.updateStatus(commandWaitingResponse, statusAnsweredCommand);
         });
     }
 }

@@ -1,8 +1,11 @@
 package by.aurorasoft.signum.crud.model.entity;
 
+import by.aurorasoft.signum.crud.model.dto.Device.Type;
 import by.nhorushko.crudgeneric.v2.domain.AbstractEntity;
+import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -15,6 +18,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "device")
 @SQLDelete(sql = "UPDATE device SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
+@TypeDef(
+        name = "pgsql_enum",
+        typeClass = PostgreSQLEnumType.class
+)
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
@@ -35,15 +42,12 @@ public class DeviceEntity implements AbstractEntity<Long> {
 
     @Enumerated(STRING)
     @Column(name = "type")
+    @org.hibernate.annotations.Type(type = "pgsql_enum")
     private Type type;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "unit_id")
     private UnitEntity unit;
-
-    public enum Type {
-        NOT_DEFINED, TRACKER, BEACON
-    }
 
     @Override
     public String toString() {

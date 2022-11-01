@@ -5,9 +5,6 @@ CREATE TABLE app_user
     deleted BOOLEAN     NOT NULL DEFAULT false
 );
 
-CREATE UNIQUE INDEX unique_name_not_deleted_users
-    ON app_user (name) WHERE (deleted = false);
-
 CREATE TABLE unit
 (
     id      SERIAL PRIMARY KEY,
@@ -16,41 +13,29 @@ CREATE TABLE unit
     deleted BOOLEAN     NOT NULL DEFAULT false
 );
 
-CREATE UNIQUE INDEX unique_name_not_deleted_units
-    ON unit (name) WHERE (deleted = false);
+CREATE TYPE device_type AS ENUM('TRACKER', 'BEACON');
 
 CREATE TABLE device
 (
     id           SERIAL PRIMARY KEY,
     imei         VARCHAR(20) NOT NULL,
     phone_number VARCHAR(20) NOT NULL,
-    type         VARCHAR(64) NOT NULL,
+    type         device_type NOT NULL,
     unit_id      INTEGER     NOT NULL REFERENCES unit,
     deleted      BOOLEAN     NOT NULL DEFAULT false
 );
 
-CREATE UNIQUE INDEX unique_imei_not_deleted_device
-    ON device (imei) WHERE (deleted = false);
-
-ALTER TABLE device
-    ADD CONSTRAINT correct_type CHECK (type IN ('TRACKER', 'BEACON'));
+CREATE TYPE command_status AS ENUM('NEW', 'SENT', 'SUCCESS', 'ERROR', 'TIMEOUT');
+CREATE TYPE command_type AS ENUM('COMMAND', 'ANSWER');
 
 CREATE TABLE command
 (
     id        BIGSERIAL PRIMARY KEY,
     text      TEXT        NOT NULL,
-    status    VARCHAR(64) NOT NULL,
+    status    command_status NOT NULL,
     device_id INTEGER     NOT NULL REFERENCES device,
-    type      VARCHAR(64) NOT NULL
+    type      command_type NOT NULL
 );
-
-ALTER TABLE command
-    ADD CONSTRAINT valid_command_status
-        CHECK (status IN ('NEW', 'SENT', 'SUCCESS', 'ERROR', 'TIMEOUT'));
-
-ALTER TABLE command
-    ADD CONSTRAINT valid_command_type
-        CHECK (type IN ('COMMAND', 'ANSWER'));
 
 CREATE TABLE message
 (
@@ -71,8 +56,18 @@ CREATE TABLE message
     deleted          BOOLEAN      NOT NULL DEFAULT false
 );
 
+--- UNIQUE INDEXES
 
+CREATE UNIQUE INDEX unique_imei_not_deleted_device
+    ON device (imei) WHERE (deleted = false);
 
+CREATE UNIQUE INDEX unique_name_not_deleted_users
+    ON app_user (name) WHERE (deleted = false);
+
+CREATE UNIQUE INDEX unique_name_not_deleted_units
+    ON unit (name) WHERE (deleted = false);
+
+--------------
 
 
 

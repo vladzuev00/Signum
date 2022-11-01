@@ -7,9 +7,9 @@ import by.aurorasoft.signum.crud.model.entity.DeviceEntity;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Status.SENT;
-import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Type.COMMAND;
-import static by.aurorasoft.signum.crud.model.entity.DeviceEntity.Type.TRACKER;
+import static by.aurorasoft.signum.crud.model.dto.Command.Status.SENT;
+import static by.aurorasoft.signum.crud.model.dto.Command.Type.COMMAND;
+import static by.aurorasoft.signum.crud.model.dto.Device.Type.TRACKER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
@@ -46,8 +46,8 @@ public final class CommandMapperTest extends AbstractContextTest {
 
         assertEquals(255, resultEntity.getId().longValue());
         assertEquals("command", resultEntity.getText());
-        assertSame(CommandEntity.Status.NOT_DEFINED, resultEntity.getStatus());
+        assertSame(Command.Status.NOT_DEFINED, resultEntity.getStatus());
         assertEquals(25551, resultEntity.getDevice().getId().longValue());
-        assertSame(CommandEntity.Type.NOT_DEFINED, resultEntity.getType());
+        assertSame(Command.Type.NOT_DEFINED, resultEntity.getType());
     }
 }

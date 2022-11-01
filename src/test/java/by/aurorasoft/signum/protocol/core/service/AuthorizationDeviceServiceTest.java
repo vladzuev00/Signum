@@ -16,7 +16,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.List;
 import java.util.Optional;
 
-import static by.aurorasoft.signum.crud.model.entity.DeviceEntity.Type.TRACKER;
+import static by.aurorasoft.signum.crud.model.dto.Device.Type.TRACKER;
 import static java.util.Optional.empty;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -59,7 +59,7 @@ public final class AuthorizationDeviceServiceTest {
 
        final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
        final Optional<Device> optionalActual = this.authorizationDeviceService
-               .authorize(givenContext, givenDevice.getImei());
+               .authorize(givenDevice.getImei(), givenContext);
        assertTrue(optionalActual.isPresent());
        final Device actual = optionalActual.get();
        assertEquals(givenDevice, actual);
@@ -71,7 +71,7 @@ public final class AuthorizationDeviceServiceTest {
        verify(this.mockedContextManager, times(1))
                .putDevice(this.contextArgumentCaptor.capture(), this.deviceArgumentCaptor.capture());
        verify(this.mockedConnectionManager, times(1))
-               .addContext(this.contextArgumentCaptor.capture());
+               .add(this.contextArgumentCaptor.capture());
 
        assertEquals(List.of(givenContext, givenContext, givenContext), this.contextArgumentCaptor.getAllValues());
        assertEquals(List.of(givenDevice.getImei(), givenDevice.getImei()), this.stringArgumentCaptor.getAllValues());
@@ -84,7 +84,7 @@ public final class AuthorizationDeviceServiceTest {
 
         final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
         final String givenImei = "11111222223333344444";
-        final Optional<Device> optionalDevice = this.authorizationDeviceService.authorize(givenContext, givenImei);
+        final Optional<Device> optionalDevice = this.authorizationDeviceService.authorize(givenImei, givenContext);
         assertTrue(optionalDevice.isEmpty());
 
         verify(this.mockedContextManager, times(1))

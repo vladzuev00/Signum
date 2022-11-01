@@ -1,8 +1,7 @@
-package by.aurorasoft.signum.protocol.wialon.service.sendcommand;
+package by.aurorasoft.signum.protocol.core.service;
 
 import by.aurorasoft.signum.crud.model.dto.Command;
 import by.aurorasoft.signum.crud.model.dto.Device;
-import by.aurorasoft.signum.crud.model.entity.CommandEntity.Status;
 import by.aurorasoft.signum.crud.service.CommandService;
 import by.aurorasoft.signum.protocol.core.connectionmanager.ConnectionManager;
 import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
@@ -13,15 +12,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Status.NEW;
-import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Status.SENT;
-import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Type.COMMAND;
+import static by.aurorasoft.signum.crud.model.dto.Command.Status.NEW;
+import static by.aurorasoft.signum.crud.model.dto.Command.Status.SENT;
+import static by.aurorasoft.signum.crud.model.dto.Command.Type.COMMAND;
 import static java.lang.String.format;
 
 //TODO: correct dependencies
 @Service
 public class CommandSenderService {
-    private static final Status[] STATUSES_OF_COMMANDS_TO_BE_RESENT = { NEW, SENT };
+    private static final Command.Status[] STATUSES_OF_COMMANDS_TO_BE_RESENT = { NEW, SENT };
 
     private final CommandService commandService;
     private final CommandSerializer commandSerializer;
@@ -63,7 +62,7 @@ public class CommandSenderService {
 
     private void sendIfTrackerIsConnected(Command command) {
         final Optional<ChannelHandlerContext> optionalContext = this.connectionManager
-                .findContextByDeviceId(command.getDeviceId());
+                .find(command.getDeviceId());
         optionalContext.ifPresent(context -> this.sendToConnectedTracker(command, context));
     }
 
@@ -87,7 +86,7 @@ public class CommandSenderService {
         this.contextManager.putCommandWaitingResponse(context, command);
         context.writeAndFlush(serializedCommand)
                 .addListener((ChannelFutureListener)
-                        future -> this.commandService.updateByStatus(command, SENT));
+                        future -> this.commandService.updateStatus(command, SENT));
     }
 
     @Component

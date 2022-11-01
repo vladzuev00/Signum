@@ -4,24 +4,23 @@ import by.aurorasoft.signum.crud.mapper.CommandMapper;
 import by.aurorasoft.signum.crud.model.dto.Command;
 import by.aurorasoft.signum.crud.model.dto.Device;
 import by.aurorasoft.signum.crud.model.entity.CommandEntity;
-import by.aurorasoft.signum.crud.model.entity.CommandEntity.Status;
-import by.aurorasoft.signum.crud.model.entity.CommandEntity.Type;
 import by.aurorasoft.signum.crud.repository.CommandRepository;
 import by.nhorushko.crudgeneric.v2.service.AbstractCrudService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Set;
 
 @Service
+@Transactional
 public class CommandService extends AbstractCrudService<Long, CommandEntity, Command> {
 
     public CommandService(CommandMapper mapper, CommandRepository repository) {
         super(mapper, repository);
     }
 
-    public Command save(Command command, Status status, Type type) {
+    public Command save(Command command, Command.Status status, Command.Type type) {
         final CommandEntity entityToBeSaved = super.mapper.toEntity(command);
         entityToBeSaved.setStatus(status);
         entityToBeSaved.setType(type);
@@ -29,14 +28,12 @@ public class CommandService extends AbstractCrudService<Long, CommandEntity, Com
         return super.mapper.toDto(savedEntity);
     }
 
-    @Transactional
-    public void updateByStatus(Command command, Status newStatus) {
+    public void updateStatus(Command command, Command.Status newStatus) {
         final CommandRepository commandRepository = (CommandRepository) super.repository;
-        commandRepository.updateByStatus(command.getId(), newStatus);
+        commandRepository.updateStatus(command.getId(), newStatus);
     }
 
-    @Transactional
-    public List<Command> findCommandsByDeviceAndStatuses(Device device, Status... statuses) {
+    public List<Command> findCommandsByDeviceAndStatuses(Device device, Command.Status... statuses) {
         final CommandRepository commandRepository = (CommandRepository) super.repository;
         final List<CommandEntity> commandEntities = commandRepository
                 .findByDeviceIdAndStatuses(device.getId(), Set.of(statuses));

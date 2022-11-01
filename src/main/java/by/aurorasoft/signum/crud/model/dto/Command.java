@@ -21,4 +21,23 @@ public class Command implements AbstractDto<Long> {
         this.text = text;
         this.deviceId = deviceId;
     }
+
+    public enum Status {
+        NOT_DEFINED, NEW, SENT, SUCCESS, ERROR, TIMEOUT
+    }
+
+    public enum Type {
+
+        NOT_DEFINED,
+
+        /**
+         * indicates that command has been delivered by server to device
+         */
+        COMMAND,
+
+        /**
+         * indicates that command has been delivered by device to server
+         */
+        ANSWER
+    }
 }

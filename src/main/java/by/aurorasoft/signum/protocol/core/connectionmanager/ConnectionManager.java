@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.Optional.ofNullable;
 
-//TODO: correct dependencies
+//TODO: correct circular dependencies
 @Component
 public final class ConnectionManager {
     private final ContextManager contextManager;
@@ -22,7 +22,7 @@ public final class ConnectionManager {
         this.deviceIdToContextMap = new ConcurrentHashMap<>();
     }
 
-    public void addContext(ChannelHandlerContext context) {
+    public void add(ChannelHandlerContext context) {
         final Device associatedDevice = this.contextManager.findDevice(context);
         this.deviceIdToContextMap.merge(associatedDevice.getId(), context, (oldContext, newContext) -> {
             oldContext.close();
@@ -30,11 +30,11 @@ public final class ConnectionManager {
         });
     }
 
-    public Optional<ChannelHandlerContext> findContextByDeviceId(Long deviceId) {
+    public Optional<ChannelHandlerContext> find(Long deviceId) {
         return ofNullable(this.deviceIdToContextMap.get(deviceId));
     }
 
-    public void removeContextByDeviceId(Long deviceId) {
+    public void remove(Long deviceId) {
         this.deviceIdToContextMap.remove(deviceId);
     }
 }

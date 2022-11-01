@@ -7,7 +7,7 @@ netty:
     timeoutSeconds: 300
   contextManager:
     lifecycleObserver:
-      waitingResponseTimeoutInSeconds: 30
+      responseTimeoutSeconds: 30
       threadPool:
         size: 10
 

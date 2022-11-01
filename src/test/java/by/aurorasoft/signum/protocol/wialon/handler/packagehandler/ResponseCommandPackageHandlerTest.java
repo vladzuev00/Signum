@@ -1,8 +1,6 @@
 package by.aurorasoft.signum.protocol.wialon.handler.packagehandler;
 
 import by.aurorasoft.signum.crud.model.dto.Command;
-import by.aurorasoft.signum.crud.model.entity.CommandEntity;
-import by.aurorasoft.signum.crud.model.entity.CommandEntity.Status;
 import by.aurorasoft.signum.crud.service.CommandService;
 import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
@@ -19,6 +17,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.List;
 import java.util.Optional;
 
+import static by.aurorasoft.signum.crud.model.dto.Command.Status.ERROR;
+import static by.aurorasoft.signum.crud.model.dto.Command.Status.SUCCESS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.mockito.ArgumentMatchers.any;
@@ -42,7 +42,7 @@ public final class ResponseCommandPackageHandlerTest {
     private ArgumentCaptor<Command> commandArgumentCaptor;
 
     @Captor
-    private ArgumentCaptor<Status> commandStatusArgumentCaptor;
+    private ArgumentCaptor<Command.Status> commandStatusArgumentCaptor;
 
     @Before
     public void initializePackageHandler() {
@@ -65,13 +65,13 @@ public final class ResponseCommandPackageHandlerTest {
         verify(this.mockedContextManager, times(1))
                 .onGetCommandResponse(this.contextArgumentCaptor.capture());
         verify(this.mockedCommandService, times(1))
-                .updateByStatus(
+                .updateStatus(
                         this.commandArgumentCaptor.capture(),
                         this.commandStatusArgumentCaptor.capture());
 
         assertEquals(List.of(givenContext, givenContext), this.contextArgumentCaptor.getAllValues());
         assertSame(givenCommand, this.commandArgumentCaptor.getValue());
-        assertSame(CommandEntity.Status.SUCCESS, this.commandStatusArgumentCaptor.getValue());
+        assertSame(SUCCESS, this.commandStatusArgumentCaptor.getValue());
     }
 
     @Test
@@ -89,13 +89,13 @@ public final class ResponseCommandPackageHandlerTest {
         verify(this.mockedContextManager, times(1))
                 .onGetCommandResponse(this.contextArgumentCaptor.capture());
         verify(this.mockedCommandService, times(1))
-                .updateByStatus(
+                .updateStatus(
                         this.commandArgumentCaptor.capture(),
                         this.commandStatusArgumentCaptor.capture());
 
         assertEquals(List.of(givenContext, givenContext), this.contextArgumentCaptor.getAllValues());
         assertSame(givenCommand, this.commandArgumentCaptor.getValue());
-        assertSame(CommandEntity.Status.ERROR, this.commandStatusArgumentCaptor.getValue());
+        assertSame(ERROR, this.commandStatusArgumentCaptor.getValue());
     }
 
     @Test(expected = ClassCastException.class)

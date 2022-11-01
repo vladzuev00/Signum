@@ -2,8 +2,6 @@ package by.aurorasoft.signum.protocol.wialon.handler.packagehandler;
 
 import by.aurorasoft.signum.crud.model.dto.Command;
 import by.aurorasoft.signum.crud.model.dto.Device;
-import by.aurorasoft.signum.crud.model.entity.CommandEntity.Status;
-import by.aurorasoft.signum.crud.model.entity.CommandEntity.Type;
 import by.aurorasoft.signum.crud.service.CommandService;
 import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
@@ -17,9 +15,9 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Status.SUCCESS;
-import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Type.ANSWER;
-import static by.aurorasoft.signum.crud.model.entity.DeviceEntity.Type.TRACKER;
+import static by.aurorasoft.signum.crud.model.dto.Command.Status.SUCCESS;
+import static by.aurorasoft.signum.crud.model.dto.Command.Type.ANSWER;
+import static by.aurorasoft.signum.crud.model.dto.Device.Type.TRACKER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.mockito.ArgumentMatchers.any;
@@ -43,10 +41,10 @@ public final class RequestCommandPackageHandlerTest {
     private ArgumentCaptor<Command> commandArgumentCaptor;
 
     @Captor
-    private ArgumentCaptor<Status> commandStatusArgumentCaptor;
+    private ArgumentCaptor<Command.Status> commandStatusArgumentCaptor;
 
     @Captor
-    private ArgumentCaptor<Type> commandTypeArgumentCaptor;
+    private ArgumentCaptor<Command.Type> commandTypeArgumentCaptor;
 
     @Captor
     private ArgumentCaptor<String> stringArgumentCaptor;

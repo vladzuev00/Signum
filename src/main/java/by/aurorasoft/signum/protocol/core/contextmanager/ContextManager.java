@@ -3,7 +3,7 @@ package by.aurorasoft.signum.protocol.core.contextmanager;
 import by.aurorasoft.signum.crud.model.dto.Command;
 import by.aurorasoft.signum.crud.model.dto.Device;
 import by.aurorasoft.signum.crud.service.CommandService;
-import by.aurorasoft.signum.protocol.wialon.service.sendcommand.CommandSenderService;
+import by.aurorasoft.signum.protocol.core.service.CommandSenderService;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.Attribute;
@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.*;
 
-import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Status.*;
+import static by.aurorasoft.signum.crud.model.dto.Command.Status.TIMEOUT;
 import static io.netty.util.AttributeKey.valueOf;
 import static java.lang.Thread.interrupted;
 import static java.util.Optional.empty;
@@ -34,15 +34,15 @@ public final class ContextManager {
 
     private final CommandService commandService;
     private final CommandSenderService commandSenderService;
-    private final int waitingResponseTimeoutInSeconds;
+    private final int responseTimeoutSeconds;
 
     public ContextManager(CommandService commandService,
                           @Lazy CommandSenderService commandSenderService,
-                          @Value("${netty.contextManager.lifecycleObserver.waitingResponseTimeoutInSeconds}")
-                          int waitingResponseTimeoutInSeconds) {
+                          @Value("${netty.contextManager.lifecycleObserver.responseTimeoutSeconds}")
+                          int responseTimeoutSeconds) {
         this.commandService = commandService;
         this.commandSenderService = commandSenderService;
-        this.waitingResponseTimeoutInSeconds = waitingResponseTimeoutInSeconds;
+        this.responseTimeoutSeconds = responseTimeoutSeconds;
     }
 
     public void putDeviceImei(ChannelHandlerContext context, String imei) {
@@ -124,14 +124,14 @@ public final class ContextManager {
                 .channel()
                 .eventLoop()
                 .schedule(this.createObserverLifecycleCommandTask(context, command),
-                        this.waitingResponseTimeoutInSeconds, SECONDS);
+                        this.responseTimeoutSeconds, SECONDS);
     }
 
     private Runnable createObserverLifecycleCommandTask(ChannelHandlerContext context, Command command) {
         return () -> {
             if (!interrupted()) {
                 removeCommandWaitingResponse(context);
-                this.commandService.updateByStatus(command, TIMEOUT);
+                this.commandService.updateStatus(command, TIMEOUT);
                 this.commandSenderService.onSentCommandWasHandled(context);
             }
         };

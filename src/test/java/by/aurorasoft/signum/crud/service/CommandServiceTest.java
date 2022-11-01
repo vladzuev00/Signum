@@ -10,9 +10,9 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
-import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Status.*;
-import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Type.COMMAND;
-import static by.aurorasoft.signum.crud.model.entity.DeviceEntity.Type.TRACKER;
+import static by.aurorasoft.signum.crud.model.dto.Command.Status.*;
+import static by.aurorasoft.signum.crud.model.dto.Command.Type.COMMAND;
+import static by.aurorasoft.signum.crud.model.dto.Device.Type.TRACKER;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 
@@ -38,7 +38,7 @@ public final class CommandServiceTest extends AbstractContextTest {
     @Sql(statements = "INSERT INTO command(id, text, status, device_id, type) VALUES(255, 'command', 'NEW', 25551, 'COMMAND')")
     public void commandShouldBeUpdatedByStatus() {
         final Command command = new Command(255L, "command", 25551L);
-        this.service.updateByStatus(command, SENT);
+        this.service.updateStatus(command, SENT);
 
         final CommandEntity updatedCommand = super.findEntityFromDB(CommandEntity.class, 255L);
         assertEquals("command", updatedCommand.getText());
@@ -67,7 +67,7 @@ public final class CommandServiceTest extends AbstractContextTest {
     @Test
     public void commandsShouldNotBeFoundByStatuses() {
         final Device givenDevice = new Device(25552L, "355026070842667", "+3197011460885", TRACKER);
-        final List<Command> foundCommands = this.service.findCommandsByDeviceAndStatuses(givenDevice, NOT_DEFINED);
+        final List<Command> foundCommands = this.service.findCommandsByDeviceAndStatuses(givenDevice, SUCCESS);
         assertTrue(foundCommands.isEmpty());
     }
 }

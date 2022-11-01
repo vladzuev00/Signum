@@ -22,9 +22,9 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
-import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Status.SUCCESS;
-import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Type.ANSWER;
-import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Type.COMMAND;
+import static by.aurorasoft.signum.crud.model.dto.Command.Status.SUCCESS;
+import static by.aurorasoft.signum.crud.model.dto.Command.Type.ANSWER;
+import static by.aurorasoft.signum.crud.model.dto.Command.Type.COMMAND;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.Instant.parse;
 import static java.util.concurrent.Executors.newSingleThreadExecutor;
@@ -262,8 +262,8 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
     }
 
     @Test
-    @Sql(statements = "INSERT INTO command(id, text, status, device_id, type) VALUES (255, 'command', 'SENT', 25551, 'COMMAND')")
     @Transactional(propagation = NOT_SUPPORTED)
+    @Sql(statements = "INSERT INTO command(id, text, status, device_id, type) VALUES (255, 'command', 'SENT', 25551, 'COMMAND')")
     @Sql(statements = "DELETE FROM command", executionPhase = AFTER_TEST_METHOD)
     public void responseCommandPackageShouldBeHandledSuccess()
             throws Exception {
@@ -271,7 +271,7 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String responseLoginPackage = this.client.doRequest(requestLoginPackage).get();
         assertEquals(RESPONSE_LOGIN_PACKAGE_SUCCESS_AUTHORIZATION, responseLoginPackage);
 
-        final ChannelHandlerContext context = this.connectionManager.findContextByDeviceId(25551L).orElseThrow();
+        final ChannelHandlerContext context = this.connectionManager.find(25551L).orElseThrow();
 
         final String givenResponse = "#AM#1\r\n";
         this.client.doResponse(givenResponse);

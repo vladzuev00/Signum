@@ -66,7 +66,7 @@ public final class WialonHandler extends ChannelInboundHandlerAdapter {
 
         final Device device = this.contextManager.findDevice(context);
         if (device != null) {       //if device was authorized
-            this.connectionManager.removeContextByDeviceId(device.getId());
+            this.connectionManager.remove(device.getId());
         }
     }
 }

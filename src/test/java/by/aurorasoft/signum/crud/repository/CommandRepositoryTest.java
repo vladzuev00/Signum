@@ -10,8 +10,8 @@ import org.springframework.test.context.jdbc.Sql;
 import java.util.List;
 import java.util.Set;
 
-import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Status.*;
-import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Type.COMMAND;
+import static by.aurorasoft.signum.crud.model.dto.Command.Status.*;
+import static by.aurorasoft.signum.crud.model.dto.Command.Type.COMMAND;
 import static by.aurorasoft.signum.crud.model.entity.CommandEntity.builder;
 import static java.lang.Long.MIN_VALUE;
 import static java.util.stream.Collectors.toList;
@@ -55,7 +55,7 @@ public final class CommandRepositoryTest extends AbstractContextTest {
             = "INSERT INTO command(id, text, status, device_id, type) VALUES(255, 'command', 'NEW', 25551, 'COMMAND')")
     public void commandShouldBeUpdatedByStatus() {
         super.startQueryCount();
-        this.repository.updateByStatus(255L, SENT);
+        this.repository.updateStatus(255L, SENT);
         super.checkQueryCount(1);
 
         final CommandEntity updatedCommand = this.repository.findById(255L).orElseThrow();
@@ -90,7 +90,7 @@ public final class CommandRepositoryTest extends AbstractContextTest {
     public void commandsShouldNotBeFoundByStatuses() {
         super.startQueryCount();
         final List<CommandEntity> foundCommands = this.repository
-                .findByDeviceIdAndStatuses(MIN_VALUE, Set.of(NOT_DEFINED));
+                .findByDeviceIdAndStatuses(MIN_VALUE, Set.of(SUCCESS));
         super.checkQueryCount(1);
 
         assertTrue(foundCommands.isEmpty());
