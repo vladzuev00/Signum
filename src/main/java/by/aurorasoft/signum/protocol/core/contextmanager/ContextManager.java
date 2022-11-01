@@ -12,12 +12,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.*;
 
 import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Status.*;
 import static io.netty.util.AttributeKey.valueOf;
 import static java.lang.Thread.interrupted;
+import static java.util.Optional.empty;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 //TODO: correct dependencies
@@ -70,10 +72,12 @@ public final class ContextManager {
         putAttributeValue(context, ATTRIBUTE_KEY_COMMAND_WAITING_RESPONSE, commandWaitingResponse);
     }
 
-    public Command findCommandWaitingResponse(ChannelHandlerContext context) {
+    public Optional<Command> findCommandWaitingResponse(ChannelHandlerContext context) {
         final CommandWaitingResponse commandWaitingResponse
                 = findAttributeValue(context, ATTRIBUTE_KEY_COMMAND_WAITING_RESPONSE);
-        return commandWaitingResponse.getCommand();
+        return commandWaitingResponse != null
+                ? Optional.of(commandWaitingResponse.getCommand())
+                : empty();
     }
 
     public void onGetCommandResponse(ChannelHandlerContext context) {

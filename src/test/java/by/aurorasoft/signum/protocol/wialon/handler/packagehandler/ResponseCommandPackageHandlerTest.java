@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
@@ -53,7 +54,7 @@ public final class ResponseCommandPackageHandlerTest {
     public void packageWithSuccessStatusShouldBeHandled() {
         final Command givenCommand = mock(Command.class);
         when(this.mockedContextManager.findCommandWaitingResponse(any(ChannelHandlerContext.class)))
-                .thenReturn(givenCommand);
+                .thenReturn(Optional.of(givenCommand));
 
         final ResponseCommandPackage givenPackage = new ResponseCommandPackage(ResponseCommandPackage.Status.SUCCESS);
         final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
@@ -77,7 +78,7 @@ public final class ResponseCommandPackageHandlerTest {
     public void packageWithErrorStatusShouldBeHandled() {
         final Command givenCommand = mock(Command.class);
         when(this.mockedContextManager.findCommandWaitingResponse(any(ChannelHandlerContext.class)))
-                .thenReturn(givenCommand);
+                .thenReturn(Optional.of(givenCommand));
 
         final ResponseCommandPackage givenPackage = new ResponseCommandPackage(ResponseCommandPackage.Status.ERROR);
         final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);

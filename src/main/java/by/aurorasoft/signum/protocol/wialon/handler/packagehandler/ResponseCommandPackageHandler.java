@@ -9,6 +9,8 @@ import by.aurorasoft.signum.protocol.wialon.model.Package;
 import io.netty.channel.ChannelHandlerContext;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public final class ResponseCommandPackageHandler extends PackageHandler {
     private final CommandService commandService;
@@ -24,12 +26,15 @@ public final class ResponseCommandPackageHandler extends PackageHandler {
     @Override
     protected void doHandle(Package inboundPackage, ChannelHandlerContext context) {
         final ResponseCommandPackage responseCommandPackage = (ResponseCommandPackage) inboundPackage;
-        final Command commandWaitingResponse = this.contextManager.findCommandWaitingResponse(context);
-        this.contextManager.onGetCommandResponse(context);
-        final CommandEntity.Status statusAnsweredCommand =
-                responseCommandPackage.getStatus() == ResponseCommandPackage.Status.SUCCESS
-                        ? CommandEntity.Status.SUCCESS
-                        : CommandEntity.Status.ERROR;
-        this.commandService.updateByStatus(commandWaitingResponse, statusAnsweredCommand);
+        final Optional<Command> optionalCommandWaitingResponse = this.contextManager
+                .findCommandWaitingResponse(context);
+        optionalCommandWaitingResponse.ifPresent(commandWaitingResponse -> {
+            this.contextManager.onGetCommandResponse(context);
+            final CommandEntity.Status statusAnsweredCommand =
+                    responseCommandPackage.getStatus() == ResponseCommandPackage.Status.SUCCESS
+                            ? CommandEntity.Status.SUCCESS
+                            : CommandEntity.Status.ERROR;
+            this.commandService.updateByStatus(commandWaitingResponse, statusAnsweredCommand);
+        });
     }
 }
