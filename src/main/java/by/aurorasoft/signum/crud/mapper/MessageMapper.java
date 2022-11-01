@@ -5,7 +5,7 @@ import by.aurorasoft.signum.crud.model.dto.Message.GpsCoordinate;
 import by.aurorasoft.signum.crud.model.dto.Message.ParameterName;
 import by.aurorasoft.signum.crud.model.entity.DeviceEntity;
 import by.aurorasoft.signum.crud.model.entity.MessageEntity;
-import by.nhorushko.crudgeneric.v2.mapper.ExtAbstractMapper;
+import by.nhorushko.crudgeneric.v2.mapper.AbsMapperEntityExtDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,7 @@ import java.util.Map;
 import static by.aurorasoft.signum.crud.model.dto.Message.ParameterName.*;
 
 @Component
-public final class MessageMapper extends ExtAbstractMapper<MessageEntity, Message, Long, DeviceEntity> {
+public final class MessageMapper extends AbsMapperEntityExtDto<MessageEntity, Message, Long, DeviceEntity> {
 
     public MessageMapper(ModelMapper modelMapper, EntityManager entityManager) {
         super(modelMapper, MessageEntity.class, Message.class, entityManager, DeviceEntity.class);
@@ -33,7 +33,7 @@ public final class MessageMapper extends ExtAbstractMapper<MessageEntity, Messag
     }
 
     @Override
-    protected Message createDto(MessageEntity entity) {
+    protected Message create(MessageEntity entity) {
         return new Message(
                 entity.getId(),
                 entity.getDateTime(),
