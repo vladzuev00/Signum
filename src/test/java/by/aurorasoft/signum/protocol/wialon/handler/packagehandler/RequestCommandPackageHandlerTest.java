@@ -2,7 +2,6 @@ package by.aurorasoft.signum.protocol.wialon.handler.packagehandler;
 
 import by.aurorasoft.signum.crud.model.dto.Command;
 import by.aurorasoft.signum.crud.model.dto.Device;
-import by.aurorasoft.signum.crud.model.dto.Unit;
 import by.aurorasoft.signum.crud.model.entity.CommandEntity.Status;
 import by.aurorasoft.signum.crud.model.entity.CommandEntity.Type;
 import by.aurorasoft.signum.crud.service.CommandService;
@@ -59,18 +58,15 @@ public final class RequestCommandPackageHandlerTest {
 
     @Test
     public void packageShouldBeHandled() {
-        final Unit givenUnit = mock(Unit.class);
         final Device givenDevice = new Device(255L, "11112222333344445555", "448446945", TRACKER);
-//        when(givenUnit.getDevice()).thenReturn(givenDevice);
-//        when(this.mockedContextManager.findUnit(any(ChannelHandlerContext.class)))
-//                .thenReturn(givenUnit);
+        when(this.mockedContextManager.findDevice(any(ChannelHandlerContext.class))).thenReturn(givenDevice);
 
         final RequestCommandPackage givenPackage = new RequestCommandPackage("message");
         final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
         this.packageHandler.doHandle(givenPackage, givenContext);
 
-//        verify(this.mockedContextManager, times(1))
-//                .findUnit(this.contextArgumentCaptor.capture());
+        verify(this.mockedContextManager, times(1))
+                .findDevice(this.contextArgumentCaptor.capture());
         verify(this.mockedCommandService, times(1)).save(
                 this.commandArgumentCaptor.capture(),
                 this.commandStatusArgumentCaptor.capture(),
@@ -78,7 +74,7 @@ public final class RequestCommandPackageHandlerTest {
         verify(givenContext, times(1)).writeAndFlush(this.stringArgumentCaptor.capture());
 
         assertSame(givenContext, this.contextArgumentCaptor.getValue());
-//        assertEquals(new Command(givenPackage.getMessage(), givenDevice), this.commandArgumentCaptor.getValue());
+        assertEquals(new Command(givenPackage.getMessage(), 255L), this.commandArgumentCaptor.getValue());
         assertSame(SUCCESS, this.commandStatusArgumentCaptor.getValue());
         assertSame(ANSWER, this.commandTypeArgumentCaptor.getValue());
     }

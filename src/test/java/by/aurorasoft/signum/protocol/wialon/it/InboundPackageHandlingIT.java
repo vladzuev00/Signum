@@ -281,7 +281,7 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String givenResponse = "#AM#1\r\n";
         this.client.doResponse(givenResponse);
 
-        SECONDS.sleep(1);
+        SECONDS.sleep(2);
 
         assertFalse(this.contextManager.isExistCommandWaitingResponse(context));
 
