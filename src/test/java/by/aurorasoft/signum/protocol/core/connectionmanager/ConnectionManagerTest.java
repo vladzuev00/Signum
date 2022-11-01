@@ -12,10 +12,12 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import static by.aurorasoft.signum.crud.model.entity.DeviceEntity.Type.TRACKER;
+import static java.lang.Long.MIN_VALUE;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -40,73 +42,71 @@ public final class ConnectionManagerTest {
     @Test
     public void contextShouldBeAdded()
             throws Exception {
-//        final Device givenDevice = new Device(255L, "11111222223333344444", "223334455", TRACKER);
-//        final Unit givenUnit = new Unit(256L, "unit-name", new User(257L, "user-name"), givenDevice);
-//        when(this.mockedContextManager.findUnit(any(ChannelHandlerContext.class))).thenReturn(givenUnit);
-//
-//        final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
-//        this.connectionManager.addContext(givenContext);
-//
-//        final Map<Long, ChannelHandlerContext> actual = findDeviceIdToContextMap(
-//                this.connectionManager);
-//        final Map<Long, ChannelHandlerContext> expected = Map.of(givenDevice.getId(), givenContext);
-//        assertEquals(expected, actual);
-//
-//        verify(this.mockedContextManager, times(1))
-//                .findUnit(this.contextArgumentCaptor.capture());
-//
-//        assertSame(givenContext, this.contextArgumentCaptor.getValue());
+        final Device givenDevice = new Device(255L, "11111222223333344444", "223334455", TRACKER);
+        when(this.mockedContextManager.findDevice(any(ChannelHandlerContext.class))).thenReturn(givenDevice);
+
+        final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
+        this.connectionManager.addContext(givenContext);
+
+        final Map<Long, ChannelHandlerContext> actual = findDeviceIdToContextMap(this.connectionManager);
+        final Map<Long, ChannelHandlerContext> expected = Map.of(givenDevice.getId(), givenContext);
+        assertEquals(expected, actual);
+
+        verify(this.mockedContextManager, times(1))
+                .findDevice(this.contextArgumentCaptor.capture());
+
+        assertSame(givenContext, this.contextArgumentCaptor.getValue());
     }
 
     @Test
     public void oldContextShouldBeReplacedByNew()
             throws Exception {
-//        final Device givenDevice = new Device(255L, "11111222223333344444", "223334455", TRACKER);
-//        final Unit givenUnit = new Unit(256L, "unit-name", new User(257L, "user-name"), givenDevice);
-//
-//        when(this.mockedContextManager.findUnit(any(ChannelHandlerContext.class))).thenReturn(givenUnit);
-//
-//        final ChannelHandlerContext givenFirstContext = mock(ChannelHandlerContext.class);
-//        this.connectionManager.addContext(givenFirstContext);
-//
-//        final ChannelHandlerContext givenSecondContext = mock(ChannelHandlerContext.class);
-//        this.connectionManager.addContext(givenSecondContext);
-//
-//        final Map<Long, ChannelHandlerContext> actual = findDeviceIdToContextMap(
-//                this.connectionManager);
-//        final Map<Long, ChannelHandlerContext> expected = Map.of(givenDevice.getId(), givenSecondContext);
-//        assertEquals(expected, actual);
-//
-//        verify(givenFirstContext, times(1)).close();
-//        verify(this.mockedContextManager, times(2))
-//                .findUnit(this.contextArgumentCaptor.capture());
-//
-//        final List<ChannelHandlerContext> expectedCapturedContextArguments
-//                = List.of(givenFirstContext, givenSecondContext);
-//        assertEquals(expectedCapturedContextArguments, this.contextArgumentCaptor.getAllValues());
+        final Device givenDevice = new Device(255L, "11111222223333344444", "223334455", TRACKER);
+
+        when(this.mockedContextManager.findDevice(any(ChannelHandlerContext.class))).thenReturn(givenDevice);
+
+        final ChannelHandlerContext givenFirstContext = mock(ChannelHandlerContext.class);
+        this.connectionManager.addContext(givenFirstContext);
+
+        final ChannelHandlerContext givenSecondContext = mock(ChannelHandlerContext.class);
+        this.connectionManager.addContext(givenSecondContext);
+
+        final Map<Long, ChannelHandlerContext> actual = findDeviceIdToContextMap(
+                this.connectionManager);
+        final Map<Long, ChannelHandlerContext> expected = Map.of(givenDevice.getId(), givenSecondContext);
+        assertEquals(expected, actual);
+
+        verify(givenFirstContext, times(1)).close();
+        verify(this.mockedContextManager, times(2))
+                .findDevice(this.contextArgumentCaptor.capture());
+
+        final List<ChannelHandlerContext> expectedCapturedContextArguments
+                = List.of(givenFirstContext, givenSecondContext);
+        assertEquals(expectedCapturedContextArguments, this.contextArgumentCaptor.getAllValues());
     }
 
     @Test
-    public void contextShouldBeFound()
+    public void contextShouldBeFoundByDeviceId()
             throws Exception {
-//        final Device givenDevice = new Device(255L, "11111222223333344444", "223334455", TRACKER);
-//        final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
-//
-//        final Map<Long, ChannelHandlerContext> deviceIdToContextMap = findDeviceIdToContextMap(
-//                this.connectionManager);
-//        deviceIdToContextMap.put(givenDevice.getId(), givenContext);
-//
-//        final Optional<ChannelHandlerContext> optionalContext = this.connectionManager.findContextByDeviceId(givenDevice);
-//        assertTrue(optionalContext.isPresent());
-//        final ChannelHandlerContext actual = optionalContext.get();
-//        assertSame(givenContext, actual);
+        final Device givenDevice = new Device(255L, "11111222223333344444", "223334455", TRACKER);
+        final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
+
+        final Map<Long, ChannelHandlerContext> deviceIdToContextMap = findDeviceIdToContextMap(
+                this.connectionManager);
+        deviceIdToContextMap.put(givenDevice.getId(), givenContext);
+
+        final Optional<ChannelHandlerContext> optionalContext = this.connectionManager
+                .findContextByDeviceId(givenDevice.getId());
+        assertTrue(optionalContext.isPresent());
+        final ChannelHandlerContext actual = optionalContext.get();
+        assertSame(givenContext, actual);
     }
 
     @Test
     public void contextShouldNotBeFound() {
-//        final Device givenDevice = new Device(255L, "11111222223333344444", "223334455", TRACKER);
-//        final Optional<ChannelHandlerContext> optionalContext = this.connectionManager.findContextByDeviceId(givenDevice);
-//        assertTrue(optionalContext.isEmpty());
+        final Optional<ChannelHandlerContext> optionalContext = this.connectionManager
+                .findContextByDeviceId(MIN_VALUE);
+        assertTrue(optionalContext.isEmpty());
     }
 
     @SuppressWarnings("unchecked")
