@@ -2,8 +2,6 @@ package by.aurorasoft.signum.protocol.wialon.it;
 
 import by.aurorasoft.signum.base.AbstractContextTest;
 import by.aurorasoft.signum.config.property.ServerProperty;
-import by.aurorasoft.signum.crud.model.dto.Command;
-import by.aurorasoft.signum.crud.model.dto.Device;
 import by.aurorasoft.signum.crud.model.entity.CommandEntity;
 import by.aurorasoft.signum.crud.model.entity.DeviceEntity;
 import by.aurorasoft.signum.crud.model.entity.MessageEntity;
@@ -27,7 +25,6 @@ import java.util.concurrent.Future;
 import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Status.SUCCESS;
 import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Type.ANSWER;
 import static by.aurorasoft.signum.crud.model.entity.CommandEntity.Type.COMMAND;
-import static by.aurorasoft.signum.crud.model.entity.DeviceEntity.Type.TRACKER;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.Instant.parse;
 import static java.util.concurrent.Executors.newSingleThreadExecutor;
@@ -274,14 +271,12 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String responseLoginPackage = this.client.doRequest(requestLoginPackage).get();
         assertEquals(RESPONSE_LOGIN_PACKAGE_SUCCESS_AUTHORIZATION, responseLoginPackage);
 
-        final Device device = new Device(25551L, "355234055650192", "+37257063997", TRACKER);
-        final ChannelHandlerContext context = this.connectionManager.findContextByDeviceId(device.getId()).orElseThrow();
-        this.contextManager.putCommandWaitingResponse(context, new Command(255L, "command", device.getId()));
+        final ChannelHandlerContext context = this.connectionManager.findContextByDeviceId(25551L).orElseThrow();
 
         final String givenResponse = "#AM#1\r\n";
         this.client.doResponse(givenResponse);
 
-        SECONDS.sleep(2);
+        SECONDS.sleep(1);
 
         assertFalse(this.contextManager.isExistCommandWaitingResponse(context));
 
