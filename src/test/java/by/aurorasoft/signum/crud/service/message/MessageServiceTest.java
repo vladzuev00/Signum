@@ -5,7 +5,6 @@ import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.crud.model.dto.Message.GpsCoordinate;
 import by.aurorasoft.signum.crud.model.entity.DeviceEntity;
 import by.aurorasoft.signum.crud.model.entity.MessageEntity;
-import by.aurorasoft.signum.crud.service.MessageService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

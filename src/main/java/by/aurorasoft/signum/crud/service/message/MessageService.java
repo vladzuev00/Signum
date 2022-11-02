@@ -1,4 +1,4 @@
-package by.aurorasoft.signum.crud.service;
+package by.aurorasoft.signum.crud.service.message;
 
 import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.crud.mapper.MessageMapper;
@@ -6,7 +6,6 @@ import by.aurorasoft.signum.crud.model.entity.DeviceEntity;
 import by.aurorasoft.signum.crud.model.entity.MessageEntity;
 import by.aurorasoft.signum.crud.model.entity.MessageEntity.MessageType;
 import by.aurorasoft.signum.crud.repository.MessageRepository;
-import by.aurorasoft.signum.crud.service.message.MessageValidator;
 import by.nhorushko.crudgeneric.v2.service.AbsServiceExtCRUD;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

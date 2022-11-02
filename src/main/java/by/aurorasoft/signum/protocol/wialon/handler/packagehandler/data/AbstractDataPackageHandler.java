@@ -6,7 +6,7 @@ import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.PackageHandler;
 import by.aurorasoft.signum.protocol.wialon.model.AbstractDataPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
-import by.aurorasoft.signum.crud.service.MessageService;
+import by.aurorasoft.signum.crud.service.message.MessageService;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.List;

@@ -2,7 +2,7 @@ package by.aurorasoft.signum.protocol.wialon.handler.packagehandler.data;
 
 import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import by.aurorasoft.signum.protocol.wialon.model.DataPackage;
-import by.aurorasoft.signum.crud.service.MessageService;
+import by.aurorasoft.signum.crud.service.message.MessageService;
 import org.springframework.stereotype.Component;
 
 import static java.lang.String.format;
