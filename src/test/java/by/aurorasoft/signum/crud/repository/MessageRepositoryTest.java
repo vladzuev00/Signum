@@ -7,9 +7,11 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
+import static by.aurorasoft.signum.crud.model.entity.MessageEntity.MessageType.VALID;
 import static java.time.Instant.now;
 import static java.time.Instant.parse;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 public final class MessageRepositoryTest extends AbstractContextTest {
     @Autowired
@@ -31,6 +33,7 @@ public final class MessageRepositoryTest extends AbstractContextTest {
                 .ecoCornering(8.8F)
                 .ecoAcceleration(9.9F)
                 .ecoBraking(10.1F)
+                .type(VALID)
                 .build();
         super.startQueryCount();
         this.repository.save(givenMessage);
@@ -58,5 +61,6 @@ public final class MessageRepositoryTest extends AbstractContextTest {
         assertEquals(1.6, foundMessage.getEcoCornering(), 0.001);
         assertEquals(1.7, foundMessage.getEcoAcceleration(), 0.001);
         assertEquals(1.8, foundMessage.getEcoBraking(), 0.001);
+        assertSame(VALID, foundMessage.getType());
     }
 }

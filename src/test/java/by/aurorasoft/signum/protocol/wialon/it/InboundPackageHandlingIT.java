@@ -25,6 +25,8 @@ import java.util.concurrent.Future;
 import static by.aurorasoft.signum.crud.model.dto.Command.Status.SUCCESS;
 import static by.aurorasoft.signum.crud.model.dto.Command.Type.ANSWER;
 import static by.aurorasoft.signum.crud.model.dto.Command.Type.COMMAND;
+import static by.aurorasoft.signum.crud.model.entity.MessageEntity.MessageType.INCORRECT;
+import static by.aurorasoft.signum.crud.model.entity.MessageEntity.MessageType.VALID;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.Instant.parse;
 import static java.util.concurrent.Executors.newSingleThreadExecutor;
@@ -126,6 +128,7 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
                 .ecoCornering(-1)
                 .ecoAcceleration(-1)
                 .ecoBraking(-1)
+                .type(INCORRECT)
                 .build();
 
         checkEqualsExceptId(expectedSavedMessage, actualSavedMessage);
@@ -157,7 +160,7 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         assertEquals(RESPONSE_LOGIN_PACKAGE_SUCCESS_AUTHORIZATION, responseLoginPackage);
 
         final String request = "#B#"
-                + "111122;145643;5544.6025;N;03739.6834;E;100;15;10;177;545.4554;17;18;"
+                + "101022;145643;5544.6025;N;03739.6834;E;100;15;10;177;545.4554;17;18;"
                 + "5.5,4343.454544334,454.433,1;"
                 + "keydrivercode;"
                 + "21:1:1,secondparam:2:65.4321,VPWR:2:31.5"
@@ -177,7 +180,7 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final MessageEntity actualFirstSavedMessage = messagesFromDB.get(0);
         final MessageEntity expectedFirstSavedMessage = MessageEntity.builder()
                 .device(super.entityManager.getReference(DeviceEntity.class, 25551L))
-                .dateTime(parse("2022-11-11T14:56:43Z"))
+                .dateTime(parse("2022-10-10T14:56:43Z"))
                 .latitude(57.406944F)
                 .longitude(39.548332F)
                 .speed(100)
@@ -189,6 +192,7 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
                 .ecoCornering(-1)
                 .ecoAcceleration(-1)
                 .ecoBraking(-1)
+                .type(VALID)
                 .build();
         checkEqualsExceptId(expectedFirstSavedMessage, actualFirstSavedMessage);
 
@@ -207,6 +211,7 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
                 .ecoCornering(-1)
                 .ecoAcceleration(-1)
                 .ecoBraking(-1)
+                .type(INCORRECT)
                 .build();
         checkEqualsExceptId(expectedSecondSavedMessage, secondActualSavedMessage);
     }
@@ -307,6 +312,7 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         assertEquals(expected.getEcoCornering(), actual.getEcoCornering(), 0.);
         assertEquals(expected.getEcoAcceleration(), actual.getEcoAcceleration(), 0.);
         assertEquals(expected.getEcoBraking(), actual.getEcoBraking(), 0.);
+        assertSame(expected.getType(), actual.getType());
     }
 
     private static void checkEqualsExceptId(CommandEntity expected, CommandEntity actual) {

@@ -1,14 +1,18 @@
 package by.aurorasoft.signum.crud.model.entity;
 
+import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import lombok.*;
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.Instant;
 
 import static by.aurorasoft.signum.utils.BoundingUtils.bound;
+import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -17,6 +21,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 @SQLDelete(sql = "UPDATE message SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
 @EntityListeners(MessageEntity.ParametersBounder.class)
+@TypeDef(
+        name = "pgsql_enum",
+        typeClass = PostgreSQLEnumType.class
+)
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
@@ -85,6 +93,11 @@ public class MessageEntity extends BaseEntity<Long> {
     )
     private float ecoBraking;
 
+    @Enumerated(STRING)
+    @Column(name = "type")
+    @Type(type = "pgsql_enum")
+    private MessageType type;
+
     @Override
     public String toString() {
         return super.toString()
@@ -101,7 +114,25 @@ public class MessageEntity extends BaseEntity<Long> {
                 + ", ecoCornering = " + this.ecoCornering
                 + ", ecoAcceleration = " + this.ecoAcceleration
                 + ", ecoBraking = " + this.ecoBraking
+                + ", type = " + this.type
                 + "]";
+    }
+
+    public enum MessageType {
+        /**
+         * Valid coordinates and valid time
+         */
+        VALID,
+
+        /**
+         * Not valid coordinates and valid time
+         */
+        CORRECT,
+
+        /**
+         * other cases
+         */
+        INCORRECT
     }
 
     static final class ParametersBounder {
@@ -116,10 +147,10 @@ public class MessageEntity extends BaseEntity<Long> {
         @PreUpdate
         public void boundParameters(MessageEntity message) {
             message.gsmLevel = bound(message.gsmLevel, MIN, MAX);
-            message.onboardVoltage = bound(message.onboardVoltage, (float)MIN, (float)MAX);
-            message.ecoCornering = bound(message.ecoCornering, (float)MIN, (float)MAX);
-            message.ecoAcceleration = bound(message.ecoAcceleration, (float)MIN, (float)MAX);
-            message.ecoBraking = bound(message.ecoBraking, (float)MIN, (float)MAX);
+            message.onboardVoltage = bound(message.onboardVoltage, (float) MIN, (float) MAX);
+            message.ecoCornering = bound(message.ecoCornering, (float) MIN, (float) MAX);
+            message.ecoAcceleration = bound(message.ecoAcceleration, (float) MIN, (float) MAX);
+            message.ecoBraking = bound(message.ecoBraking, (float) MIN, (float) MAX);
         }
     }
 }

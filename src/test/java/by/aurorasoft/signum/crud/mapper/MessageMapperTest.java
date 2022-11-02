@@ -7,13 +7,13 @@ import by.aurorasoft.signum.crud.model.entity.DeviceEntity;
 import by.aurorasoft.signum.crud.model.entity.MessageEntity;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Map;
 
 import static by.aurorasoft.signum.crud.model.dto.Message.ParameterName.*;
 import static java.time.Instant.parse;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public final class MessageMapperTest extends AbstractContextTest {
 
@@ -53,7 +53,6 @@ public final class MessageMapperTest extends AbstractContextTest {
     }
 
     @Test
-    @Sql("classpath:sql/insert-message.sql")
     public void dtoShouldBeMappedToEntity() {
         final Message givenDto = new Message(255L, parse("2000-02-18T04:05:06Z"),
                 new GpsCoordinate(4.4F, 5.5F), 6, 7, 8, 9,
@@ -81,5 +80,6 @@ public final class MessageMapperTest extends AbstractContextTest {
         assertEquals(23.3F, resultEntity.getEcoCornering(), 0.001);
         assertEquals(24.4F, resultEntity.getEcoAcceleration(), 0.001);
         assertEquals(25.5F, resultEntity.getEcoBraking(), 0.001);
+        assertNull(resultEntity.getType());
     }
 }

@@ -13,7 +13,7 @@ CREATE TABLE unit
     deleted BOOLEAN     NOT NULL DEFAULT false
 );
 
-CREATE TYPE device_type AS ENUM('TRACKER', 'BEACON');
+CREATE TYPE device_type AS ENUM ('TRACKER', 'BEACON');
 
 CREATE TABLE device
 (
@@ -25,17 +25,19 @@ CREATE TABLE device
     deleted      BOOLEAN     NOT NULL DEFAULT false
 );
 
-CREATE TYPE command_status AS ENUM('NEW', 'SENT', 'SUCCESS', 'ERROR', 'TIMEOUT');
-CREATE TYPE command_type AS ENUM('COMMAND', 'ANSWER');
+CREATE TYPE command_status AS ENUM ('NEW', 'SENT', 'SUCCESS', 'ERROR', 'TIMEOUT');
+CREATE TYPE command_type AS ENUM ('COMMAND', 'ANSWER');
 
 CREATE TABLE command
 (
     id        BIGSERIAL PRIMARY KEY,
-    text      TEXT        NOT NULL,
+    text      TEXT           NOT NULL,
     status    command_status NOT NULL,
-    device_id INTEGER     NOT NULL REFERENCES device,
-    type      command_type NOT NULL
+    device_id INTEGER        NOT NULL REFERENCES device,
+    type      command_type   NOT NULL
 );
+
+CREATE TYPE message_type AS ENUM ('VALID', 'CORRECT', 'INCORRECT');
 
 CREATE TABLE message
 (
@@ -53,6 +55,7 @@ CREATE TABLE message
     eco_cornering    SMALLINT     NOT NULL,
     eco_acceleration SMALLINT     NOT NULL,
     eco_braking      SMALLINT     NOT NULL,
+    type             message_type NOT NULL,
     deleted          BOOLEAN      NOT NULL DEFAULT false
 );
 

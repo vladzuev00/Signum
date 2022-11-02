@@ -8,8 +8,6 @@ netty:
   contextManager:
     lifecycleObserver:
       responseTimeoutSeconds: 30
-      threadPool:
-        size: 10
 
 
 spring:
@@ -22,3 +20,8 @@ spring:
   sql:
     init:
       mode: always
+
+message:
+  validation:
+    minValidAmountSatellite: 3
+    maxValidDOP: 7

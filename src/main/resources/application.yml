@@ -8,8 +8,6 @@ netty:
   contextManager:
     lifecycleObserver:
       responseTimeoutSeconds: 30
-      threadPool:
-        size: 10
 
 spring:
   datasource:
@@ -20,3 +18,9 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL10Dialect
     show-sql: true
+
+
+message:
+  validation:
+    minValidAmountSatellite: 3
+    maxValidDOP: 7

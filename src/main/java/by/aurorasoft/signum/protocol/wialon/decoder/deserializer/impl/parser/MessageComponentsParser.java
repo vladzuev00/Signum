@@ -20,6 +20,8 @@ import static java.time.LocalDateTime.parse;
 import static java.time.ZoneOffset.UTC;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.Arrays.stream;
+import static java.util.Map.entry;
+import static java.util.Map.ofEntries;
 import static java.util.regex.Pattern.compile;
 import static java.util.stream.Collectors.toMap;
 
@@ -64,21 +66,27 @@ public final class MessageComponentsParser {
     private static final String DELIMITER_PARAMETER_COMPONENTS = ":";
 
     private static final Map<String, ParameterName> PARAMETER_IDENTIFICATION_TO_NAME_MAP
-            = Map.of(
-            "GSMCSQ", GSM_LEVEL,
-            "21", GSM_LEVEL,
+            = ofEntries(
+            entry("GSMCSQ", GSM_LEVEL),
+            entry("21", GSM_LEVEL),
 
-            "VPWR", VOLTAGE,
-            "66", VOLTAGE,
+            entry("VPWR", VOLTAGE),
+            entry("66", VOLTAGE),
 
-            "wln_crn_max", CORNER_ACCELERATION,
-            "47", CORNER_ACCELERATION,
+            entry("wln_crn_max", CORNER_ACCELERATION),
+            entry("47", CORNER_ACCELERATION),
 
-            "wln_accel_max", ACCELERATION_UP,
-            "44", ACCELERATION_UP,
+            entry("wln_accel_max", ACCELERATION_UP),
+            entry("44", ACCELERATION_UP),
 
-            "wln_brk_max", ACCELERATION_DOWN,
-            "45", ACCELERATION_DOWN
+            entry("wln_brk_max", ACCELERATION_DOWN),
+            entry("45", ACCELERATION_DOWN),
+
+            entry("122", HDOP),
+
+            entry("123", VDOP),
+
+            entry("124", PDOP)
     );
     private static final int COMPONENT_INDEX_PARAMETER_NAME = 0;
     private static final int COMPONENT_INDEX_PARAMETER_VALUE = 2;

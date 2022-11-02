@@ -62,6 +62,9 @@ public class Message implements AbstractDto<Long> {
         VOLTAGE,
         CORNER_ACCELERATION,
         ACCELERATION_UP,
-        ACCELERATION_DOWN;
+        ACCELERATION_DOWN,
+        HDOP,
+        VDOP,
+        PDOP
     }
 }
