@@ -63,7 +63,7 @@ CREATE TABLE message
 CREATE TABLE device_state
 (
     device_id            INTEGER PRIMARY KEY REFERENCES device ON DELETE CASCADE,
-    last_message_id      BIGINT REFERENCES message ON DELETE CASCADE,
+    last_message_id      BIGINT REFERENCES message,
     last_valid_latitude  FLOAT(4),
     last_valid_longitude FLOAT(4)
 );

@@ -95,6 +95,9 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
 
     @Test
     @Transactional(propagation = NOT_SUPPORTED)
+    @Sql(statements = "UPDATE device_state "
+            + "SET last_message_id = NULL, last_valid_latitude = NULL, last_valid_longitude = NULL",
+            executionPhase = AFTER_TEST_METHOD)
     @Sql(statements = "DELETE FROM message", executionPhase = AFTER_TEST_METHOD)
     public void dataPackageShouldBeHandled() throws Exception {
         final String requestLoginPackage = "#L#355234055650192;NA\r\n";
@@ -153,6 +156,9 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
 
     @Test
     @Transactional(propagation = NOT_SUPPORTED)
+    @Sql(statements = "UPDATE device_state "
+            + "SET last_message_id = NULL, last_valid_latitude = NULL, last_valid_longitude = NULL",
+            executionPhase = AFTER_TEST_METHOD)
     @Sql(statements = "DELETE FROM message", executionPhase = AFTER_TEST_METHOD)
     public void blackBoxPackageShouldBeHandled() throws Exception {
         final String requestLoginPackage = "#L#355234055650192;NA\r\n";

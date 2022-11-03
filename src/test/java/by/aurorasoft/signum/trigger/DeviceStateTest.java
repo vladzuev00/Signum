@@ -11,9 +11,10 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import static java.util.Set.copyOf;
 import static org.junit.Assert.assertEquals;
 
 public final class DeviceStateTest extends AbstractContextTest {
@@ -23,11 +24,11 @@ public final class DeviceStateTest extends AbstractContextTest {
 
     @Test
     public void deviceStatesShouldBeInserted() {
-        final List<DeviceState> actual = this.jdbcTemplate.query(
+        final Set<DeviceState> actual = copyOf(this.jdbcTemplate.query(
                 "SELECT device_id, last_message_id, last_valid_latitude, last_valid_longitude "
                         + "FROM device_state",
-                new DeviceStateRowMapper());
-        final List<DeviceState> expected = List.of(
+                new DeviceStateRowMapper()));
+        final Set<DeviceState> expected = Set.of(
                 new DeviceState(25551, null, null, null),
                 new DeviceState(25552, null, null, null),
                 new DeviceState(25553, null, null, null),
