@@ -2,6 +2,7 @@ package by.aurorasoft.signum.protocol.core.contextmanager;
 
 import by.aurorasoft.signum.crud.model.dto.Command;
 import by.aurorasoft.signum.crud.model.dto.Device;
+import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.crud.service.CommandService;
 import by.aurorasoft.signum.protocol.core.service.CommandSenderService;
 import io.netty.channel.Channel;
@@ -31,6 +32,8 @@ public final class ContextManager {
             = valueOf("command_waiting_response");
     private static final AttributeKey<Queue<Command>> ATTRIBUTE_KEY_COMMANDS_TO_BE_SENT
             = valueOf("commands_to_be_sent");
+    private static final AttributeKey<Message> ATTRIBUTE_KEY_LAST_VALID_RECEIVED_MESSAGE
+            = valueOf("last_valid_received_message");
 
     private final CommandService commandService;
     private final CommandSenderService commandSenderService;
@@ -102,6 +105,14 @@ public final class ContextManager {
     public boolean isExistCommandToBeSent(ChannelHandlerContext context) {
         final Queue<Command> commandsToBeSent = findAttributeValue(context, ATTRIBUTE_KEY_COMMANDS_TO_BE_SENT);
         return commandsToBeSent != null && !commandsToBeSent.isEmpty();
+    }
+
+    public void putLastMessage(ChannelHandlerContext context, Message message) {
+        putAttributeValue(context, ATTRIBUTE_KEY_LAST_VALID_RECEIVED_MESSAGE, message);
+    }
+
+    public Message findLastValidReceivedMessage(ChannelHandlerContext context) {
+        return findAttributeValue(context, ATTRIBUTE_KEY_LAST_VALID_RECEIVED_MESSAGE);
     }
 
     private static <ValueType> ValueType findAttributeValue(ChannelHandlerContext context,

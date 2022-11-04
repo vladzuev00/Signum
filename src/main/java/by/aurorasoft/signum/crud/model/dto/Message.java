@@ -7,6 +7,7 @@ import lombok.Value;
 import java.time.Instant;
 import java.util.Map;
 
+import static java.util.Map.copyOf;
 import static lombok.AccessLevel.NONE;
 
 @Value
@@ -32,7 +33,7 @@ public class Message implements AbstractDto<Long> {
         this.course = course;
         this.altitude = altitude;
         this.amountSatellite = amountSatellite;
-        this.parameterNamesToValues = parameterNamesToValues;
+        this.parameterNamesToValues = copyOf(parameterNamesToValues);
     }
 
     public Message(Long id, Instant dateTime, GpsCoordinate coordinate, int speed, int course, int altitude,
@@ -44,7 +45,18 @@ public class Message implements AbstractDto<Long> {
         this.course = course;
         this.altitude = altitude;
         this.amountSatellite = amountSatellite;
-        this.parameterNamesToValues = parameterNamesToValues;
+        this.parameterNamesToValues = copyOf(parameterNamesToValues);
+    }
+
+    public Message(Message other, GpsCoordinate coordinate) {
+        this.id = other.id;
+        this.dateTime = other.dateTime;
+        this.coordinate = coordinate;
+        this.speed = other.speed;
+        this.course = other.course;
+        this.altitude = other.altitude;
+        this.amountSatellite = other.amountSatellite;
+        this.parameterNamesToValues = copyOf(other.parameterNamesToValues);
     }
 
     public Float getParameter(ParameterName parameterName) {

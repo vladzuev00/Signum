@@ -2,6 +2,7 @@ package by.aurorasoft.signum.protocol.core.service;
 
 import by.aurorasoft.signum.crud.model.dto.Device;
 import by.aurorasoft.signum.crud.service.DeviceService;
+import by.aurorasoft.signum.crud.service.message.MessageService;
 import by.aurorasoft.signum.protocol.core.connectionmanager.ConnectionManager;
 import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import io.netty.channel.ChannelHandlerContext;
@@ -16,6 +17,7 @@ public class AuthorizationDeviceService {
     private final ContextManager contextManager;
     private final DeviceService deviceService;
     private final ConnectionManager connectionManager;
+    private final MessageService messageService;
 
     public Optional<Device> authorize(String imei, ChannelHandlerContext context) {
         this.contextManager.putDeviceImei(context, imei);
@@ -23,7 +25,15 @@ public class AuthorizationDeviceService {
         optionalDevice.ifPresent(device -> {
             this.contextManager.putDevice(context, device);
             this.connectionManager.add(context);
+            this.putLastMessage(context, device);
         });
         return optionalDevice;
+    }
+
+    private void putLastMessage(ChannelHandlerContext context, Device device) {
+        this.messageService
+                .findLastReceivedMessage(device.getId())
+                .ifPresent(
+                        message -> this.contextManager.putLastMessage(context, message));
     }
 }

@@ -130,6 +130,11 @@ public class MessageEntity extends BaseEntity<Long> {
         CORRECT,
 
         /**
+         * message contains time which is less than previous message
+         */
+        WRONG_ORDER,
+
+        /**
          * other cases
          */
         INCORRECT

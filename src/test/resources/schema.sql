@@ -37,7 +37,7 @@ CREATE TABLE command
     type      command_type   NOT NULL
 );
 
-CREATE TYPE message_type AS ENUM ('VALID', 'CORRECT', 'INCORRECT');
+CREATE TYPE message_type AS ENUM ('VALID', 'WRONG_ORDER', 'INCORRECT');
 
 CREATE TABLE message
 (

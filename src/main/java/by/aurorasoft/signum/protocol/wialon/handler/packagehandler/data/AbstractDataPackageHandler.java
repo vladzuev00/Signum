@@ -26,10 +26,13 @@ public abstract class AbstractDataPackageHandler<T extends AbstractDataPackage> 
     @Override
     protected final void doHandle(Package requestPackage, ChannelHandlerContext context) {
         final T dataPackage = (T) requestPackage;
-        final List<Message> messagesToBeSaved = dataPackage.getMessages();
+        final List<Message> messages = dataPackage.getMessages();
         final Device device = this.contextManager.findDevice(context);
-        final List<Message> savedMessages = this.messageService.saveAll(device.getId(), messagesToBeSaved);
-        context.writeAndFlush(this.createResponse(savedMessages.size()));
+        final Message lastValidMessage = this.contextManager.findLastValidReceivedMessage(context);
+        final Message newLastValidMessage = this.messageService.saveAll(
+                device.getId(), lastValidMessage, messages);
+        this.contextManager.putLastMessage(context, newLastValidMessage);
+        context.writeAndFlush(this.createResponse(messages.size()));
     }
 
     protected abstract String createResponse(int amountSavedMessages);
