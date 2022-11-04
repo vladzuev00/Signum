@@ -29,10 +29,6 @@ public class MessageService
     }
 
     /**
-     *
-     * @param deviceId
-     * @param lastValidMessage
-     * @param savedMessages
      * @return new last valid message
      */
     public Message saveAll(Long deviceId, Message lastValidMessage,
@@ -49,8 +45,8 @@ public class MessageService
         return optionalEntity.map(super.mapper::toDto);
     }
 
-    private MessageEntity mapToValidatedEntity(Long deviceId, Message message) {
-        final MessageType messageType = this.messageValidator.validate(message);
+    private MessageEntity mapToValidatedEntity(Long deviceId, Message message, Message lastValidMessage) {
+        final MessageType messageType = this.messageValidator.validate(message, lastValidMessage);
         final MessageEntity validatedEntity = super.mapper.toEntity(deviceId, message);
         validatedEntity.setType(messageType);
         return validatedEntity;
@@ -70,7 +66,7 @@ public class MessageService
         MessageEntity currentLastMessage = super.mapper.toEntity(deviceId, lastValidMessage);
         MessageEntity currentMessage;
         for (Message fixingMessage : fixingMessages) {
-            currentMessage = this.mapToValidatedEntity(deviceId, fixingMessage);
+            currentMessage = this.mapToValidatedEntity(deviceId, fixingMessage, lastValidMessage);
             if (currentMessage.getType() == VALID) {
                 currentLastMessage = currentMessage;
             } else if (currentMessage.getType() == CORRECT) {

@@ -22,25 +22,33 @@ public final class MessageValidator {
 
     private final MessageValidationProperty property;
 
-    public MessageType validate(Message message) {
-        if (this.isValid(message)) {
+    public MessageType validate(Message current, Message previous) {
+        if (this.isValid(current, previous)) {
             return VALID;
-        } else if (this.isCorrect(message)) {
+        } else if (this.isCorrect(current, previous)) {
             return CORRECT;
+        } else if (this.isWrongOrder(current, previous)) {
+            return WRONG_ORDER;
         } else {
             return INCORRECT;
         }
     }
 
-    private boolean isValid(Message message) {
-        return isValidDateTime(message)
-                && this.isValidAmountSatellite(message)
-                && this.areValidCoordinates(message);
+    private boolean isValid(Message current, Message previous) {
+        return isValidDateTime(current)
+                && this.isValidAmountSatellite(current)
+                && this.areValidCoordinates(current)
+                && isValidOrder(current, previous);
     }
 
-    private boolean isCorrect(Message message) {
-        return isValidDateTime(message)
-                && !(this.isValidAmountSatellite(message) && this.areValidCoordinates(message));
+    private boolean isCorrect(Message current, Message previous) {
+        return isValidDateTime(current)
+                && !(this.isValidAmountSatellite(current) && this.areValidCoordinates(current))
+                && isValidOrder(current, previous);
+    }
+
+    private boolean isWrongOrder(Message research, Message last) {
+        return isValidDateTime(research) && !isValidOrder(research, last);
     }
 
     private boolean isValidAmountSatellite(Message message) {
@@ -62,5 +70,9 @@ public final class MessageValidator {
         final Instant researchDateTime = message.getDateTime();
         return researchDateTime.isAfter(MIN_ALLOWABLE_VALID_DATE_TIME)
                 && researchDateTime.isBefore(maxAllowableValidDateTime);
+    }
+
+    private static boolean isValidOrder(Message current, Message previous) {
+        return current.getDateTime().isAfter(previous.getDateTime());
     }
 }

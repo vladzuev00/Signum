@@ -63,9 +63,7 @@ CREATE TABLE message
 CREATE TABLE device_state
 (
     device_id            INTEGER PRIMARY KEY REFERENCES device ON DELETE CASCADE,
-    last_message_id      BIGINT REFERENCES message,
-    last_valid_latitude  FLOAT(4),
-    last_valid_longitude FLOAT(4)
+    last_message_id      BIGINT REFERENCES message
 );
 
 --- UNIQUE INDEXES
@@ -104,18 +102,11 @@ CREATE FUNCTION tr_update_device_state() RETURNS TRIGGER AS
 '
     BEGIN
 
-        IF NEW.type IN (''VALID'', ''CORRECT'') THEN
+        IF NEW.type IN (''VALID'') THEN
 
             UPDATE device_state
             SET last_message_id = NEW.id
             WHERE device_state.device_id = NEW.device_id;
-
-            IF NEW.type = ''VALID'' THEN
-                UPDATE device_state
-                SET last_valid_latitude  = NEW.latitude,
-                    last_valid_longitude = NEW.longitude
-                WHERE device_state.device_id = NEW.device_id;
-            END IF;
 
         END IF;
 
