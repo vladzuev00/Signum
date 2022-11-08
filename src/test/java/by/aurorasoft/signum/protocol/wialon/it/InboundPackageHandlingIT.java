@@ -306,7 +306,7 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
 
     private static void checkEqualsExceptId(MessageEntity expected, MessageEntity actual) {
         assertEquals(expected.getDevice().getId(), actual.getDevice().getId());
-        assertEquals(expected.getDateTime(), actual.getDateTime());
+        assertEquals(expected.getDatetime(), actual.getDatetime());
         assertEquals(expected.getLatitude(), actual.getLatitude(), 0.);
         assertEquals(expected.getLongitude(), actual.getLongitude(), 0.);
         assertEquals(expected.getSpeed(), actual.getSpeed());

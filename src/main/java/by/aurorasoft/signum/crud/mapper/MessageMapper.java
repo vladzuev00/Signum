@@ -36,7 +36,7 @@ public final class MessageMapper extends AbsMapperEntityExtDto<MessageEntity, Me
     protected Message create(MessageEntity entity) {
         return new Message(
                 entity.getId(),
-                entity.getDateTime(),
+                entity.getDatetime(),
                 new GpsCoordinate(entity.getLatitude(), entity.getLongitude()),
                 entity.getSpeed(),
                 entity.getCourse(),

@@ -15,7 +15,7 @@ public class Message implements AbstractDto<Long> {
     private static final Float NOT_DEFINED_PARAMETER_VALUE = -1F;
 
     Long id;
-    Instant dateTime;
+    Instant datetime;
     GpsCoordinate coordinate;
     int speed;
     int course;
@@ -24,10 +24,10 @@ public class Message implements AbstractDto<Long> {
     @Getter(NONE)
     Map<ParameterName, Float> parameterNamesToValues;
 
-    public Message(Instant dateTime, GpsCoordinate coordinate, int speed, int course, int altitude,
+    public Message(Instant datetime, GpsCoordinate coordinate, int speed, int course, int altitude,
                    int amountSatellite, Map<ParameterName, Float> parameterNamesToValues) {
         this.id = null;
-        this.dateTime = dateTime;
+        this.datetime = datetime;
         this.coordinate = coordinate;
         this.speed = speed;
         this.course = course;
@@ -36,10 +36,10 @@ public class Message implements AbstractDto<Long> {
         this.parameterNamesToValues = copyOf(parameterNamesToValues);
     }
 
-    public Message(Long id, Instant dateTime, GpsCoordinate coordinate, int speed, int course, int altitude,
+    public Message(Long id, Instant datetime, GpsCoordinate coordinate, int speed, int course, int altitude,
                    int amountSatellite, Map<ParameterName, Float> parameterNamesToValues) {
         this.id = id;
-        this.dateTime = dateTime;
+        this.datetime = datetime;
         this.coordinate = coordinate;
         this.speed = speed;
         this.course = course;
@@ -50,7 +50,7 @@ public class Message implements AbstractDto<Long> {
 
     public Message(Message other, GpsCoordinate coordinate) {
         this.id = other.id;
-        this.dateTime = other.dateTime;
+        this.datetime = other.datetime;
         this.coordinate = coordinate;
         this.speed = other.speed;
         this.course = other.course;

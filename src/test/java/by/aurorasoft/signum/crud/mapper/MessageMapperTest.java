@@ -68,7 +68,7 @@ public final class MessageMapperTest extends AbstractContextTest {
 
         assertEquals(255L, resultEntity.getId().longValue());
         assertEquals(25551L, resultEntity.getDevice().getId().longValue());
-        assertEquals(parse("2000-02-18T04:05:06Z"), resultEntity.getDateTime());
+        assertEquals(parse("2000-02-18T04:05:06Z"), resultEntity.getDatetime());
         assertEquals(4.4F, resultEntity.getLatitude(), 0.001);
         assertEquals(5.5F, resultEntity.getLongitude(), 0.001);
         assertEquals(6, resultEntity.getSpeed());

@@ -33,7 +33,7 @@ public final class MessageServiceTest extends AbstractContextTest {
         final MessageEntity actual = super.findEntityFromDB(MessageEntity.class, savedMessage.getId());
         final MessageEntity expected = MessageEntity.builder()
                 .device(super.entityManager.getReference(DeviceEntity.class, 25551L))
-                .dateTime(givenMessage.getDateTime())
+                .dateTime(givenMessage.getDatetime())
                 .latitude(5.5F)
                 .longitude(6.6F)
                 .speed(7)
@@ -68,7 +68,7 @@ public final class MessageServiceTest extends AbstractContextTest {
 
         final MessageEntity firstExpectedMessage = MessageEntity.builder()
                 .device(super.entityManager.getReference(DeviceEntity.class, 25551L))
-                .dateTime(givenMessages.get(0).getDateTime())
+                .dateTime(givenMessages.get(0).getDatetime())
                 .latitude(5.5F)
                 .longitude(6.6F)
                 .speed(7)
@@ -86,7 +86,7 @@ public final class MessageServiceTest extends AbstractContextTest {
 
         final MessageEntity secondExpectedMessage = MessageEntity.builder()
                 .device(super.entityManager.getReference(DeviceEntity.class, 25551L))
-                .dateTime(givenMessages.get(0).getDateTime())
+                .dateTime(givenMessages.get(0).getDatetime())
                 .latitude(5.5F)
                 .longitude(6.6F)
                 .speed(7)
@@ -105,7 +105,7 @@ public final class MessageServiceTest extends AbstractContextTest {
 
     private static void checkEqualsWithoutId(MessageEntity expected, MessageEntity actual) {
         assertEquals(expected.getDevice().getId(), actual.getDevice().getId());
-        assertTrue(Duration.between(expected.getDateTime(), actual.getDateTime()).getSeconds() < 1);
+        assertTrue(Duration.between(expected.getDatetime(), actual.getDatetime()).getSeconds() < 1);
         assertEquals(expected.getLatitude(), actual.getLatitude(), 0.001);
         assertEquals(expected.getLongitude(), actual.getLongitude(), 0.001);
         assertEquals(expected.getSpeed(), actual.getSpeed());

@@ -34,17 +34,33 @@ public final class MessageValidator {
         }
     }
 
+    public MessageType validate(Message message) {
+        if (this.isValid(message)) {
+            return VALID;
+        } else if (this.isCorrect(message)) {
+            return CORRECT;
+        } else {
+            return INCORRECT;
+        }
+    }
+
+    private boolean isValid(Message message) {
+        return isValidDateTime(message)
+                && this.isValidAmountSatellite(message)
+                && this.areValidCoordinates(message);
+    }
+
     private boolean isValid(Message current, Message previous) {
-        return isValidDateTime(current)
-                && this.isValidAmountSatellite(current)
-                && this.areValidCoordinates(current)
-                && isValidOrder(current, previous);
+        return this.isValid(current) && isValidOrder(current, previous);
+    }
+
+    private boolean isCorrect(Message message) {
+        return isValidDateTime(message)
+                && !(this.isValidAmountSatellite(message) && this.areValidCoordinates(message));
     }
 
     private boolean isCorrect(Message current, Message previous) {
-        return isValidDateTime(current)
-                && !(this.isValidAmountSatellite(current) && this.areValidCoordinates(current))
-                && isValidOrder(current, previous);
+        return this.isCorrect(current) && isValidOrder(current, previous);
     }
 
     private boolean isWrongOrder(Message research, Message last) {
@@ -67,12 +83,12 @@ public final class MessageValidator {
 
     private static boolean isValidDateTime(Message message) {
         final Instant maxAllowableValidDateTime = now().plusSeconds(15);
-        final Instant researchDateTime = message.getDateTime();
+        final Instant researchDateTime = message.getDatetime();
         return researchDateTime.isAfter(MIN_ALLOWABLE_VALID_DATE_TIME)
                 && researchDateTime.isBefore(maxAllowableValidDateTime);
     }
 
     private static boolean isValidOrder(Message current, Message previous) {
-        return current.getDateTime().isAfter(previous.getDateTime());
+        return current.getDatetime().isAfter(previous.getDatetime());
     }
 }

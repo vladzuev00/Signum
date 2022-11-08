@@ -48,7 +48,7 @@ public final class MessageRepositoryTest extends AbstractContextTest {
         super.checkQueryCount(1);
 
         assertEquals(25551, foundMessage.getId().longValue());
-        assertEquals(parse("2000-02-18T04:05:06Z"), foundMessage.getDateTime());
+        assertEquals(parse("2000-02-18T04:05:06Z"), foundMessage.getDatetime());
         assertEquals(4.4, foundMessage.getLatitude(), 0.001);
         assertEquals(5.5, foundMessage.getLongitude(), 0.001);
         assertEquals(10, foundMessage.getSpeed());

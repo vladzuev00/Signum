@@ -1,5 +1,6 @@
 package by.aurorasoft.signum.crud.model.entity;
 
+import by.nhorushko.distancecalculator.LatLngAlt;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import lombok.*;
 import org.hibernate.annotations.ColumnTransformer;
@@ -11,6 +12,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.time.Instant;
 
+import static by.aurorasoft.signum.crud.model.entity.MessageEntity.MessageType.VALID;
 import static by.aurorasoft.signum.utils.BoundingUtils.bound;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
@@ -30,7 +32,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Setter
 @Getter
 @Builder
-public class MessageEntity extends BaseEntity<Long> {
+public class MessageEntity extends BaseEntity<Long> implements LatLngAlt {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -42,7 +44,7 @@ public class MessageEntity extends BaseEntity<Long> {
     private DeviceEntity device;
 
     @Column(name = "time")
-    private Instant dateTime;
+    private Instant datetime;
 
     @Column(name = "latitude")
     private float latitude;
@@ -98,11 +100,23 @@ public class MessageEntity extends BaseEntity<Long> {
     @Type(type = "pgsql_enum")
     private MessageType type;
 
+    @Column(name = "gps_odometer")
+    @ColumnTransformer(
+            read = "gps_odometer::DECIMAL / 1000",
+            write = "? * 1000"
+    )
+    private double gpsOdometer;
+
+    @Override
+    public boolean isValid() {
+        return this.type == VALID;
+    }
+
     @Override
     public String toString() {
         return super.toString()
                 + "[deviceId = " + this.device.getId()
-                + ", dateTime = " + this.dateTime
+                + ", datetime = " + this.datetime
                 + ", latitude = " + this.latitude
                 + ", longitude = " + this.longitude
                 + ", speed = " + this.speed
@@ -115,22 +129,23 @@ public class MessageEntity extends BaseEntity<Long> {
                 + ", ecoAcceleration = " + this.ecoAcceleration
                 + ", ecoBraking = " + this.ecoBraking
                 + ", type = " + this.type
+                + ", gpsOdometer = " + this.gpsOdometer
                 + "]";
     }
 
     public enum MessageType {
         /**
-         * Valid coordinates and valid time
+         * Valid coordinates, valid time, valid order
          */
         VALID,
 
         /**
-         * Not valid coordinates and valid time
+         * Not valid coordinates, valid time, valid order
          */
         CORRECT,
 
         /**
-         * message contains time which is less than previous message
+         * any coordinates, valid time, not valid order
          */
         WRONG_ORDER,
 

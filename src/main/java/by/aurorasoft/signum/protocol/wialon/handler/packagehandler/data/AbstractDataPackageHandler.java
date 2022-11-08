@@ -10,6 +10,7 @@ import by.aurorasoft.signum.crud.service.message.MessageService;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.List;
+import java.util.Optional;
 
 public abstract class AbstractDataPackageHandler<T extends AbstractDataPackage> extends PackageHandler {
     private final MessageService messageService;
@@ -28,10 +29,11 @@ public abstract class AbstractDataPackageHandler<T extends AbstractDataPackage> 
         final T dataPackage = (T) requestPackage;
         final List<Message> messages = dataPackage.getMessages();
         final Device device = this.contextManager.findDevice(context);
-        final Message lastValidMessage = this.contextManager.findLastValidReceivedMessage(context);
-        final Message newLastValidMessage = this.messageService.saveAll(
-                device.getId(), lastValidMessage, messages);
-        this.contextManager.putLastMessage(context, newLastValidMessage);
+        final Optional<Message> optionalLastMessage = this.contextManager.findLastMessage(context);
+        optionalLastMessage
+                .flatMap(lastMessage -> this.messageService.saveAll(device.getId(), lastMessage, messages))
+                .or(() -> this.messageService.saveAll(device.getId(), messages))
+                .ifPresent(newLastMessage -> this.contextManager.putLastMessage(context, newLastMessage));
         context.writeAndFlush(this.createResponse(messages.size()));
     }
 

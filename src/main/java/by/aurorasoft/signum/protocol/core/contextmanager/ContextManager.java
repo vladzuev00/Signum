@@ -111,8 +111,8 @@ public final class ContextManager {
         putAttributeValue(context, ATTRIBUTE_KEY_LAST_VALID_RECEIVED_MESSAGE, message);
     }
 
-    public Message findLastValidReceivedMessage(ChannelHandlerContext context) {
-        return findAttributeValue(context, ATTRIBUTE_KEY_LAST_VALID_RECEIVED_MESSAGE);
+    public Optional<Message> findLastMessage(ChannelHandlerContext context) {
+        return Optional.of(findAttributeValue(context, ATTRIBUTE_KEY_LAST_VALID_RECEIVED_MESSAGE));
     }
 
     private static <ValueType> ValueType findAttributeValue(ChannelHandlerContext context,

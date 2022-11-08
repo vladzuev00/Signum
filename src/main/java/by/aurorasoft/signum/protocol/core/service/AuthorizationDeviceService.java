@@ -25,12 +25,12 @@ public class AuthorizationDeviceService {
         optionalDevice.ifPresent(device -> {
             this.contextManager.putDevice(context, device);
             this.connectionManager.add(context);
-            this.putLastMessage(context, device);
+            this.putLastMessageIfExist(context, device);
         });
         return optionalDevice;
     }
 
-    private void putLastMessage(ChannelHandlerContext context, Device device) {
+    private void putLastMessageIfExist(ChannelHandlerContext context, Device device) {
         this.messageService
                 .findLastReceivedMessage(device.getId())
                 .ifPresent(

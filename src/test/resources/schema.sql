@@ -56,14 +56,15 @@ CREATE TABLE message
     eco_acceleration SMALLINT     NOT NULL,
     eco_braking      SMALLINT     NOT NULL,
     type             message_type NOT NULL,
+    gps_odometer     INTEGER      NOT NULL,
     created_time     TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     deleted          BOOLEAN      NOT NULL DEFAULT false
 );
 
 CREATE TABLE device_state
 (
-    device_id            INTEGER PRIMARY KEY REFERENCES device ON DELETE CASCADE,
-    last_message_id      BIGINT REFERENCES message
+    device_id       INTEGER PRIMARY KEY REFERENCES device ON DELETE CASCADE,
+    last_message_id BIGINT REFERENCES message
 );
 
 --- UNIQUE INDEXES
