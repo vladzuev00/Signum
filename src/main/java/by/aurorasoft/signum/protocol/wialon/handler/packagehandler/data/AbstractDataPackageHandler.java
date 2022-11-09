@@ -31,8 +31,8 @@ public abstract class AbstractDataPackageHandler<T extends AbstractDataPackage> 
         final Device device = this.contextManager.findDevice(context);
         final Optional<Message> optionalLastMessage = this.contextManager.findLastMessage(context);
         optionalLastMessage
-                .flatMap(lastMessage -> this.messageService.saveAll(device.getId(), lastMessage, messages))
-                .or(() -> this.messageService.saveAll(device.getId(), messages))
+                .map(lastMessage -> this.messageService.saveAll(device.getId(), lastMessage, messages))
+                .orElse(this.messageService.saveAll(device.getId(), messages))
                 .ifPresent(newLastMessage -> this.contextManager.putLastMessage(context, newLastMessage));
         context.writeAndFlush(this.createResponse(messages.size()));
     }

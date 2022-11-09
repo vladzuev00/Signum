@@ -16,7 +16,6 @@ import static by.aurorasoft.signum.crud.model.dto.Message.ParameterName.*;
 
 @Component
 public final class MessageMapper extends AbsMapperEntityExtDto<MessageEntity, Message, Long, DeviceEntity> {
-
     public MessageMapper(ModelMapper modelMapper, EntityManager entityManager) {
         super(modelMapper, MessageEntity.class, Message.class, entityManager, DeviceEntity.class);
     }

@@ -17,7 +17,7 @@ import static org.junit.Assert.assertSame;
 public final class MessageValidatorTest extends AbstractContextTest {
 
     @Autowired
-    private MessageValidator validator;
+    private MessageTypeIdentifier validator;
 
     @Test
     public void messageShouldBeValid() {

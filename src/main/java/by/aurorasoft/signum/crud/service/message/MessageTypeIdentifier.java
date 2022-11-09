@@ -17,16 +17,22 @@ import static java.time.Instant.parse;
 
 @Component
 @RequiredArgsConstructor
-public final class MessageValidator {
+public final class MessageTypeIdentifier {
     private static final Instant MIN_ALLOWABLE_VALID_DATE_TIME = parse("2020-01-01T00:00:00Z");
 
     private final MessageValidationProperty property;
 
+    public MessageType validate(Message message) {
+        if (this.isValid(message)) {
+            return VALID;
+        } else {
+            return INCORRECT;
+        }
+    }
+
     public MessageType validate(Message current, Message previous) {
         if (this.isValid(current, previous)) {
             return VALID;
-        } else if (this.isCorrect(current, previous)) {
-            return CORRECT;
         } else if (this.isWrongOrder(current, previous)) {
             return WRONG_ORDER;
         } else {
@@ -34,14 +40,9 @@ public final class MessageValidator {
         }
     }
 
-    public MessageType validate(Message message) {
-        if (this.isValid(message)) {
-            return VALID;
-        } else if (this.isCorrect(message)) {
-            return CORRECT;
-        } else {
-            return INCORRECT;
-        }
+    boolean isNeedToBeFixed(Message research) {
+        return isValidDateTime(research)
+                && !(this.isValidAmountSatellite(research) && this.areValidCoordinates(research));
     }
 
     private boolean isValid(Message message) {

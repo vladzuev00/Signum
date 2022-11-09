@@ -140,11 +140,6 @@ public class MessageEntity extends BaseEntity<Long> implements LatLngAlt {
         VALID,
 
         /**
-         * Not valid coordinates, valid time, valid order
-         */
-        CORRECT,
-
-        /**
          * any coordinates, valid time, not valid order
          */
         WRONG_ORDER,
