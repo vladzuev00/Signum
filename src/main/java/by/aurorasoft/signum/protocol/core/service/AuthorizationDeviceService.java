@@ -32,7 +32,7 @@ public class AuthorizationDeviceService {
 
     private void putLastMessageIfExist(ChannelHandlerContext context, Device device) {
         this.messageService
-                .findLastReceivedMessage(device.getId())
+                .findLastMessage(device.getId())
                 .ifPresent(
                         message -> this.contextManager.putLastMessage(context, message));
     }

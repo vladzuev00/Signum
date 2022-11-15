@@ -13,6 +13,11 @@ final class GPSOdometerCalculator implements MessagePropertyCalculator {
     private final DistanceCalculator distanceCalculator;
 
     @Override
+    public void calculate(MessageEntity current) {
+        current.setGpsOdometer(0);
+    }
+
+    @Override
     public void calculate(MessageEntity last, MessageEntity current) {
         final double gpsOdometer = this.distanceCalculator
                 .calculateDistance(last, current, this.distanceCalculatorSettings);

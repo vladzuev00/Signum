@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static by.aurorasoft.signum.crud.model.dto.Message.ParameterName.*;
+import static java.lang.Double.parseDouble;
 import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 import static java.lang.Math.abs;
@@ -155,14 +156,14 @@ public final class MessageComponentsParser {
     }
 
 
-    public Map<ParameterName, Float> parseParameters() {
+    public Map<ParameterName, Double> parseParameters() {
         final String parameters = this.matcher.group(GROUP_NUMBER_PARAMETERS);
         return stream(parameters.split(DELIMITER_PARAMETERS))
                 .map(parameter -> parameter.split(DELIMITER_PARAMETER_COMPONENTS))
                 .filter(components -> PARAMETER_IDENTIFICATION_TO_NAME_MAP.containsKey(components[0]))
                 .collect(toMap(
                         components -> PARAMETER_IDENTIFICATION_TO_NAME_MAP.get(components[COMPONENT_INDEX_PARAMETER_NAME]),
-                        components -> parseFloat(components[COMPONENT_INDEX_PARAMETER_VALUE])));
+                        components -> parseDouble(components[COMPONENT_INDEX_PARAMETER_VALUE])));
     }
 
     private float parseGpsCoordinate(int groupNumberDegrees, int groupNumberMinute,

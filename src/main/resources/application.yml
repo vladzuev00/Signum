@@ -1,7 +1,7 @@
 netty:
   server:
     host: localhost
-    port: 6001
+    port: 6000
     connectionThreads: 1
     dataProcessThreads: 10
     timeoutSeconds: 300

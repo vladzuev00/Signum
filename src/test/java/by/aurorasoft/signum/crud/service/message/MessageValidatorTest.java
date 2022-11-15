@@ -24,7 +24,7 @@ public final class MessageValidatorTest extends AbstractContextTest {
         final Message givenMessage = new Message(now(), new Message.GpsCoordinate(5.5F, 6.6F),
                 7, 8, 10, 11, Map.of(HDOP, 6F, VDOP, 4F, PDOP, -1F));
 
-        final MessageType actual = this.validator.validate(givenMessage);
+        final MessageType actual = this.validator.identify(givenMessage);
         assertSame(VALID, actual);
     }
 
@@ -33,7 +33,7 @@ public final class MessageValidatorTest extends AbstractContextTest {
         final Message givenMessage = new Message(now(), new Message.GpsCoordinate(5.5F, 6.6F),
                 7, 8, 10, 2, Map.of(HDOP, 6F, VDOP, 4F, PDOP, -1F));
 
-        final MessageType actual = this.validator.validate(givenMessage);
+        final MessageType actual = this.validator.identify(givenMessage);
         assertSame(CORRECT, actual);
     }
 
@@ -42,7 +42,7 @@ public final class MessageValidatorTest extends AbstractContextTest {
         final Message givenMessage = new Message(now(), new Message.GpsCoordinate(5.5F, 6.6F),
                 7, 8, 10, 11, Map.of(HDOP, 8F, VDOP, 4F, PDOP, -1F));
 
-        final MessageType actual = this.validator.validate(givenMessage);
+        final MessageType actual = this.validator.identify(givenMessage);
         assertSame(CORRECT, actual);
     }
 
@@ -51,7 +51,7 @@ public final class MessageValidatorTest extends AbstractContextTest {
         final Message givenMessage = new Message(MIN, new Message.GpsCoordinate(5.5F, 6.6F),
                 7, 8, 10, 3, Map.of(HDOP, 6F, VDOP, 4F, PDOP, -1F));
 
-        final MessageType actual = this.validator.validate(givenMessage);
+        final MessageType actual = this.validator.identify(givenMessage);
         assertSame(INCORRECT, actual);
     }
 }

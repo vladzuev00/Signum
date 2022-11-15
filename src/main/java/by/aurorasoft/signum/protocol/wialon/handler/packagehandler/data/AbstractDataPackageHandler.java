@@ -1,26 +1,21 @@
 package by.aurorasoft.signum.protocol.wialon.handler.packagehandler.data;
 
-import by.aurorasoft.signum.crud.model.dto.Device;
 import by.aurorasoft.signum.crud.model.dto.Message;
-import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
+import by.aurorasoft.signum.protocol.core.service.ReceivingMessageService;
 import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.PackageHandler;
 import by.aurorasoft.signum.protocol.wialon.model.AbstractDataPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
-import by.aurorasoft.signum.crud.service.message.MessageService;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.List;
-import java.util.Optional;
 
 public abstract class AbstractDataPackageHandler<T extends AbstractDataPackage> extends PackageHandler {
-    private final MessageService messageService;
-    private final ContextManager contextManager;
+    private final ReceivingMessageService receivingMessageService;
 
     public AbstractDataPackageHandler(Class<T> packageType, PackageHandler nextHandler,
-                                      MessageService messageService, ContextManager contextManager) {
+                                      ReceivingMessageService receivingMessageService) {
         super(packageType, nextHandler);
-        this.messageService = messageService;
-        this.contextManager = contextManager;
+        this.receivingMessageService = receivingMessageService;
     }
 
     @SuppressWarnings("unchecked")
@@ -28,12 +23,7 @@ public abstract class AbstractDataPackageHandler<T extends AbstractDataPackage> 
     protected final void doHandle(Package requestPackage, ChannelHandlerContext context) {
         final T dataPackage = (T) requestPackage;
         final List<Message> messages = dataPackage.getMessages();
-        final Device device = this.contextManager.findDevice(context);
-        final Optional<Message> optionalLastMessage = this.contextManager.findLastMessage(context);
-        optionalLastMessage
-                .map(lastMessage -> this.messageService.saveAll(device.getId(), lastMessage, messages))
-                .orElse(this.messageService.saveAll(device.getId(), messages))
-                .ifPresent(newLastMessage -> this.contextManager.putLastMessage(context, newLastMessage));
+        this.receivingMessageService.receive(context, messages);
         context.writeAndFlush(this.createResponse(messages.size()));
     }
 

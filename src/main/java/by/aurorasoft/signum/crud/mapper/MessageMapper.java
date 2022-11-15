@@ -52,19 +52,25 @@ public final class MessageMapper extends AbsMapperEntityExtDto<MessageEntity, Me
 
     private static void mapParameters(Message source, MessageEntity destination) {
         destination.setGsmLevel(source.getParameter(GSM_LEVEL).intValue());
-        destination.setOnboardVoltage(source.getParameter(VOLTAGE));
-        destination.setEcoCornering(source.getParameter(CORNER_ACCELERATION));
-        destination.setEcoAcceleration(source.getParameter(ACCELERATION_UP));
-        destination.setEcoBraking(source.getParameter(ACCELERATION_DOWN));
+        destination.setOnboardVoltage(source.getParameter(VOLTAGE).floatValue());
+        destination.setEcoCornering(source.getParameter(CORNER_ACCELERATION).floatValue());
+        destination.setEcoAcceleration(source.getParameter(ACCELERATION_UP).intValue());
+        destination.setEcoBraking(source.getParameter(ACCELERATION_DOWN).intValue());
+        destination.setGpsOdometer(source.getParameter(GPS_ODOMETER));
+        destination.setIgnition(source.getParameter(IGNITION).intValue());
+        destination.setEngineTime(source.getParameter(ENGINE_TIME).intValue());
     }
 
-    private static Map<ParameterName, Float> mapParameters(MessageEntity entity) {
+    private static Map<ParameterName, Double> mapParameters(MessageEntity entity) {
         return Map.of(
-                GSM_LEVEL, (float) entity.getGsmLevel(),
-                VOLTAGE, entity.getOnboardVoltage(),
-                CORNER_ACCELERATION, entity.getEcoCornering(),
-                ACCELERATION_UP, entity.getEcoAcceleration(),
-                ACCELERATION_DOWN, entity.getEcoBraking()
+                GSM_LEVEL, (double) entity.getGsmLevel(),
+                VOLTAGE, (double) entity.getOnboardVoltage(),
+                CORNER_ACCELERATION, (double) entity.getEcoCornering(),
+                ACCELERATION_UP, (double) entity.getEcoAcceleration(),
+                ACCELERATION_DOWN, (double) entity.getEcoBraking(),
+                GPS_ODOMETER, entity.getGpsOdometer(),
+                IGNITION, (double) entity.getIgnition(),
+                ENGINE_TIME, (double) entity.getEngineTime()
         );
     }
 }

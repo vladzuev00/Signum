@@ -12,7 +12,7 @@ import static lombok.AccessLevel.NONE;
 
 @Value
 public class Message implements AbstractDto<Long> {
-    private static final Float NOT_DEFINED_PARAMETER_VALUE = -1F;
+    private static final Double NOT_DEFINED_PARAMETER_VALUE = -1.;
 
     Long id;
     Instant datetime;
@@ -22,10 +22,10 @@ public class Message implements AbstractDto<Long> {
     int altitude;
     int amountSatellite;
     @Getter(NONE)
-    Map<ParameterName, Float> parameterNamesToValues;
+    Map<ParameterName, Double> parameterNamesToValues;
 
     public Message(Instant datetime, GpsCoordinate coordinate, int speed, int course, int altitude,
-                   int amountSatellite, Map<ParameterName, Float> parameterNamesToValues) {
+                   int amountSatellite, Map<ParameterName, Double> parameterNamesToValues) {
         this.id = null;
         this.datetime = datetime;
         this.coordinate = coordinate;
@@ -37,7 +37,7 @@ public class Message implements AbstractDto<Long> {
     }
 
     public Message(Long id, Instant datetime, GpsCoordinate coordinate, int speed, int course, int altitude,
-                   int amountSatellite, Map<ParameterName, Float> parameterNamesToValues) {
+                   int amountSatellite, Map<ParameterName, Double> parameterNamesToValues) {
         this.id = id;
         this.datetime = datetime;
         this.coordinate = coordinate;
@@ -59,7 +59,7 @@ public class Message implements AbstractDto<Long> {
         this.parameterNamesToValues = copyOf(other.parameterNamesToValues);
     }
 
-    public Float getParameter(ParameterName parameterName) {
+    public Double getParameter(ParameterName parameterName) {
         return this.parameterNamesToValues.getOrDefault(parameterName, NOT_DEFINED_PARAMETER_VALUE);
     }
 
@@ -77,6 +77,9 @@ public class Message implements AbstractDto<Long> {
         ACCELERATION_DOWN,
         HDOP,
         VDOP,
-        PDOP
+        PDOP,
+        GPS_ODOMETER,
+        IGNITION,
+        ENGINE_TIME
     }
 }

@@ -107,6 +107,12 @@ public class MessageEntity extends BaseEntity<Long> implements LatLngAlt {
     )
     private double gpsOdometer;
 
+    @Column(name = "ignition")
+    private int ignition;
+
+    @Column(name = "engine_time")
+    private long engineTime;
+
     @Override
     public boolean isValid() {
         return this.type == VALID;
@@ -130,6 +136,8 @@ public class MessageEntity extends BaseEntity<Long> implements LatLngAlt {
                 + ", ecoBraking = " + this.ecoBraking
                 + ", type = " + this.type
                 + ", gpsOdometer = " + this.gpsOdometer
+                + ", ignition = " + this.ignition
+                + ", engineTime = " + this.engineTime
                 + "]";
     }
 
@@ -140,12 +148,17 @@ public class MessageEntity extends BaseEntity<Long> implements LatLngAlt {
         VALID,
 
         /**
-         * any coordinates, valid time, not valid order
+         * Not valid coordinate, valid time, valid order
+         */
+        CORRECT,
+
+        /**
+         * Any coordinates, valid time, not valid order
          */
         WRONG_ORDER,
 
         /**
-         * other cases
+         * Other cases
          */
         INCORRECT
     }

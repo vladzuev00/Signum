@@ -1,4 +1,4 @@
-package by.aurorasoft.signum.protocol.core.service.message;
+package by.aurorasoft.signum.crud.service.message;
 
 import by.aurorasoft.signum.config.property.MessageValidationProperty;
 import by.aurorasoft.signum.crud.model.dto.Message;
@@ -9,15 +9,15 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 
 import static by.aurorasoft.signum.crud.model.dto.Message.ParameterName.*;
-import static java.lang.Float.compare;
+import static java.lang.Double.compare;
 import static java.time.Instant.now;
 import static java.time.Instant.parse;
 
 @Component
 @RequiredArgsConstructor
-public final class MessagePropertyValidator {
+class MessagePropertyValidator {
     private static final Instant MIN_ALLOWABLE_VALID_DATE_TIME = parse("2020-01-01T00:00:00Z");
-    private static final int DELTA_IN_SECONDS_FROM_NOW_MAX_ALLOWABLE_VALID_DATE_TIME = 15;
+    private static final int DELTA_SECONDS_FROM_NOW_MAX_ALLOWABLE_VALID_DATE_TIME = 15;
 
     private final MessageValidationProperty property;
 
@@ -31,9 +31,9 @@ public final class MessagePropertyValidator {
                 && this.isValidParameter(research, PDOP);
     }
 
-    public static boolean isValidDateTime(Message research) {
+    public boolean isValidDateTime(Message research) {
         final Instant maxAllowableValidDateTime = now()
-                .plusSeconds(DELTA_IN_SECONDS_FROM_NOW_MAX_ALLOWABLE_VALID_DATE_TIME);
+                .plusSeconds(DELTA_SECONDS_FROM_NOW_MAX_ALLOWABLE_VALID_DATE_TIME);
         final Instant researchDateTime = research.getDatetime();
         return researchDateTime.isAfter(MIN_ALLOWABLE_VALID_DATE_TIME)
                 && researchDateTime.isBefore(maxAllowableValidDateTime);

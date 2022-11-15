@@ -1,8 +1,7 @@
 package by.aurorasoft.signum.protocol.wialon.handler.packagehandler.data;
 
-import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
+import by.aurorasoft.signum.protocol.core.service.ReceivingMessageService;
 import by.aurorasoft.signum.protocol.wialon.model.DataPackage;
-import by.aurorasoft.signum.crud.service.message.MessageService;
 import org.springframework.stereotype.Component;
 
 import static java.lang.String.format;
@@ -11,9 +10,8 @@ import static java.lang.String.format;
 public final class DataPackageHandler extends AbstractDataPackageHandler<DataPackage> {
     private static final String RESPONSE_TEMPLATE = "#AD#%d\r\n";
 
-    public DataPackageHandler(BlackBoxPackageHandler nextHandler, MessageService messageService,
-                              ContextManager contextWorker) {
-        super(DataPackage.class, nextHandler, messageService, contextWorker);
+    public DataPackageHandler(BlackBoxPackageHandler nextHandler, ReceivingMessageService receivingMessageService) {
+        super(DataPackage.class, nextHandler, receivingMessageService);
     }
 
     @Override

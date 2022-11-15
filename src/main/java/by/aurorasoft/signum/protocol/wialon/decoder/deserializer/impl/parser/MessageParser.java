@@ -13,7 +13,7 @@ public final class MessageParser {
 
     public Message parse(String source) {
         final MessageComponentsParser parser = new MessageComponentsParser(source);
-        final Map<ParameterName, Float> parameters = parser.parseParameters();
+        final Map<ParameterName, Double> parameters = parser.parseParameters();
         parameters.computeIfPresent(GSM_LEVEL,
                 (parameterName, beforeConvertingValue) -> beforeConvertingValue * 100 / 6);
         return new Message(parser.parseDateTime(), parser.parseCoordinate(), parser.parseSpeed(),
