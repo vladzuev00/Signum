@@ -6,7 +6,7 @@ import by.aurorasoft.signum.crud.model.dto.Message.GpsCoordinate;
 import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import by.aurorasoft.signum.protocol.wialon.model.AbstractDataPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
-import by.aurorasoft.signum.crud.service.message.MessageService;
+import by.aurorasoft.signum.crud.service.MessageService;
 
 import io.netty.channel.ChannelHandlerContext;
 import org.junit.Before;

@@ -1,7 +1,7 @@
 package by.aurorasoft.signum.protocol.wialon.handler.packagehandler.data;
 
 import by.aurorasoft.signum.crud.model.dto.Message;
-import by.aurorasoft.signum.protocol.core.service.ReceivingMessageService;
+import by.aurorasoft.signum.protocol.core.service.receivemessage.ReceivingMessageService;
 import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.PackageHandler;
 import by.aurorasoft.signum.protocol.wialon.model.AbstractDataPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;

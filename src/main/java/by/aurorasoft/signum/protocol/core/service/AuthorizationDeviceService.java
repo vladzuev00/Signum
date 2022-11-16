@@ -2,7 +2,7 @@ package by.aurorasoft.signum.protocol.core.service;
 
 import by.aurorasoft.signum.crud.model.dto.Device;
 import by.aurorasoft.signum.crud.service.DeviceService;
-import by.aurorasoft.signum.crud.service.message.MessageService;
+import by.aurorasoft.signum.crud.service.MessageService;
 import by.aurorasoft.signum.protocol.core.connectionmanager.ConnectionManager;
 import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import io.netty.channel.ChannelHandlerContext;
