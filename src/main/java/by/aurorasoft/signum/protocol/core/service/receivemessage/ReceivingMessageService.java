@@ -24,6 +24,15 @@ public final class ReceivingMessageService {
     private final MessageTypeIdentifier typeIdentifier;
     private final List<MessagePropertyCalculator> propertyCalculators;
 
+    /**
+     * Set 'type' in given messages, fix 'CORRECT' messages to 'VALID'
+     * taking GPS coordinates and amount of satellites from last valid message,
+     * calculate additional calculated properties for each message.
+     * If last valid message isn't exist, then 'CORRECT' messages are saved as 'INCORRECT'
+     * @param context - current connection's context.
+     * @param messages - messages, which were created by data from tracker:
+     *                 without additional properties to be calculated.
+     */
     public void receive(ChannelHandlerContext context, List<Message> messages) {
         final Optional<Message> optionalPreviousMessage = this.contextManager.findPreviousMessage(context);
         final Optional<Message> optionalNewPreviousMessage = optionalPreviousMessage

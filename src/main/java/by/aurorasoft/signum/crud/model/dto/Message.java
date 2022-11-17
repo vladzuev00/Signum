@@ -3,6 +3,7 @@ package by.aurorasoft.signum.crud.model.dto;
 import by.aurorasoft.signum.crud.model.entity.MessageEntity.MessageType;
 import by.nhorushko.crudgeneric.v2.domain.AbstractDto;
 import by.nhorushko.distancecalculator.LatLngAlt;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Value;
 
@@ -13,7 +14,8 @@ import static by.aurorasoft.signum.crud.model.entity.MessageEntity.MessageType.V
 import static java.util.Map.copyOf;
 
 @Data
-public class Message implements AbstractDto<Long>, LatLngAlt {
+@Builder
+public final class Message implements AbstractDto<Long>, LatLngAlt {
     private static final Double NOT_EXISTING_PARAMETER_VALUE = -1.;
 
     private Long id;

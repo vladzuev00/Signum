@@ -1,6 +1,5 @@
 package by.aurorasoft.signum.crud.model.entity;
 
-import by.nhorushko.distancecalculator.LatLngAlt;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import lombok.*;
 import org.hibernate.annotations.ColumnTransformer;
@@ -12,7 +11,6 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.time.Instant;
 
-import static by.aurorasoft.signum.crud.model.entity.MessageEntity.MessageType.VALID;
 import static by.aurorasoft.signum.utils.BoundingUtils.bound;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
@@ -32,7 +30,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Setter
 @Getter
 @Builder
-public class MessageEntity extends BaseEntity<Long> implements LatLngAlt {
+public class MessageEntity extends BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -115,11 +113,6 @@ public class MessageEntity extends BaseEntity<Long> implements LatLngAlt {
 
     @Column(name = "shock")
     private double shock;
-
-    @Override
-    public boolean isValid() {
-        return this.type == VALID;
-    }
 
     @Override
     public String toString() {

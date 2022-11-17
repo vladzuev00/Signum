@@ -1,7 +1,9 @@
 package by.aurorasoft.signum.protocol.core.service;
 
 import by.aurorasoft.signum.crud.model.dto.Device;
+import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.crud.service.DeviceService;
+import by.aurorasoft.signum.crud.service.MessageService;
 import by.aurorasoft.signum.protocol.core.connectionmanager.ConnectionManager;
 import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import io.netty.channel.ChannelHandlerContext;
@@ -34,6 +36,9 @@ public final class AuthorizationDeviceServiceTest {
     @Mock
     private ConnectionManager mockedConnectionManager;
 
+    @Mock
+    private MessageService mockedMessageService;
+
     private AuthorizationDeviceService authorizationDeviceService;
 
     @Captor
@@ -45,41 +50,92 @@ public final class AuthorizationDeviceServiceTest {
     @Captor
     private ArgumentCaptor<Device> deviceArgumentCaptor;
 
+    @Captor
+    private ArgumentCaptor<Long> longArgumentCaptor;
+
+    @Captor
+    private ArgumentCaptor<Message> messageArgumentCaptor;
+
     @Before
     public void initializeAuthorizationDeviceService() {
         this.authorizationDeviceService = new AuthorizationDeviceService(
-                this.mockedContextManager, this.mockedDeviceService, this.mockedConnectionManager);
+                this.mockedContextManager, this.mockedDeviceService, this.mockedConnectionManager,
+                this.mockedMessageService);
     }
 
     @Test
-    public void deviceShouldAuthorize() {
-       final Device givenDevice = new Device(255L, "11111222223333344444", "334445566", TRACKER);
+    public void deviceShouldBeAuthorizedAndPreviousMessageShouldBePutInContext() {
+        final Device givenDevice = new Device(255L, "11111222223333344444", "334445566", TRACKER);
+        when(this.mockedDeviceService.findByImei(anyString())).thenReturn(Optional.of(givenDevice));
 
-       when(this.mockedDeviceService.findByImei(anyString())).thenReturn(Optional.of(givenDevice));
+        final Message givenLastMessage = mock(Message.class);
+        when(this.mockedMessageService.findLastMessage(anyLong())).thenReturn(Optional.of(givenLastMessage));
 
-       final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
-       final Optional<Device> optionalActual = this.authorizationDeviceService
-               .authorize(givenDevice.getImei(), givenContext);
-       assertTrue(optionalActual.isPresent());
-       final Device actual = optionalActual.get();
-       assertEquals(givenDevice, actual);
+        final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
+        final Optional<Device> optionalActual = this.authorizationDeviceService
+                .authorize(givenDevice.getImei(), givenContext);
+        assertTrue(optionalActual.isPresent());
+        final Device actual = optionalActual.get();
+        assertEquals(givenDevice, actual);
 
-       verify(this.mockedContextManager, times(1))
-               .putDeviceImei(this.contextArgumentCaptor.capture(), this.stringArgumentCaptor.capture());
-       verify(this.mockedDeviceService, times(1))
-               .findByImei(this.stringArgumentCaptor.capture());
-       verify(this.mockedContextManager, times(1))
-               .putDevice(this.contextArgumentCaptor.capture(), this.deviceArgumentCaptor.capture());
-       verify(this.mockedConnectionManager, times(1))
-               .add(this.contextArgumentCaptor.capture());
+        verify(this.mockedContextManager, times(1))
+                .putDeviceImei(this.contextArgumentCaptor.capture(), this.stringArgumentCaptor.capture());
+        verify(this.mockedDeviceService, times(1))
+                .findByImei(this.stringArgumentCaptor.capture());
+        verify(this.mockedContextManager, times(1))
+                .putDevice(this.contextArgumentCaptor.capture(), this.deviceArgumentCaptor.capture());
+        verify(this.mockedConnectionManager, times(1))
+                .add(this.contextArgumentCaptor.capture());
+        verify(this.mockedMessageService, times(1))
+                .findLastMessage(this.longArgumentCaptor.capture());
+        verify(this.mockedContextManager, times(1))
+                .putLastMessage(this.contextArgumentCaptor.capture(), this.messageArgumentCaptor.capture());
 
-       assertEquals(List.of(givenContext, givenContext, givenContext), this.contextArgumentCaptor.getAllValues());
-       assertEquals(List.of(givenDevice.getImei(), givenDevice.getImei()), this.stringArgumentCaptor.getAllValues());
-       assertEquals(givenDevice, this.deviceArgumentCaptor.getValue());
+        assertEquals(List.of(givenContext, givenContext, givenContext, givenContext),
+                this.contextArgumentCaptor.getAllValues());
+        assertEquals(List.of(givenDevice.getImei(), givenDevice.getImei()),
+                this.stringArgumentCaptor.getAllValues());
+        assertEquals(givenDevice, this.deviceArgumentCaptor.getValue());
+        assertEquals(givenDevice.getId(), this.longArgumentCaptor.getValue());
+        assertEquals(givenLastMessage, this.messageArgumentCaptor.getValue());
     }
 
     @Test
-    public void deviceShouldNotAuthorize() {
+    public void deviceShouldBeAuthorizedAndPreviousMessageShouldNotBePutInContextBecauseOfNotExist() {
+        final Device givenDevice = new Device(255L, "11111222223333344444", "334445566", TRACKER);
+        when(this.mockedDeviceService.findByImei(anyString())).thenReturn(Optional.of(givenDevice));
+
+        when(this.mockedMessageService.findLastMessage(anyLong())).thenReturn(empty());
+
+        final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
+        final Optional<Device> optionalActual = this.authorizationDeviceService
+                .authorize(givenDevice.getImei(), givenContext);
+        assertTrue(optionalActual.isPresent());
+        final Device actual = optionalActual.get();
+        assertEquals(givenDevice, actual);
+
+        verify(this.mockedContextManager, times(1))
+                .putDeviceImei(this.contextArgumentCaptor.capture(), this.stringArgumentCaptor.capture());
+        verify(this.mockedDeviceService, times(1))
+                .findByImei(this.stringArgumentCaptor.capture());
+        verify(this.mockedContextManager, times(1))
+                .putDevice(this.contextArgumentCaptor.capture(), this.deviceArgumentCaptor.capture());
+        verify(this.mockedConnectionManager, times(1))
+                .add(this.contextArgumentCaptor.capture());
+        verify(this.mockedMessageService, times(1))
+                .findLastMessage(this.longArgumentCaptor.capture());
+        verify(this.mockedContextManager, times(0))
+                .putLastMessage(any(ChannelHandlerContext.class), any(Message.class));
+
+        assertEquals(List.of(givenContext, givenContext, givenContext),
+                this.contextArgumentCaptor.getAllValues());
+        assertEquals(List.of(givenDevice.getImei(), givenDevice.getImei()),
+                this.stringArgumentCaptor.getAllValues());
+        assertEquals(givenDevice, this.deviceArgumentCaptor.getValue());
+    }
+
+    @Test
+    public void deviceShouldNotBeAuthorized() {
         when(this.mockedDeviceService.findByImei(anyString())).thenReturn(empty());
 
         final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
@@ -91,6 +147,14 @@ public final class AuthorizationDeviceServiceTest {
                 .putDeviceImei(this.contextArgumentCaptor.capture(), this.stringArgumentCaptor.capture());
         verify(this.mockedDeviceService, times(1))
                 .findByImei(this.stringArgumentCaptor.capture());
+        verify(this.mockedContextManager, times(0))
+                .putDevice(any(ChannelHandlerContext.class), any(Device.class));
+        verify(this.mockedConnectionManager, times(0))
+                .add(any(ChannelHandlerContext.class));
+        verify(this.mockedMessageService, times(0))
+                .findLastMessage(anyLong());
+        verify(this.mockedContextManager, times(0))
+                .putLastMessage(any(ChannelHandlerContext.class), any(Message.class));
 
         assertSame(givenContext, this.contextArgumentCaptor.getValue());
         assertEquals(List.of(givenImei, givenImei), this.stringArgumentCaptor.getAllValues());

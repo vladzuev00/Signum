@@ -15,7 +15,8 @@ import java.util.Map;
 import static by.aurorasoft.signum.crud.model.dto.Message.ParameterName.*;
 
 @Component
-public final class MessageMapper extends AbsMapperEntityExtDto<MessageEntity, Message, Long, DeviceEntity> {
+public final class MessageMapper
+        extends AbsMapperEntityExtDto<MessageEntity, Message, Long, DeviceEntity> {
     public MessageMapper(ModelMapper modelMapper, EntityManager entityManager) {
         super(modelMapper, MessageEntity.class, Message.class, entityManager, DeviceEntity.class);
     }
@@ -41,7 +42,12 @@ public final class MessageMapper extends AbsMapperEntityExtDto<MessageEntity, Me
                 entity.getCourse(),
                 entity.getAltitude(),
                 entity.getAmountSatellite(),
-                mapParameters(entity));
+                mapParameters(entity),
+                entity.getType(),
+                entity.getGpsOdometer(),
+                entity.getIgnition(),
+                entity.getEngineTime(),
+                entity.getShock());
     }
 
     private static void mapGpsCoordinate(Message source, MessageEntity destination) {
@@ -54,11 +60,8 @@ public final class MessageMapper extends AbsMapperEntityExtDto<MessageEntity, Me
         destination.setGsmLevel(source.getParameter(GSM_LEVEL).intValue());
         destination.setOnboardVoltage(source.getParameter(VOLTAGE).floatValue());
         destination.setEcoCornering(source.getParameter(CORNER_ACCELERATION).floatValue());
-        destination.setEcoAcceleration(source.getParameter(ACCELERATION_UP).intValue());
-        destination.setEcoBraking(source.getParameter(ACCELERATION_DOWN).intValue());
-        destination.setGpsOdometer(source.getParameter(GPS_ODOMETER));
-        destination.setIgnition(source.getParameter(IGNITION).intValue());
-        destination.setEngineTime(source.getParameter(ENGINE_TIME).intValue());
+        destination.setEcoAcceleration(source.getParameter(ACCELERATION_UP).floatValue());
+        destination.setEcoBraking(source.getParameter(ACCELERATION_DOWN).floatValue());
     }
 
     private static Map<ParameterName, Double> mapParameters(MessageEntity entity) {
@@ -67,10 +70,7 @@ public final class MessageMapper extends AbsMapperEntityExtDto<MessageEntity, Me
                 VOLTAGE, (double) entity.getOnboardVoltage(),
                 CORNER_ACCELERATION, (double) entity.getEcoCornering(),
                 ACCELERATION_UP, (double) entity.getEcoAcceleration(),
-                ACCELERATION_DOWN, (double) entity.getEcoBraking(),
-                GPS_ODOMETER, entity.getGpsOdometer(),
-                IGNITION, (double) entity.getIgnition(),
-                ENGINE_TIME, (double) entity.getEngineTime()
+                ACCELERATION_DOWN, (double) entity.getEcoBraking()
         );
     }
 }

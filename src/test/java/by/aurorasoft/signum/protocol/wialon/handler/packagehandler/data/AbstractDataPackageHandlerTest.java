@@ -27,97 +27,97 @@ import static org.junit.Assert.assertSame;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
-public final class AbstractDataPackageHandlerTest {
-    private static final String RESPONSE_TEMPLATE = "#RESPONSE#%d";
-
-    @Mock
-    private MessageService mockedService;
-
-    @Mock
-    private ContextManager mockedContextManager;
-
-    private AbstractDataPackageHandler<HandledPackage> packageHandler;
-
-    @Captor
-    private ArgumentCaptor<List<Message>> messagesArgumentCaptor;
-
-    @Captor
-    private ArgumentCaptor<ChannelHandlerContext> contextArgumentCaptor;
-
-    @Captor
-    private ArgumentCaptor<Long> longArgumentCaptor;
-
-    @Captor
-    private ArgumentCaptor<String> stringArgumentCaptor;
-
-    @Before
-    public void initializePackageHandler() {
-        this.packageHandler = new HandledPackageHandler(this.mockedService, this.mockedContextManager);
-    }
-
-    @Test
-    @SuppressWarnings("all")
-    public void handlerShouldHandlePackage() {
-        final List<Message> givenMessages = List.of(createMessage(), createMessage(), createMessage());
-        final HandledPackage givenPackage = new HandledPackage(givenMessages);
-        final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
-
-        final Device givenDevice = mock(Device.class);
-        final Long givenDeviceId = 255L;
-        when(givenDevice.getId()).thenReturn(givenDeviceId);
-
-        when(this.mockedContextManager.findDevice(any(ChannelHandlerContext.class))).thenReturn(givenDevice);
-
-        final List<Message> givenSavedMessages = mock(List.class);
-        final int givenAmountSavedMessages = givenMessages.size();
-        when(givenSavedMessages.size()).thenReturn(givenAmountSavedMessages);
-        when(this.mockedService.saveAll(anyLong(), anyList())).thenReturn(givenSavedMessages);
-
-        this.packageHandler.doHandle(givenPackage, givenContext);
-
-        verify(this.mockedContextManager, times(1))
-                .findDevice(this.contextArgumentCaptor.capture());
-        verify(this.mockedService, times(1))
-                .saveAll(this.longArgumentCaptor.capture(), this.messagesArgumentCaptor.capture());
-        verify(givenContext, times(1))
-                .writeAndFlush(this.stringArgumentCaptor.capture());
-
-        assertSame(givenContext, this.contextArgumentCaptor.getValue());
-        assertEquals(givenDeviceId, this.longArgumentCaptor.getValue());
-        assertSame(givenMessages, this.messagesArgumentCaptor.getValue());
-        assertEquals("#RESPONSE#3", this.stringArgumentCaptor.getValue());
-    }
-
-    @Test(expected = ClassCastException.class)
-    public void handlerShouldNotHandlePackageOfNotSuitableType() {
-        final Package givenPackage = new Package() {
-        };
-        final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
-        this.packageHandler.doHandle(givenPackage, givenContext);
-    }
-
-    @SuppressWarnings("all")
-    private static final class HandledPackage extends AbstractDataPackage {
-        public HandledPackage(List<Message> messages) {
-            super(messages);
-        }
-    }
-
-    @SuppressWarnings("all")
-    private static final class HandledPackageHandler extends AbstractDataPackageHandler<HandledPackage> {
-        public HandledPackageHandler(MessageService messageService, ContextManager contextWorker) {
-            super(HandledPackage.class, null, messageService, contextWorker);
-        }
-
-        @Override
-        protected String createResponse(int amountSavedMessages) {
-            return format(RESPONSE_TEMPLATE, amountSavedMessages);
-        }
-    }
-
-    private static Message createMessage() {
-        return new Message(now(), new GpsCoordinate(1, 2), 3, 4, 5, 6,
-                emptyMap());
-    }
-}
+//@RunWith(MockitoJUnitRunner.class)
+//public final class AbstractDataPackageHandlerTest {
+//    private static final String RESPONSE_TEMPLATE = "#RESPONSE#%d";
+//
+//    @Mock
+//    private MessageService mockedService;
+//
+//    @Mock
+//    private ContextManager mockedContextManager;
+//
+//    private AbstractDataPackageHandler<HandledPackage> packageHandler;
+//
+//    @Captor
+//    private ArgumentCaptor<List<Message>> messagesArgumentCaptor;
+//
+//    @Captor
+//    private ArgumentCaptor<ChannelHandlerContext> contextArgumentCaptor;
+//
+//    @Captor
+//    private ArgumentCaptor<Long> longArgumentCaptor;
+//
+//    @Captor
+//    private ArgumentCaptor<String> stringArgumentCaptor;
+//
+//    @Before
+//    public void initializePackageHandler() {
+//        this.packageHandler = new HandledPackageHandler(this.mockedService, this.mockedContextManager);
+//    }
+//
+//    @Test
+//    @SuppressWarnings("all")
+//    public void handlerShouldHandlePackage() {
+//        final List<Message> givenMessages = List.of(createMessage(), createMessage(), createMessage());
+//        final HandledPackage givenPackage = new HandledPackage(givenMessages);
+//        final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
+//
+//        final Device givenDevice = mock(Device.class);
+//        final Long givenDeviceId = 255L;
+//        when(givenDevice.getId()).thenReturn(givenDeviceId);
+//
+//        when(this.mockedContextManager.findDevice(any(ChannelHandlerContext.class))).thenReturn(givenDevice);
+//
+//        final List<Message> givenSavedMessages = mock(List.class);
+//        final int givenAmountSavedMessages = givenMessages.size();
+//        when(givenSavedMessages.size()).thenReturn(givenAmountSavedMessages);
+//        when(this.mockedService.saveAll(anyLong(), anyList())).thenReturn(givenSavedMessages);
+//
+//        this.packageHandler.doHandle(givenPackage, givenContext);
+//
+//        verify(this.mockedContextManager, times(1))
+//                .findDevice(this.contextArgumentCaptor.capture());
+//        verify(this.mockedService, times(1))
+//                .saveAll(this.longArgumentCaptor.capture(), this.messagesArgumentCaptor.capture());
+//        verify(givenContext, times(1))
+//                .writeAndFlush(this.stringArgumentCaptor.capture());
+//
+//        assertSame(givenContext, this.contextArgumentCaptor.getValue());
+//        assertEquals(givenDeviceId, this.longArgumentCaptor.getValue());
+//        assertSame(givenMessages, this.messagesArgumentCaptor.getValue());
+//        assertEquals("#RESPONSE#3", this.stringArgumentCaptor.getValue());
+//    }
+//
+//    @Test(expected = ClassCastException.class)
+//    public void handlerShouldNotHandlePackageOfNotSuitableType() {
+//        final Package givenPackage = new Package() {
+//        };
+//        final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
+//        this.packageHandler.doHandle(givenPackage, givenContext);
+//    }
+//
+//    @SuppressWarnings("all")
+//    private static final class HandledPackage extends AbstractDataPackage {
+//        public HandledPackage(List<Message> messages) {
+//            super(messages);
+//        }
+//    }
+//
+//    @SuppressWarnings("all")
+//    private static final class HandledPackageHandler extends AbstractDataPackageHandler<HandledPackage> {
+//        public HandledPackageHandler(MessageService messageService, ContextManager contextWorker) {
+//            super(HandledPackage.class, null, messageService, contextWorker);
+//        }
+//
+//        @Override
+//        protected String createResponse(int amountSavedMessages) {
+//            return format(RESPONSE_TEMPLATE, amountSavedMessages);
+//        }
+//    }
+//
+//    private static Message createMessage() {
+//        return new Message(now(), new GpsCoordinate(1, 2), 3, 4, 5, 6,
+//                emptyMap());
+//    }
+//}
