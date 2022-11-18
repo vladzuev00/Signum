@@ -12,7 +12,6 @@ import java.util.regex.Pattern;
 
 import static by.aurorasoft.signum.crud.model.dto.Message.ParameterName.*;
 import static java.lang.Double.parseDouble;
-import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 import static java.lang.Math.abs;
 import static java.lang.Math.signum;
@@ -69,25 +68,42 @@ public final class MessageComponentsParser {
     private static final Map<String, ParameterName> PARAMETER_IDENTIFICATION_TO_NAME_MAP
             = ofEntries(
             entry("GSMCSQ", GSM_LEVEL),
+            entry("par21", GSM_LEVEL),
             entry("21", GSM_LEVEL),
 
             entry("VPWR", VOLTAGE),
+            entry("par66", VOLTAGE),
             entry("66", VOLTAGE),
 
             entry("wln_crn_max", CORNER_ACCELERATION),
+            entry("par47", CORNER_ACCELERATION),
             entry("47", CORNER_ACCELERATION),
 
             entry("wln_accel_max", ACCELERATION_UP),
+            entry("par44", ACCELERATION_UP),
             entry("44", ACCELERATION_UP),
 
             entry("wln_brk_max", ACCELERATION_DOWN),
+            entry("par45", ACCELERATION_DOWN),
             entry("45", ACCELERATION_DOWN),
 
+            entry("par122", HDOP),
             entry("122", HDOP),
 
+            entry("par123", VDOP),
             entry("123", VDOP),
 
-            entry("124", PDOP)
+            entry("par124", PDOP),
+            entry("124", PDOP),
+
+            entry("par114", ACC_X),
+            entry("114", ACC_X),
+
+            entry("par115", ACC_Y),
+            entry("115", ACC_Y),
+
+            entry("par116", ACC_Z),
+            entry("116", ACC_Z)
     );
     private static final int COMPONENT_INDEX_PARAMETER_NAME = 0;
     private static final int COMPONENT_INDEX_PARAMETER_VALUE = 2;

@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import static by.aurorasoft.signum.crud.model.dto.Device.Type.TRACKER;
 import static java.lang.Long.MIN_VALUE;
+import static java.util.Map.copyOf;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -107,6 +108,40 @@ public final class ConnectionManagerTest {
         final Optional<ChannelHandlerContext> optionalContext = this.connectionManager
                 .find(MIN_VALUE);
         assertTrue(optionalContext.isEmpty());
+    }
+
+    @Test
+    public void contextShouldBeRemovedByDeviceId()
+            throws Exception {
+        final Long givenDeviceId = 255L;
+        final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
+        final Map<Long, ChannelHandlerContext> deviceIdToContextMap = findDeviceIdToContextMap(
+                this.connectionManager);
+        deviceIdToContextMap.put(givenDeviceId, givenContext);
+
+        this.connectionManager.remove(givenDeviceId);
+
+        assertTrue(deviceIdToContextMap.isEmpty());
+    }
+
+    @Test
+    public void contextShouldNotBeRemovedByNotExistingDeviceId()
+            throws Exception {
+        final Long givenFirstDeviceId = 255L;
+        final ChannelHandlerContext givenFirstContext = mock(ChannelHandlerContext.class);
+
+        final Long givenSecondDeviceId = 256L;
+        final ChannelHandlerContext givenSecondContext = mock(ChannelHandlerContext.class);
+
+        final Map<Long, ChannelHandlerContext> deviceIdToContextMap = findDeviceIdToContextMap(
+                this.connectionManager);
+        deviceIdToContextMap.put(givenFirstDeviceId, givenFirstContext);
+        deviceIdToContextMap.put(givenSecondDeviceId, givenSecondContext);
+
+        final Long givenDeviceIdToRemoveEntry = 257L;
+        final Map<Long, ChannelHandlerContext> deviceIdToContextMapBeforeRemove = copyOf(deviceIdToContextMap);
+        this.connectionManager.remove(givenDeviceIdToRemoveEntry);
+        assertEquals(deviceIdToContextMapBeforeRemove, deviceIdToContextMap);
     }
 
     @SuppressWarnings("unchecked")

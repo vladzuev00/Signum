@@ -57,6 +57,9 @@ CREATE TABLE message
     eco_braking      SMALLINT     NOT NULL,
     type             message_type NOT NULL,
     gps_odometer     INTEGER      NOT NULL,
+    ignition         SMALLINT     NOT NULL,
+    engine_time      INTEGER      NOT NULL,
+    shock            SMALLINT     NOT NULL,
     created_time     TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     deleted          BOOLEAN      NOT NULL DEFAULT false
 );

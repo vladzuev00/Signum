@@ -67,6 +67,7 @@ public class MessageEntity extends BaseEntity<Long> {
 
     @Column(name = "onboard_voltage")
     @ColumnTransformer(
+            forColumn = "onboard_voltage",
             read = "onboard_voltage::DECIMAL / 1000",
             write = "? * 1000"
     )
@@ -74,6 +75,7 @@ public class MessageEntity extends BaseEntity<Long> {
 
     @Column(name = "eco_cornering")
     @ColumnTransformer(
+            forColumn = "eco_cornering",
             read = "eco_cornering::DECIMAL / 1000",
             write = "? * 1000"
     )
@@ -81,6 +83,7 @@ public class MessageEntity extends BaseEntity<Long> {
 
     @Column(name = "eco_acceleration")
     @ColumnTransformer(
+            forColumn = "eco_acceleration",
             read = "eco_acceleration::DECIMAL / 1000",
             write = "? * 1000"
     )
@@ -88,6 +91,7 @@ public class MessageEntity extends BaseEntity<Long> {
 
     @Column(name = "eco_braking")
     @ColumnTransformer(
+            forColumn = "eco_braking",
             read = "eco_braking::DECIMAL / 1000",
             write = "? * 1000"
     )
@@ -100,6 +104,7 @@ public class MessageEntity extends BaseEntity<Long> {
 
     @Column(name = "gps_odometer")
     @ColumnTransformer(
+            forColumn = "gps_odometer",
             read = "gps_odometer::DECIMAL / 1000",
             write = "? * 1000"
     )
@@ -112,6 +117,11 @@ public class MessageEntity extends BaseEntity<Long> {
     private long engineTime;
 
     @Column(name = "shock")
+    @ColumnTransformer(
+            forColumn = "shock",
+            read = "shock::DECIMAL / 1000",
+            write = "? * 1000"
+    )
     private double shock;
 
     @Override
