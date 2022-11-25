@@ -107,6 +107,7 @@ public final class MessageComponentsParser {
     );
     private static final int COMPONENT_INDEX_PARAMETER_NAME = 0;
     private static final int COMPONENT_INDEX_PARAMETER_VALUE = 2;
+    private static final int AMOUNT_ALLOWABLE_INBOUND_GSM_LEVEL_VALUES = 6;
 
     private static final String MESSAGE_REGEX
             = "((\\d{6}|(NA));(\\d{6}|(NA)));"         //date, time
@@ -174,12 +175,22 @@ public final class MessageComponentsParser {
 
     public Map<ParameterName, Double> parseParameters() {
         final String parameters = this.matcher.group(GROUP_NUMBER_PARAMETERS);
-        return stream(parameters.split(DELIMITER_PARAMETERS))
-                .map(parameter -> parameter.split(DELIMITER_PARAMETER_COMPONENTS))
-                .filter(components -> PARAMETER_IDENTIFICATION_TO_NAME_MAP.containsKey(components[0]))
-                .collect(toMap(
-                        components -> PARAMETER_IDENTIFICATION_TO_NAME_MAP.get(components[COMPONENT_INDEX_PARAMETER_NAME]),
-                        components -> parseDouble(components[COMPONENT_INDEX_PARAMETER_VALUE])));
+        final Map<ParameterName, Double> parameterNamesToValues =
+                stream(parameters.split(DELIMITER_PARAMETERS))
+                        .map(parameter -> parameter.split(DELIMITER_PARAMETER_COMPONENTS))
+                        .filter(components -> PARAMETER_IDENTIFICATION_TO_NAME_MAP.containsKey(components[0]))
+                        .collect(toMap(
+                                components -> PARAMETER_IDENTIFICATION_TO_NAME_MAP
+                                        .get(components[COMPONENT_INDEX_PARAMETER_NAME]),
+                                components -> parseDouble(components[COMPONENT_INDEX_PARAMETER_VALUE])));
+        transformGsmLevelToPercent(parameterNamesToValues);
+        return parameterNamesToValues;
+    }
+
+    private static void transformGsmLevelToPercent(Map<ParameterName, Double> parameterNamesToValues) {
+        parameterNamesToValues.computeIfPresent(GSM_LEVEL,
+                (parameterName, beforeConvertingValue)
+                        -> beforeConvertingValue * 100 / AMOUNT_ALLOWABLE_INBOUND_GSM_LEVEL_VALUES);
     }
 
     private float parseGpsCoordinate(int groupNumberDegrees, int groupNumberMinute,

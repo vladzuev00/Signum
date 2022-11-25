@@ -24,9 +24,15 @@ public final class MessageParserTest extends AbstractContextTest {
                 + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
 
         final Message actual = this.messageParser.parse(givenMessage);
-        final Message expected = new Message(parse("2022-11-15T14:56:43Z"),
-                new GpsCoordinate(57.406944F, 39.548332F), 100, 15, 10,
-                177, emptyMap());
+        final Message expected = Message.builder()
+                .datetime(parse("2022-11-15T14:56:43Z"))
+                .coordinate(new GpsCoordinate(57.406944F, 39.548332F))
+                .speed(100)
+                .course(15)
+                .altitude(10)
+                .amountSatellite(177)
+                .parameterNamesToValues(emptyMap())
+                .build();
         assertEquals(expected, actual);
     }
 

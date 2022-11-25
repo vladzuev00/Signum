@@ -34,7 +34,7 @@ public final class ReceivingMessageService {
      *                 without additional properties to be calculated.
      */
     public void receive(ChannelHandlerContext context, List<Message> messages) {
-        final Optional<Message> optionalPreviousMessage = this.contextManager.findPreviousMessage(context);
+        final Optional<Message> optionalPreviousMessage = this.contextManager.findLastMessage(context);
         final Optional<Message> optionalNewPreviousMessage = optionalPreviousMessage
                 .map(previousMessage -> {
                     this.typeMessages(messages, previousMessage);

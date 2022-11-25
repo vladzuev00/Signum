@@ -1,6 +1,7 @@
 package by.aurorasoft.signum.protocol.core.contextmanager;
 
 import by.aurorasoft.signum.crud.model.dto.Device;
+import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.crud.service.CommandService;
 import by.aurorasoft.signum.protocol.core.service.CommandSenderService;
 import io.netty.channel.Channel;
@@ -16,7 +17,10 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.util.Optional;
+
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -39,6 +43,9 @@ public final class ContextManagerTest {
 
     @Captor
     private ArgumentCaptor<String> stringArgumentCaptor;
+
+    @Captor
+    private ArgumentCaptor<Message> messageArgumentCaptor;
 
     @Before
     public void initializeContextManager() {
@@ -103,7 +110,7 @@ public final class ContextManagerTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    public void unitShouldBePutIntoContext() {
+    public void deviceShouldBePutIntoContext() {
         final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
 
         final Channel givenChannel = mock(Channel.class);
@@ -118,5 +125,45 @@ public final class ContextManagerTest {
         verify(givenAttribute, times(1))
                 .set(this.deviceArgumentCaptor.capture());
         assertSame(givenDevice, this.deviceArgumentCaptor.getValue());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void lastMessageShouldBeFoundFromContext() {
+        final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
+
+        final Channel givenChannel = mock(Channel.class);
+        when(givenContext.channel()).thenReturn(givenChannel);
+
+        final Attribute<Message> givenAttribute = mock(Attribute.class);
+        when(givenChannel.attr(any(AttributeKey.class))).thenReturn(givenAttribute);
+
+        final Message givenMessage = mock(Message.class);
+        when(givenAttribute.get()).thenReturn(givenMessage);
+
+        final Optional<Message> optionalActual = this.contextManager.findLastMessage(givenContext);
+        assertTrue(optionalActual.isPresent());
+        final Message actual = optionalActual.get();
+
+        assertSame(givenMessage, actual);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void lastMessageShouldBePutIntoContext() {
+        final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
+
+        final Channel givenChannel = mock(Channel.class);
+        when(givenContext.channel()).thenReturn(givenChannel);
+
+        final Attribute<Message> givenAttribute = mock(Attribute.class);
+        when(givenChannel.attr(any(AttributeKey.class))).thenReturn(givenAttribute);
+
+        final Message givenMessage = mock(Message.class);
+
+        this.contextManager.putLastMessage(givenContext, givenMessage);
+
+        verify(givenAttribute, times(1)).set(this.messageArgumentCaptor.capture());
+        assertSame(givenMessage, this.messageArgumentCaptor.getValue());
     }
 }

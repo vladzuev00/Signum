@@ -21,6 +21,7 @@ import static by.aurorasoft.signum.crud.model.dto.Command.Status.TIMEOUT;
 import static io.netty.util.AttributeKey.valueOf;
 import static java.lang.Thread.interrupted;
 import static java.util.Optional.empty;
+import static java.util.Optional.ofNullable;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 //TODO: correct dependencies
@@ -32,8 +33,8 @@ public final class ContextManager {
             = valueOf("command_waiting_response");
     private static final AttributeKey<Queue<Command>> ATTRIBUTE_KEY_COMMANDS_TO_BE_SENT
             = valueOf("commands_to_be_sent");
-    private static final AttributeKey<Message> ATTRIBUTE_KEY_LAST_VALID_RECEIVED_MESSAGE
-            = valueOf("last_valid_received_message");
+    private static final AttributeKey<Message> ATTRIBUTE_KEY_LAST_MESSAGE
+            = valueOf("last_message");
 
     private final CommandService commandService;
     private final CommandSenderService commandSenderService;
@@ -108,11 +109,11 @@ public final class ContextManager {
     }
 
     public void putLastMessage(ChannelHandlerContext context, Message message) {
-        putAttributeValue(context, ATTRIBUTE_KEY_LAST_VALID_RECEIVED_MESSAGE, message);
+        putAttributeValue(context, ATTRIBUTE_KEY_LAST_MESSAGE, message);
     }
 
-    public Optional<Message> findPreviousMessage(ChannelHandlerContext context) {
-        return Optional.ofNullable(findAttributeValue(context, ATTRIBUTE_KEY_LAST_VALID_RECEIVED_MESSAGE));
+    public Optional<Message> findLastMessage(ChannelHandlerContext context) {
+        return ofNullable(findAttributeValue(context, ATTRIBUTE_KEY_LAST_MESSAGE));
     }
 
     private static <ValueType> ValueType findAttributeValue(ChannelHandlerContext context,

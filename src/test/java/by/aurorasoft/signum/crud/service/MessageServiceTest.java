@@ -49,27 +49,10 @@ public final class MessageServiceTest extends AbstractContextTest {
                 .engineTime(1000)
                 .shock(2)
                 .build();
-        assertEquals(expected, actual);
+        checkEqualsWithoutId(expected, actual);
     }
 
-    private static void checkEqualsWithoutId(MessageEntity expected, MessageEntity actual) {
-        assertEquals(expected.getDevice().getId(), actual.getDevice().getId());
-        assertTrue(Duration.between(expected.getDatetime(), actual.getDatetime()).getSeconds() < 1);
-        assertEquals(expected.getLatitude(), actual.getLatitude(), ALLOWABLE_INACCURACY);
-        assertEquals(expected.getLongitude(), actual.getLongitude(), ALLOWABLE_INACCURACY);
-        assertEquals(expected.getSpeed(), actual.getSpeed());
-        assertEquals(expected.getCourse(), actual.getCourse());
-        assertEquals(expected.getAltitude(), actual.getAltitude());
-        assertEquals(expected.getAmountSatellite(), actual.getAmountSatellite());
-        assertEquals(expected.getGsmLevel(), actual.getGsmLevel());
-        assertEquals(expected.getOnboardVoltage(), actual.getOnboardVoltage(), ALLOWABLE_INACCURACY);
-        assertEquals(expected.getEcoCornering(), actual.getEcoCornering(), ALLOWABLE_INACCURACY);
-        assertEquals(expected.getEcoAcceleration(), actual.getEcoAcceleration(), ALLOWABLE_INACCURACY);
-        assertEquals(expected.getEcoBraking(), actual.getEcoBraking(), ALLOWABLE_INACCURACY);
-        assertSame(expected.getType(), actual.getType());
-        assertEquals(expected.getGpsOdometer(), actual.getGpsOdometer(), 0.);
-        assertEquals(expected.getIgnition(), actual.getIgnition());
-        assertEquals(expected.getEngineTime(), actual.getEngineTime());
-        assertEquals(expected.getShock(), actual.getShock(), 0.);
+    private static void checkEqualsWithoutId(Message expected, Message actual) {
+
     }
 }

@@ -33,17 +33,6 @@ public final class Message implements AbstractDto<Long>, LatLngAlt {
     private double shock;
 
     public Message(Instant datetime, GpsCoordinate coordinate, int speed, int course, int altitude,
-                   int amountSatellite, Map<ParameterName, Double> parameterNamesToValues) {
-        this.datetime = datetime;
-        this.coordinate = coordinate;
-        this.speed = speed;
-        this.course = course;
-        this.altitude = altitude;
-        this.amountSatellite = amountSatellite;
-        this.parameterNamesToValues = copyOf(parameterNamesToValues);
-    }
-
-    public Message(Instant datetime, GpsCoordinate coordinate, int speed, int course, int altitude,
                    int amountSatellite, Map<ParameterName, Double> parameterNamesToValues, MessageType type,
                    double gpsOdometer, int ignition, long engineTime, double shock) {
         this.id = null;
@@ -53,7 +42,7 @@ public final class Message implements AbstractDto<Long>, LatLngAlt {
         this.course = course;
         this.altitude = altitude;
         this.amountSatellite = amountSatellite;
-        this.parameterNamesToValues = copyOf(parameterNamesToValues);
+        this.parameterNamesToValues = parameterNamesToValues != null ? copyOf(parameterNamesToValues) : null;
         this.type = type;
         this.gpsOdometer = gpsOdometer;
         this.ignition = ignition;
@@ -71,7 +60,7 @@ public final class Message implements AbstractDto<Long>, LatLngAlt {
         this.course = course;
         this.altitude = altitude;
         this.amountSatellite = amountSatellite;
-        this.parameterNamesToValues = copyOf(parameterNamesToValues);
+        this.parameterNamesToValues = parameterNamesToValues != null ? copyOf(parameterNamesToValues) : null;
         this.type = type;
         this.gpsOdometer = gpsOdometer;
         this.ignition = ignition;
