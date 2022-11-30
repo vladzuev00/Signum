@@ -27,11 +27,11 @@ public class MessagePropertyValidator {
     }
 
     public boolean areValidCoordinateParameters(Message message) {
-        final Map<ParameterName, Double> parameterNamesToValues = message.getParameterNamesToValues();
-        return this.isContainCoordinateParameters(parameterNamesToValues)
-                && this.isValidCoordinateParameter(parameterNamesToValues.get(HDOP))
-                && this.isValidCoordinateParameter(parameterNamesToValues.get(VDOP))
-                && this.isValidCoordinateParameter(parameterNamesToValues.get(PDOP));
+        final Map<ParameterName, Double> parameterNamesByValues = message.getParameterNamesByValues();
+        return this.isContainCoordinateParameters(parameterNamesByValues)
+                && this.isValidCoordinateParameter(parameterNamesByValues.get(HDOP))
+                && this.isValidCoordinateParameter(parameterNamesByValues.get(VDOP))
+                && this.isValidCoordinateParameter(parameterNamesByValues.get(PDOP));
     }
 
     public boolean isValidDateTime(Message message) {

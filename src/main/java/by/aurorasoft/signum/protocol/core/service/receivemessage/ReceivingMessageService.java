@@ -27,9 +27,10 @@ public final class ReceivingMessageService {
     /**
      * Set 'type' in given messages, fix 'CORRECT' messages to 'VALID'
      * taking GPS coordinates and amount of satellites from last valid message,
-     * calculate additional calculated properties for each message.
+     * calculate additional calculated properties for 'VALID' messages.
      * If last valid message isn't exist, then 'CORRECT' messages are saved as 'INCORRECT'
-     * @param context - current connection's context.
+     *
+     * @param context  - current connection's context.
      * @param messages - messages, which were created by data from tracker:
      *                 without additional properties to be calculated.
      */
@@ -79,20 +80,20 @@ public final class ReceivingMessageService {
     private Optional<Message> fixAndCalculateProperties(List<Message> messages) {
         Message lastValid = null;
         for (final Message message : messages) {
-            if (message.getType() == VALID) {
-                lastValid = message;
-            } else if (message.getType() == CORRECT) {
+            if (message.getType() == CORRECT) {
                 if (lastValid == null) {
                     message.setType(INCORRECT);
                 } else {
                     fixMessageToValid(message, lastValid);
-                    lastValid = message;
                 }
             }
-            if (lastValid != null) {
-                this.calculateProperties(message, lastValid);
-            } else {
-                this.calculateProperties(message);
+            if (message.getType() == VALID) {
+                if (lastValid != null) {
+                    this.calculateProperties(message, lastValid);
+                } else {
+                    this.calculateProperties(message);
+                }
+                lastValid = message;
             }
         }
         return ofNullable(lastValid);
@@ -101,13 +102,13 @@ public final class ReceivingMessageService {
     private Optional<Message> fixAndCalculateProperties(List<Message> messages, Message previous) {
         Message lastValid = previous;
         for (final Message message : messages) {
-            if (message.getType() == VALID) {
-                lastValid = message;
-            } else if (message.getType() == CORRECT) {
+            if (message.getType() == CORRECT) {
                 fixMessageToValid(message, lastValid);
+            }
+            if (message.getType() == VALID) {
+                this.calculateProperties(message, lastValid);
                 lastValid = message;
             }
-            this.calculateProperties(message, lastValid);
         }
         return lastValid != previous ? of(lastValid) : empty();
     }

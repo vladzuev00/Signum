@@ -42,7 +42,7 @@ public final class IgnitionAndEngineTimeCalculator implements MessagePropertyCal
         current.setEngineTime(
                 previous.getEngineTime()
                         + (isIgnitionOnBetweenMessages(previous, current)
-                        ? between(current.getDatetime(), previous.getDatetime()).toSeconds()
+                        ? between(previous.getDatetime(), current.getDatetime()).toSeconds()
                         : 0));
     }
 

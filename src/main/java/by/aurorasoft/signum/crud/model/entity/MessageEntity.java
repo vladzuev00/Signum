@@ -150,17 +150,17 @@ public class MessageEntity extends BaseEntity<Long> {
 
     public enum MessageType {
         /**
-         * Valid coordinates, valid time, valid order
+         * Valid coordinates(amount of satellites, hdop, vdop, pdop), valid time, valid order
          */
         VALID,
 
         /**
-         * Not valid coordinate, valid time, valid order
+         * Not valid coordinate(amount of satellites, hdop, vdop, pdop), valid time, valid order
          */
         CORRECT,
 
         /**
-         * Any coordinates, valid time, not valid order
+         * Any coordinates(amount of satellites, hdop, vdop, pdop), valid time, not valid order
          */
         WRONG_ORDER,
 

@@ -20,6 +20,7 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.TimeZone;
 
+import static java.lang.Math.abs;
 import static org.junit.Assert.assertEquals;
 
 @Transactional
@@ -31,6 +32,8 @@ public abstract class AbstractContextTest {
             .withDatabaseName("integration-tests-db")
             .withUsername("sa")
             .withPassword("sa");
+
+    private static final double ALLOWABLE_INACCURACY = 0.001;
 
     static {
         postgreSQLContainer.start();
@@ -73,6 +76,14 @@ public abstract class AbstractContextTest {
             Class<EntityType> entityType) {
         return this.entityManager.createQuery("SELECT e FROM " + entityType.getName() + " e", entityType)
                 .getResultList();
+    }
+
+    protected static boolean areEqualsWithInaccuracy(double expected, double actual) {
+        return abs(expected - actual) <= ALLOWABLE_INACCURACY;
+    }
+
+    protected static boolean areEqualsWithInaccuracy(float expected, float actual) {
+        return abs(expected - actual) <= ALLOWABLE_INACCURACY;
     }
 
     static class DBContainerInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {

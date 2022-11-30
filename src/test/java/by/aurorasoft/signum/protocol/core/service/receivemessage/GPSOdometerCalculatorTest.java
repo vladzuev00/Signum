@@ -3,7 +3,6 @@ package by.aurorasoft.signum.protocol.core.service.receivemessage;
 import by.aurorasoft.signum.base.AbstractContextTest;
 import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.crud.model.dto.Message.GpsCoordinate;
-import by.aurorasoft.signum.crud.model.entity.MessageEntity;
 import by.aurorasoft.signum.protocol.core.service.receivemessage.propertycalculator.impl.GPSOdometerCalculator;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,7 @@ public final class GPSOdometerCalculatorTest extends AbstractContextTest {
                 .course(8)
                 .altitude(9)
                 .amountSatellite(10)
-                .parameterNamesToValues(emptyMap())
+                .parameterNamesByValues(emptyMap())
                 .type(VALID)
                 .build();
         final Message givenPrevious = Message.builder()
@@ -36,7 +35,7 @@ public final class GPSOdometerCalculatorTest extends AbstractContextTest {
                 .course(9)
                 .altitude(9)
                 .amountSatellite(10)
-                .parameterNamesToValues(emptyMap())
+                .parameterNamesByValues(emptyMap())
                 .type(VALID)
                 .build();
 

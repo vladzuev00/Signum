@@ -106,7 +106,7 @@ CREATE FUNCTION tr_update_device_state() RETURNS TRIGGER AS
 '
     BEGIN
 
-        IF NEW.type IN (''VALID'') THEN
+        IF NEW.type = ''VALID'' THEN
 
             UPDATE device_state
             SET last_message_id = NEW.id

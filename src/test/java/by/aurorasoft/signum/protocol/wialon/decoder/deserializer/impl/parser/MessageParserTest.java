@@ -31,7 +31,7 @@ public final class MessageParserTest extends AbstractContextTest {
                 .course(15)
                 .altitude(10)
                 .amountSatellite(177)
-                .parameterNamesToValues(emptyMap())
+                .parameterNamesByValues(emptyMap())
                 .build();
         assertEquals(expected, actual);
     }

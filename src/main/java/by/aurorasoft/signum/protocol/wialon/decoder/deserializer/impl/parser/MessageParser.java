@@ -15,7 +15,7 @@ public final class MessageParser {
                 .course(parser.parseCourse())
                 .altitude(parser.parseAltitude())
                 .amountSatellite(parser.parseAmountSatellite())
-                .parameterNamesToValues(parser.parseParameters())
+                .parameterNamesByValues(parser.parseParameters())
                 .build();
     }
 }

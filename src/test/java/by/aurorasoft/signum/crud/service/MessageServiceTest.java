@@ -3,22 +3,22 @@ package by.aurorasoft.signum.crud.service;
 import by.aurorasoft.signum.base.AbstractContextTest;
 import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.crud.model.dto.Message.GpsCoordinate;
-import by.aurorasoft.signum.crud.model.entity.MessageEntity;
+import by.aurorasoft.signum.crud.model.dto.Message.ParameterName;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import static by.aurorasoft.signum.crud.model.dto.Message.ParameterName.*;
 import static by.aurorasoft.signum.crud.model.entity.MessageEntity.MessageType.VALID;
 import static java.time.Instant.parse;
+import static java.util.Arrays.stream;
 import static org.junit.Assert.*;
 
 public final class MessageServiceTest extends AbstractContextTest {
-    private static final double ALLOWABLE_INACCURACY = 0.001;
 
     @Autowired
     private MessageService service;
@@ -40,19 +40,43 @@ public final class MessageServiceTest extends AbstractContextTest {
                 .course(11)
                 .altitude(12)
                 .amountSatellite(13)
-                .parameterNamesToValues(
+                .parameterNamesByValues(
                         Map.of(GSM_LEVEL, 44., VOLTAGE, 1.5, CORNER_ACCELERATION, 1.6,
                                 ACCELERATION_UP, 1.7, ACCELERATION_DOWN, 1.8))
                 .type(VALID)
-                .gpsOdometer(100)
+                .gpsOdometer(0.1)
                 .ignition(1)
                 .engineTime(1000)
                 .shock(2)
                 .build();
-        checkEqualsWithoutId(expected, actual);
+        checkEquals(expected, actual);
     }
 
-    private static void checkEqualsWithoutId(Message expected, Message actual) {
+    private static void checkEquals(Message expected, Message actual) {
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getDatetime(), actual.getDatetime());
+        assertEquals(expected.getCoordinate(), actual.getCoordinate());
+        assertEquals(expected.getCourse(), actual.getCourse());
+        assertEquals(expected.getAltitude(), actual.getAltitude());
+        assertEquals(expected.getAmountSatellite(), actual.getAmountSatellite());
+        checkEqualsParameters(expected.getParameterNamesByValues(), actual.getParameterNamesByValues());
+        assertSame(expected.getType(), actual.getType());
+        assertTrue(areEqualsWithInaccuracy(expected.getGpsOdometer(), actual.getGpsOdometer()));
+        assertEquals(expected.getIgnition(), actual.getIgnition());
+        assertEquals(expected.getEngineTime(), actual.getEngineTime());
+        assertTrue(areEqualsWithInaccuracy(expected.getShock(), actual.getShock()));
+    }
 
+    private static void checkEqualsParameters(Map<ParameterName, Double> expected, Map<ParameterName, Double> actual) {
+        stream(ParameterName.values())
+                .forEach(parameterName
+                        -> {
+                    final boolean bothNotExist = !expected.containsKey(parameterName)
+                            && !actual.containsKey(parameterName);
+                    final Supplier<Boolean> bothEqualSupplier
+                            = () -> areEqualsWithInaccuracy(expected.get(parameterName), actual.get(parameterName));
+                    final boolean parametersMatch = bothNotExist || bothEqualSupplier.get();
+                    assertTrue(parametersMatch);
+                });
     }
 }
