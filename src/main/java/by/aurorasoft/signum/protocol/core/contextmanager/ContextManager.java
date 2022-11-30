@@ -153,14 +153,9 @@ public final class ContextManager {
         putAttributeValue(context, ATTRIBUTE_KEY_COMMAND_WAITING_RESPONSE, null);
     }
 
-    @SuppressWarnings("all")
     private static void initializeCommandsToBeSentAttributeIfNecessary(ChannelHandlerContext context) {
         if (findAttributeValue(context, ATTRIBUTE_KEY_COMMANDS_TO_BE_SENT) == null) {
-            synchronized (context) {
-                if (findAttributeValue(context, ATTRIBUTE_KEY_COMMANDS_TO_BE_SENT) == null) {
-                    putAttributeValue(context, ATTRIBUTE_KEY_COMMANDS_TO_BE_SENT, new ConcurrentLinkedQueue<>());
-                }
-            }
+            putAttributeValue(context, ATTRIBUTE_KEY_COMMANDS_TO_BE_SENT, new ConcurrentLinkedQueue<>());
         }
     }
 

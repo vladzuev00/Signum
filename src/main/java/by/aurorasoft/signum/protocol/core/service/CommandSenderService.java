@@ -50,13 +50,10 @@ public class CommandSenderService {
         commandsToBeResent.forEach(this::send);
     }
 
-    @SuppressWarnings("all")
     public void onSentCommandWasHandled(ChannelHandlerContext context) {
-        synchronized (context) {
-            if (this.contextManager.isExistCommandToBeSent(context)) {
-                final Command commandToBeSent = this.contextManager.findCommandToBeSent(context);
-                this.sendIfTrackerIsConnected(commandToBeSent);
-            }
+        if (this.contextManager.isExistCommandToBeSent(context)) {
+            final Command commandToBeSent = this.contextManager.findCommandToBeSent(context);
+            this.sendIfTrackerIsConnected(commandToBeSent);
         }
     }
 
@@ -66,14 +63,11 @@ public class CommandSenderService {
         optionalContext.ifPresent(context -> this.sendToConnectedTracker(command, context));
     }
 
-    @SuppressWarnings("all")
     private void sendToConnectedTracker(Command command, ChannelHandlerContext context) {
-        synchronized (context) {
-            if (this.contextManager.isExistCommandWaitingResponse(context)) {
-                this.addCommandToSendLater(command, context);
-            } else {
-                this.sendCommandNow(command, context);
-            }
+        if (this.contextManager.isExistCommandWaitingResponse(context)) {
+            this.addCommandToSendLater(command, context);
+        } else {
+            this.sendCommandNow(command, context);
         }
     }
 
