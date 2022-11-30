@@ -15,5 +15,7 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 public class MessageValidationProperty {
     private int minValidAmountSatellite;
+    private int maxValidAmountSatellite;
+    private int minValidDOP;
     private int maxValidDOP;
 }

@@ -1,4 +1,4 @@
-package by.aurorasoft.signum.protocol.core.service.receivemessage;
+package by.aurorasoft.signum.protocol.core.service.receivemessage.propertycalculator;
 
 import by.aurorasoft.signum.base.AbstractContextTest;
 import by.aurorasoft.signum.crud.model.dto.Message;

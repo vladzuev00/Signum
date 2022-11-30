@@ -24,4 +24,6 @@ spring:
 message:
   validation:
     minValidAmountSatellite: 3
+    maxValidAmountSatellite: 999
+    minValidDOP: 0
     maxValidDOP: 7

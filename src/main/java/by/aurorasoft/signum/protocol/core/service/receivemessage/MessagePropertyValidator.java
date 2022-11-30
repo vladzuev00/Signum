@@ -23,7 +23,8 @@ public class MessagePropertyValidator {
     private final MessageValidationProperty property;
 
     public boolean isValidAmountSatellite(Message message) {
-        return message.getAmountSatellite() >= this.property.getMinValidAmountSatellite();
+        return this.property.getMinValidAmountSatellite() <= message.getAmountSatellite()
+                && message.getAmountSatellite() <= this.property.getMaxValidAmountSatellite();
     }
 
     public boolean areValidCoordinateParameters(Message message) {
@@ -49,6 +50,7 @@ public class MessagePropertyValidator {
     }
 
     private boolean isValidCoordinateParameter(Double research) {
-        return compare(research, this.property.getMaxValidDOP()) <= 0;
+        return compare(research, this.property.getMinValidDOP()) >= 0
+                && compare(research, this.property.getMaxValidDOP()) <= 0;
     }
 }
