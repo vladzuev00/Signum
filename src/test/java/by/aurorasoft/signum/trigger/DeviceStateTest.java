@@ -1,40 +1,30 @@
 package by.aurorasoft.signum.trigger;
 
 import by.aurorasoft.signum.base.AbstractContextTest;
-import lombok.Value;
-import org.jetbrains.annotations.NotNull;
+import by.aurorasoft.signum.crud.model.entity.DeviceStateEntity;
+import by.aurorasoft.signum.crud.model.entity.MessageEntity;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Map;
 import java.util.Set;
 
-import static java.util.Set.copyOf;
-import static org.junit.Assert.assertEquals;
+import static java.util.stream.Collectors.toSet;
+import static org.junit.Assert.*;
 
 public final class DeviceStateTest extends AbstractContextTest {
-
-    @Autowired
-    private NamedParameterJdbcTemplate jdbcTemplate;
+    private static final String HQL_QUERY_TO_FIND_ALL_DEVICE_STATES = "SELECT e FROM DeviceStateEntity e";
 
     @Test
     public void deviceStatesShouldBeInserted() {
-        final Set<DeviceState> actual = copyOf(this.jdbcTemplate.query(
-                "SELECT device_id, last_message_id FROM device_state",
-                new DeviceStateRowMapper()));
-        final Set<DeviceState> expected = Set.of(
-                new DeviceState(25551, null),
-                new DeviceState(25552, null),
-                new DeviceState(25553, null),
-                new DeviceState(25554, null),
-                new DeviceState(25555, null)
-        );
-        assertEquals(expected, actual);
+        final Set<DeviceStateEntity> actual = this.findAllDeviceStates();
+
+        final Set<Long> actualIds = actual.stream()
+                .map(DeviceStateEntity::getId)
+                .collect(toSet());
+        final Set<Long> expectedIds = Set.of(25551L, 25552L, 25553L, 25554L, 25555L);
+        assertEquals(expectedIds, actualIds);
+
+        assertTrue(actual.stream().allMatch(deviceState -> deviceState.getLastMessage() == null));
     }
 
     @Test
@@ -44,9 +34,11 @@ public final class DeviceStateTest extends AbstractContextTest {
             + "VALUES(255, '2000-02-18 04:05:06', 4.4, 5.5, 10, 11, 12, 13, 25551, 44, 1500, 1600, 1700, 1800, "
             + "'VALID', 300, 1, 500, 2000)")
     public void deviceStatesShouldBeUpdatedAfterInsertingValidMessage() {
-        final DeviceState actual = this.findDeviceState(25551);
-        final DeviceState expected = new DeviceState(25551, 255L);
-        assertEquals(expected, actual);
+        final DeviceStateEntity actual = this.findDeviceStateById(25551L);
+        final DeviceStateEntity expected = new DeviceStateEntity(25551L,
+                super.entityManager.getReference(MessageEntity.class, 255L));
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getLastMessage().getId(), actual.getLastMessage().getId());
     }
 
     @Test
@@ -56,43 +48,19 @@ public final class DeviceStateTest extends AbstractContextTest {
             + "VALUES(255, '2000-02-18 04:05:06', 4.4, 5.5, 10, 11, 12, 13, 25551, 44, 1500, 1600, 1700, 1800, "
             + "'INCORRECT', 300, 1, 500, 2000)")
     public void deviceStatesShouldNotBeUpdatedAfterInsertingIncorrectMessage() {
-        final DeviceState actual = this.findDeviceState(25551);
-        final DeviceState expected = new DeviceState(25551, null);
-        assertEquals(expected, actual);
+        final DeviceStateEntity actual = this.findDeviceStateById(25551L);
+        assertNull(actual.getLastMessage());
+    }
+
+    private Set<DeviceStateEntity> findAllDeviceStates() {
+        return super.entityManager
+                .createQuery(HQL_QUERY_TO_FIND_ALL_DEVICE_STATES, DeviceStateEntity.class)
+                .getResultStream()
+                .collect(toSet());
     }
 
     @SuppressWarnings("all")
-    private DeviceState findDeviceState(final long deviceId) {
-        return this.jdbcTemplate.queryForObject(
-                "SELECT device_id, last_message_id "
-                        + "FROM device_state "
-                        + "WHERE device_id = :deviceId",
-                Map.of("deviceId", deviceId),
-                new DeviceStateRowMapper()
-        );
-    }
-
-    @Value
-    private static class DeviceState {
-        long deviceId;
-        Long lastMessageId;
-    }
-
-    private static final class DeviceStateRowMapper implements RowMapper<DeviceState> {
-        private static final String COLUMN_NAME_DEVICE_ID = "device_id";
-        private static final String COLUMN_NAME_LAST_MESSAGE_ID = "last_message_id";
-
-        @Override
-        public DeviceState mapRow(@NotNull ResultSet resultSet, int rowNumber)
-                throws SQLException {
-            final long deviceId = resultSet.getLong(COLUMN_NAME_DEVICE_ID);
-
-            Long lastMessageId = resultSet.getLong(COLUMN_NAME_LAST_MESSAGE_ID);
-            if (resultSet.wasNull()) {
-                lastMessageId = null;
-            }
-
-            return new DeviceState(deviceId, lastMessageId);
-        }
+    private DeviceStateEntity findDeviceStateById(Long id) {
+        return super.entityManager.find(DeviceStateEntity.class, id);
     }
 }
