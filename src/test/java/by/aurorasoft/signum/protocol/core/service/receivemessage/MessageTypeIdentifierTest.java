@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static by.aurorasoft.signum.crud.model.entity.MessageEntity.MessageType.*;
-import static java.time.Instant.now;
 import static java.time.Instant.parse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -82,10 +81,10 @@ public final class MessageTypeIdentifierTest {
     @Test
     public void currentMessageShouldBeIdentifiedAsValidWithPreviousMessage() {
         final Message givenPreviousMessage = mock(Message.class);
-        when(givenPreviousMessage.getDatetime()).thenReturn(now());
+        when(givenPreviousMessage.getDatetime()).thenReturn(parse("2021-01-01T00:00:01Z"));
 
         final Message givenCurrentMessage = mock(Message.class);
-        when(givenCurrentMessage.getDatetime()).thenReturn(now());
+        when(givenCurrentMessage.getDatetime()).thenReturn(parse("2021-01-01T00:00:02Z"));
 
         when(this.mockedPropertyValidator.isValidDateTime(any(Message.class))).thenReturn(true);
         when(this.mockedPropertyValidator.isValidAmountSatellite(any(Message.class))).thenReturn(true);
@@ -110,14 +109,13 @@ public final class MessageTypeIdentifierTest {
     @Test
     public void currentMessageShouldBeIdentifiedAsCorrectWithPreviousMessageBecauseOfNotValidAmountSatellite() {
         final Message givenPreviousMessage = mock(Message.class);
-        when(givenPreviousMessage.getDatetime()).thenReturn(now());
+        when(givenPreviousMessage.getDatetime()).thenReturn(parse("2021-01-01T00:00:01Z"));
 
         final Message givenCurrentMessage = mock(Message.class);
-        when(givenCurrentMessage.getDatetime()).thenReturn(now());
+        when(givenCurrentMessage.getDatetime()).thenReturn(parse("2021-01-01T00:00:02Z"));
 
         when(this.mockedPropertyValidator.isValidDateTime(any(Message.class))).thenReturn(true);
         when(this.mockedPropertyValidator.isValidAmountSatellite(any(Message.class))).thenReturn(false);
-        when(this.mockedPropertyValidator.areValidCoordinateParameters(any(Message.class))).thenReturn(true);
 
         final MessageType actual = this.typeIdentifier.identify(givenCurrentMessage, givenPreviousMessage);
         assertSame(CORRECT, actual);
@@ -138,10 +136,10 @@ public final class MessageTypeIdentifierTest {
     @Test
     public void currentMessageShouldBeIdentifiedAsCorrectWithPreviousMessageBecauseOfNotValidCoordinateParameters() {
         final Message givenPreviousMessage = mock(Message.class);
-        when(givenPreviousMessage.getDatetime()).thenReturn(now());
+        when(givenPreviousMessage.getDatetime()).thenReturn(parse("2021-01-01T00:00:02Z"));
 
         final Message givenCurrentMessage = mock(Message.class);
-        when(givenCurrentMessage.getDatetime()).thenReturn(now());
+        when(givenCurrentMessage.getDatetime()).thenReturn(parse("2021-01-01T00:00:03Z"));
 
         when(this.mockedPropertyValidator.isValidDateTime(any(Message.class))).thenReturn(true);
         when(this.mockedPropertyValidator.isValidAmountSatellite(any(Message.class))).thenReturn(true);
@@ -194,10 +192,7 @@ public final class MessageTypeIdentifierTest {
     @Test
     public void currentMessageShouldBeIdentifiedAsIncorrectWithPreviousMessageBecauseOfNotValidDateTime() {
         final Message givenPreviousMessage = mock(Message.class);
-        when(givenPreviousMessage.getDatetime()).thenReturn(now());
-
         final Message givenCurrentMessage = mock(Message.class);
-        when(givenCurrentMessage.getDatetime()).thenReturn(now());
 
         when(this.mockedPropertyValidator.isValidDateTime(any(Message.class))).thenReturn(false);
 
