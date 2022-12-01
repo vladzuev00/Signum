@@ -44,10 +44,14 @@ public final class DataPackageDeserializerTest {
                 + "keydrivercode;"
                 + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
         final Message givenMessage = Message.builder()
+                .datetime(parse("2022-11-15T14:56:43Z"))
+                .coordinate(new GpsCoordinate(57.406944F, 39.548332F))
+                .speed(100)
+                .course(15)
+                .altitude(10)
+                .amountSatellite(177)
+                .parameterNamesByValues(emptyMap())
                 .build();
-//        final Message givenMessage = new Message(parse("2022-11-15T14:56:43Z"),
-//                new GpsCoordinate(57.406944F, 39.548332F), 100, 15, 10,
-//                177, emptyMap());
         when(this.mockedParser.parse(anyString())).thenReturn(givenMessage);
 
         final Package actual = this.deserializer.deserialize(givenPackage);
