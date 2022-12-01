@@ -110,6 +110,10 @@ public class MessageEntity extends BaseEntity<Long> {
     )
     private double gpsOdometer;
 
+    /**
+     * If ignition equals 1 then ignition is on.
+     * If ignition equals 0 then ignition is off.
+     */
     @Column(name = "ignition")
     private int ignition;
 

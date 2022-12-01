@@ -73,7 +73,9 @@ public final class Message implements AbstractDto<Long>, LatLngAlt {
     }
 
     public Double getParameterOrDefault(ParameterName name, Double defaultValue) {
-        return this.parameterNamesByValues.getOrDefault(name, defaultValue);
+        return this.parameterNamesByValues != null
+                ? this.parameterNamesByValues.getOrDefault(name, defaultValue)
+                : defaultValue;
     }
 
     @Override
