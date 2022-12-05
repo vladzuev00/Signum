@@ -42,7 +42,19 @@ kafka:
         delivery-timeout-ms: 100000
       consumer:
         group-id: signum-messages-group
+        max-poll-records: 400
+        fetch-max-wait-ms: 1000
+        fetch-min-bytes: 10000
     saved-messages:
       name: signum-messages-main
       partitions-amount: 1
       replication-factor: 1
+      producer:
+        batch-size: 10
+        linger-ms: 500
+        delivery-timeout-ms: 100000
+      consumer:
+        group-id: signum-messages-main-group
+        max-poll-records: 400
+        fetch-max-wait-ms: 1000
+        fetch-min-bytes: 10000

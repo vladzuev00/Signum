@@ -1,4 +1,4 @@
-package by.aurorasoft.signum.kafka.concumer;
+package by.aurorasoft.signum.kafka.consumer;
 
 import by.aurorasoft.kafka.consumer.KafkaConsumerGenericRecordBatch;
 import by.aurorasoft.signum.crud.model.dto.Device;
@@ -38,7 +38,7 @@ public final class KafkaInboundMessageConsumer extends KafkaConsumerGenericRecor
     @KafkaListener(
             topics = "${kafka.topic.inbound-messages.name}",
             groupId = "${kafka.topic.inbound-messages.consumer.group-id}",
-            containerFactory = "kafkaListenerContainerFactoryInboundMessage")
+            containerFactory = "kafkaListenerContainerFactoryInboundMessages")
     public void listen(List<ConsumerRecord<Long, GenericRecord>> records, Acknowledgment acknowledgment) {
         final List<Message> messages = this.map(records);
 

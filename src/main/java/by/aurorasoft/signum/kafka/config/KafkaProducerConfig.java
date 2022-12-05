@@ -25,20 +25,35 @@ public class KafkaProducerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapAddress;
 
+    /**
+     * Kafka template for producer, which sends messages, which haven't been saved in database yet, to kafka.
+     */
     @Bean
     @Autowired
-    public KafkaTemplate<Long, GenericRecord> kafkaTemplateInboundMessage(
+    public KafkaTemplate<Long, GenericRecord> kafkaTemplateInboundMessages(
             @Value("${kafka.topic.inbound-messages.producer.batch-size}") int batchSize,
             @Value("${kafka.topic.inbound-messages.producer.linger-ms}") int lingerMs,
             @Value("${kafka.topic.inbound-messages.producer.delivery-timeout-ms}") int deliveryTimeoutMs,
             @Qualifier("transportableMessageSchema") Schema schema) {
-        return new KafkaTemplate<>(
-                this.createInboundMessageProducerFactory(batchSize, lingerMs, deliveryTimeoutMs, schema));
+        return new KafkaTemplate<>(this.createProducerFactory(batchSize, lingerMs, deliveryTimeoutMs, schema));
     }
 
-    private ProducerFactory<Long, GenericRecord> createInboundMessageProducerFactory(int batchSize, int lingerMs,
-                                                                                     int deliveryTimeoutMs,
-                                                                                     Schema schema) {
+    /**
+     * Kafka template for producer, which sends messages, which have been saved in database, to kafka.
+     */
+    @Bean
+    @Autowired
+    public KafkaTemplate<Long, GenericRecord> kafkaTemplateSavedMessages(
+            @Value("${kafka.topic.saved-messages.producer.batch-size}") int batchSize,
+            @Value("${kafka.topic.saved-messages.producer.linger-ms}") int lingerMs,
+            @Value("${kafka.topic.saved-messages.producer.delivery-timeout-ms}") int deliveryTimeoutMs,
+            @Qualifier("transportableMessageSchema") Schema schema) {
+        return new KafkaTemplate<>(this.createProducerFactory(batchSize, lingerMs, deliveryTimeoutMs, schema));
+    }
+
+    private <KeyType, ValueType> ProducerFactory<KeyType, ValueType> createProducerFactory(int batchSize, int lingerMs,
+                                                                                           int deliveryTimeoutMs,
+                                                                                           Schema schema) {
         final Map<String, Object> configProps = Map.of(
                 BOOTSTRAP_SERVERS_CONFIG, this.bootstrapAddress,
                 KEY_SERIALIZER_CLASS_CONFIG, LongSerializer.class,
