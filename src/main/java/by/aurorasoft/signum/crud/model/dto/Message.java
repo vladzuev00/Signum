@@ -31,10 +31,11 @@ public final class Message implements AbstractDto<Long>, LatLngAlt {
     private int ignition;
     private long engineTime;
     private double shock;
+    private Device device;
 
     public Message(Instant datetime, GpsCoordinate coordinate, int speed, int course, int altitude,
                    int amountSatellite, Map<ParameterName, Double> parameterNamesByValues, MessageType type,
-                   double gpsOdometer, int ignition, long engineTime, double shock) {
+                   double gpsOdometer, int ignition, long engineTime, double shock, Device device) {
         this.id = null;
         this.datetime = datetime;
         this.coordinate = coordinate;
@@ -48,11 +49,12 @@ public final class Message implements AbstractDto<Long>, LatLngAlt {
         this.ignition = ignition;
         this.engineTime = engineTime;
         this.shock = shock;
+        this.device = device;
     }
 
     public Message(Long id, Instant datetime, GpsCoordinate coordinate, int speed, int course, int altitude,
                    int amountSatellite, Map<ParameterName, Double> parameterNamesByValues, MessageType type,
-                   double gpsOdometer, int ignition, long engineTime, double shock) {
+                   double gpsOdometer, int ignition, long engineTime, double shock, Device device) {
         this.id = id;
         this.datetime = datetime;
         this.coordinate = coordinate;
@@ -66,10 +68,11 @@ public final class Message implements AbstractDto<Long>, LatLngAlt {
         this.ignition = ignition;
         this.engineTime = engineTime;
         this.shock = shock;
+        this.device = device;
     }
 
     public Double getParameter(ParameterName name) {
-        return this.parameterNamesByValues.getOrDefault(name, NOT_EXISTING_PARAMETER_VALUE);
+        return this.getParameterOrDefault(name, NOT_EXISTING_PARAMETER_VALUE);
     }
 
     public Double getParameterOrDefault(ParameterName name, Double defaultValue) {

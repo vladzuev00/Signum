@@ -1,10 +1,12 @@
 package by.aurorasoft.signum.crud.mapper;
 
+import by.aurorasoft.signum.crud.model.dto.Device;
 import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.crud.model.dto.Message.GpsCoordinate;
 import by.aurorasoft.signum.crud.model.dto.Message.ParameterName;
 import by.aurorasoft.signum.crud.model.entity.DeviceEntity;
 import by.aurorasoft.signum.crud.model.entity.MessageEntity;
+import by.nhorushko.crudgeneric.v2.mapper.AbsMapperEntityDto;
 import by.nhorushko.crudgeneric.v2.mapper.AbsMapperEntityExtDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -15,21 +17,15 @@ import java.util.Map;
 import static by.aurorasoft.signum.crud.model.dto.Message.ParameterName.*;
 
 @Component
-public final class MessageMapper
-        extends AbsMapperEntityExtDto<MessageEntity, Message, Long, DeviceEntity> {
-    public MessageMapper(ModelMapper modelMapper, EntityManager entityManager) {
-        super(modelMapper, MessageEntity.class, Message.class, entityManager, DeviceEntity.class);
+public final class MessageMapper extends AbsMapperEntityDto<MessageEntity, Message> {
+    public MessageMapper(ModelMapper modelMapper) {
+        super(modelMapper, MessageEntity.class, Message.class);
     }
 
     @Override
     protected void mapSpecificFields(Message source, MessageEntity destination) {
         mapGpsCoordinate(source, destination);
         mapParameters(source, destination);
-    }
-
-    @Override
-    protected void setRelation(DeviceEntity device, MessageEntity message) {
-        message.setDevice(device);
     }
 
     @Override
@@ -47,7 +43,8 @@ public final class MessageMapper
                 entity.getGpsOdometer(),
                 entity.getIgnition(),
                 entity.getEngineTime(),
-                entity.getShock());
+                entity.getShock(),
+                super.map(entity.getDevice(), Device.class));
     }
 
     private static void mapGpsCoordinate(Message source, MessageEntity destination) {

@@ -18,6 +18,8 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL10Dialect
     show-sql: true
+  kafka:
+    bootstrap-servers: 127.0.0.1:9092
 
 
 message:
@@ -26,3 +28,24 @@ message:
     maxValidAmountSatellite: 999
     minValidDOP: 0
     maxValidDOP: 7
+
+kafka:
+  topic:
+    inbound-messages:
+      name: signum-messages
+      partitions-amount: 1
+      replication-factor: 1
+      producer:
+        batch-size: 10
+        linger-ms: 500
+        delivery-timeout-ms: 100000
+      consumer:
+        group-id: signum-messages-group
+    saved-messages:
+      name: signum-messages-main
+      partitions-amount: 1
+      replication-factor: 1
+
+
+
+

@@ -3,7 +3,7 @@ package by.aurorasoft.signum.protocol.core.service.receivemessage;
 import by.aurorasoft.signum.crud.model.dto.Device;
 import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.crud.model.entity.MessageEntity.MessageType;
-import by.aurorasoft.signum.crud.service.MessageService;
+import by.aurorasoft.signum.kafka.producer.KafkaInboundMessageProducer;
 import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import by.aurorasoft.signum.protocol.core.service.receivemessage.propertycalculator.MessagePropertyCalculator;
 import io.netty.channel.ChannelHandlerContext;
@@ -20,7 +20,7 @@ import static java.util.Optional.*;
 @RequiredArgsConstructor
 public final class ReceivingMessageService {
     private final ContextManager contextManager;
-    private final MessageService messageService;
+    private final KafkaInboundMessageProducer kafkaProducer;
     private final MessageTypeIdentifier typeIdentifier;
     private final List<MessagePropertyCalculator> propertyCalculators;
 
@@ -28,8 +28,8 @@ public final class ReceivingMessageService {
      * Set 'type' in given messages, fix 'CORRECT' messages to 'VALID'
      * taking GPS coordinates and amount of satellites from last valid message,
      * calculate additional calculated properties for 'VALID' messages.
-     * If last valid message isn't exist, then 'CORRECT' messages are saved as 'INCORRECT'
-     *
+     * If last valid message isn't exist, then 'CORRECT' messages are saved as 'INCORRECT'.
+     * Injects device in each message. Sends result messages to kafka.
      * @param context  - current connection's context.
      * @param messages - messages, which were created by data from tracker:
      *                 without additional properties to be calculated.
@@ -47,8 +47,8 @@ public final class ReceivingMessageService {
                 });
         optionalNewPreviousMessage.ifPresent(
                 newPreviousMessage -> this.contextManager.putLastMessage(context, newPreviousMessage));
-        final Device device = this.contextManager.findDevice(context);
-        this.messageService.saveAll(device.getId(), messages);
+        messages.forEach(message -> this.injectDevice(message, context));
+        this.kafkaProducer.send(messages);
     }
 
     private void typeMessages(List<Message> messages) {
@@ -125,5 +125,10 @@ public final class ReceivingMessageService {
 
     private void calculateProperties(Message message, Message previous) {
         this.propertyCalculators.forEach(calculator -> calculator.calculate(message, previous));
+    }
+
+    private void injectDevice(Message message, ChannelHandlerContext context) {
+        final Device device = this.contextManager.findDevice(context);
+        message.setDevice(device);
     }
 }
