@@ -21,6 +21,7 @@ import java.net.Socket;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import static by.aurorasoft.signum.crud.model.dto.Command.Status.SUCCESS;
 import static by.aurorasoft.signum.crud.model.dto.Command.Type.ANSWER;
@@ -39,6 +40,7 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
     private static final String RESPONSE_LOGIN_PACKAGE_SUCCESS_AUTHORIZATION = "#AL#1\r\n";
     private static final String HQL_QUERY_TO_FIND_LAST_INSERTED_MESSAGE
             = "SELECT me FROM MessageEntity me WHERE me.id = (SELECT MAX(me.id) FROM MessageEntity me)";
+    private static final int WAIT_MESSAGE_DELIVERING_SECONDS_AMOUNT = 3;
 
     @Autowired
     private Server server;
@@ -119,6 +121,9 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String actualResponse = this.client.doRequest(request).get();
         final String expectedResponse = "#AD#1\r\n";
         assertEquals(expectedResponse, actualResponse);
+
+        waitMessageDelivering();
+
 
         final List<MessageEntity> messagesFromDB = super.findEntities(MessageEntity.class);
         assertEquals(1, messagesFromDB.size());
@@ -1671,6 +1676,11 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         assertSame(expected.getStatus(), actual.getStatus());
         assertEquals(expected.getDevice().getId(), actual.getDevice().getId());
         assertSame(expected.getStatus(), actual.getStatus());
+    }
+
+    private static void waitMessageDelivering()
+            throws InterruptedException {
+        SECONDS.sleep(WAIT_MESSAGE_DELIVERING_SECONDS_AMOUNT);
     }
 
     private static final class Client implements AutoCloseable {

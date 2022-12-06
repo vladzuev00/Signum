@@ -27,6 +27,9 @@ public class KafkaConsumerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapAddress;
 
+    /**
+     * Kafka factory of consumer, which consumes messages from kafka, which haven't been saved in database yet.
+     */
     @Bean
     @Autowired
     public ConsumerFactory<Long, GenericRecord> consumerFactoryInboundMessages(
@@ -45,6 +48,9 @@ public class KafkaConsumerConfig {
         return createKafkaListenerContainerFactory(consumerFactoryInboundMessages);
     }
 
+    /**
+     * Kafka factory of consumer, which consumes messages from kafka, which have been saved in database.
+     */
     @Bean
     @Autowired
     public ConsumerFactory<Long, GenericRecord> consumerFactorySavedMessages(

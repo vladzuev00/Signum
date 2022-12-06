@@ -19,7 +19,7 @@ public abstract class AbstractKafkaMessageProducer
     private static final String LOG_START_SENDING_MESSAGES
             = "Sending messages to kafka is started. Messages: %s. Topic: %s";
     private static final String LOG_END_SENDING_MESSAGES
-            = "Sending messages to kafka is finished. Messages: %s. Topic: %s";
+            = "Messages were sent to kafka. Messages: %s. Topic: %s";
     private static final String LOG_MESSAGE_WAS_SENT_FAILURE
             = "Sending message to kafka was failed. Message: %s. Topic: %s";
 

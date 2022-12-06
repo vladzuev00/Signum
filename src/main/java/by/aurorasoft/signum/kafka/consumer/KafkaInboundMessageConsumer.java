@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -35,11 +34,12 @@ public final class KafkaInboundMessageConsumer extends KafkaConsumerGenericRecor
     private final MessageService messageService;
     private final KafkaSavedMessageProducer savedMessageProducer;
 
+    @Override
     @KafkaListener(
             topics = "${kafka.topic.inbound-messages.name}",
             groupId = "${kafka.topic.inbound-messages.consumer.group-id}",
             containerFactory = "kafkaListenerContainerFactoryInboundMessages")
-    public void listen(List<ConsumerRecord<Long, GenericRecord>> records, Acknowledgment acknowledgment) {
+    public void listen(List<ConsumerRecord<Long, GenericRecord>> records) {
         final List<Message> messages = this.map(records);
 
         log.info(format(LOG_TEMPLATE_RECEIVE_INBOUND_MESSAGES_FROM_KAFKA, messages));
@@ -47,14 +47,8 @@ public final class KafkaInboundMessageConsumer extends KafkaConsumerGenericRecor
         log.info(format(LOG_TEMPLATE_SAVE_INBOUND_MESSAGES, messages));
 
         this.savedMessageProducer.send(savedMessages);
-
-        acknowledgment.acknowledge();
     }
 
-    @Override
-    public void listen(List<ConsumerRecord<Long, GenericRecord>> list) {
-        throw new UnsupportedOperationException();
-    }
 
     @Override
     protected Message map(GenericRecord genericRecord) {

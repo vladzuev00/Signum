@@ -2,7 +2,9 @@ package by.aurorasoft.signum.base;
 
 import by.nhorushko.crudgeneric.v2.domain.AbstractEntity;
 import com.yannbriancon.interceptor.HibernateQueryInterceptor;
+import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,8 +13,11 @@ import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.support.TestPropertySourceUtils;
 import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.utility.DockerImageName;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,12 +31,16 @@ import static org.junit.Assert.assertEquals;
 @Transactional
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ContextConfiguration(initializers = {AbstractContextTest.DBContainerInitializer.class})
+@ContextConfiguration(initializers = {AbstractContextTest.DBContainerInitializer.class, AbstractContextTest.KafkaBootstrapAddressOverrider.class})
 public abstract class AbstractContextTest {
     public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:11.1")
             .withDatabaseName("integration-tests-db")
             .withUsername("sa")
             .withPassword("sa");
+
+    @ClassRule
+    public static KafkaContainer kafkaContainer = new KafkaContainer(
+            DockerImageName.parse("confluentinc/cp-kafka:5.4.3"));
 
     private static final double ALLOWABLE_INACCURACY = 0.001;
 
@@ -95,6 +104,16 @@ public abstract class AbstractContextTest {
                     "spring.datasource.username=" + postgreSQLContainer.getUsername(),
                     "spring.datasource.password=" + postgreSQLContainer.getPassword()
             ).applyTo(configurableApplicationContext.getEnvironment());
+        }
+    }
+
+    public static class KafkaBootstrapAddressOverrider
+            implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+
+        @Override
+        public void initialize(ConfigurableApplicationContext applicationContext) {
+            TestPropertySourceUtils.addInlinedPropertiesToEnvironment(applicationContext,
+                    "spring.kafka.bootstrap-servers=" + kafkaContainer.getBootstrapServers());
         }
     }
 }
