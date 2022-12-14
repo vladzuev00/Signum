@@ -13,6 +13,8 @@ import javax.persistence.EntityManager;
 
 @Component
 public final class CommandMapper extends AbsMapperEntityDto<CommandEntity, Command> {
+    private static final Long NOT_DEFINED_DEVICE_ID = 0L;
+
     private final EntityManager entityManager;
 
     public CommandMapper(ModelMapper modelMapper, EntityManager entityManager) {
@@ -29,6 +31,10 @@ public final class CommandMapper extends AbsMapperEntityDto<CommandEntity, Comma
 
     @Override
     protected Command create(CommandEntity entity) {
-        return new Command(entity.getId(), entity.getText(), entity.getDevice().getId());
+        return new Command(entity.getId(), entity.getText(), mapDeviceId(entity));
+    }
+
+    private static Long mapDeviceId(CommandEntity entity) {
+        return entity.getDevice() != null ? entity.getDevice().getId() : NOT_DEFINED_DEVICE_ID;
     }
 }

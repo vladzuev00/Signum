@@ -16,7 +16,7 @@ public final class UnitMapper extends AbsMapperEntityDto<UnitEntity, Unit> {
 
     @Override
     protected Unit create(UnitEntity entity) {
-        final User user = map(entity.getUser(), User.class);
+        final User user = super.map(entity.getUser(), User.class);
         return new Unit(entity.getId(), entity.getName(), user);
     }
 }

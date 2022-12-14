@@ -31,11 +31,11 @@ public final class Message implements AbstractDto<Long>, LatLngAlt {
     private int ignition;
     private long engineTime;
     private double shock;
-    private Device device;
+    private Long deviceId;
 
     public Message(Instant datetime, GpsCoordinate coordinate, int speed, int course, int altitude,
                    int amountSatellite, Map<ParameterName, Double> parameterNamesByValues, MessageType type,
-                   double gpsOdometer, int ignition, long engineTime, double shock, Device device) {
+                   double gpsOdometer, int ignition, long engineTime, double shock, Long deviceId) {
         this.id = null;
         this.datetime = datetime;
         this.coordinate = coordinate;
@@ -49,12 +49,12 @@ public final class Message implements AbstractDto<Long>, LatLngAlt {
         this.ignition = ignition;
         this.engineTime = engineTime;
         this.shock = shock;
-        this.device = device;
+        this.deviceId = deviceId;
     }
 
     public Message(Long id, Instant datetime, GpsCoordinate coordinate, int speed, int course, int altitude,
                    int amountSatellite, Map<ParameterName, Double> parameterNamesByValues, MessageType type,
-                   double gpsOdometer, int ignition, long engineTime, double shock, Device device) {
+                   double gpsOdometer, int ignition, long engineTime, double shock, Long deviceId) {
         this.id = id;
         this.datetime = datetime;
         this.coordinate = coordinate;
@@ -68,7 +68,7 @@ public final class Message implements AbstractDto<Long>, LatLngAlt {
         this.ignition = ignition;
         this.engineTime = engineTime;
         this.shock = shock;
-        this.device = device;
+        this.deviceId = deviceId;
     }
 
     public Double getParameter(ParameterName name) {

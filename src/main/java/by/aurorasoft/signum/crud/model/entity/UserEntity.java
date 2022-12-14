@@ -19,7 +19,6 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Setter
 @Getter
 @ToString
-@Builder
 public class UserEntity extends NamedEntity<Long> {
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -35,6 +34,7 @@ public class UserEntity extends NamedEntity<Long> {
         this.units = units;
     }
 
+    @Builder
     public UserEntity(Long id, String name, List<UnitEntity> units) {
         super(name);
         this.id = id;

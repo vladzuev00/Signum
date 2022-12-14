@@ -2,7 +2,6 @@ package by.aurorasoft.signum.base;
 
 import by.nhorushko.crudgeneric.v2.domain.AbstractEntity;
 import com.yannbriancon.interceptor.HibernateQueryInterceptor;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.runner.RunWith;
@@ -25,7 +24,6 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.TimeZone;
 
-import static java.lang.Math.abs;
 import static org.junit.Assert.assertEquals;
 
 @Transactional
@@ -42,7 +40,7 @@ public abstract class AbstractContextTest {
     public static KafkaContainer kafkaContainer = new KafkaContainer(
             DockerImageName.parse("confluentinc/cp-kafka:5.4.3"));
 
-    private static final double ALLOWABLE_INACCURACY = 0.001;
+    private static final float ALLOWABLE_INACCURACY = 0.001F;
 
     static {
         postgreSQLContainer.start();
@@ -87,12 +85,12 @@ public abstract class AbstractContextTest {
                 .getResultList();
     }
 
-    protected static boolean areEqualsWithInaccuracy(double expected, double actual) {
-        return abs(expected - actual) <= ALLOWABLE_INACCURACY;
+    protected static void checkEqualsWithInaccuracy(double expected, double actual) {
+        assertEquals(expected, actual, ALLOWABLE_INACCURACY);
     }
 
-    protected static boolean areEqualsWithInaccuracy(float expected, float actual) {
-        return abs(expected - actual) <= ALLOWABLE_INACCURACY;
+    protected static void checkEqualsWithInaccuracy(float expected, float actual) {
+        assertEquals(expected, actual, ALLOWABLE_INACCURACY);
     }
 
     static class DBContainerInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
@@ -110,6 +108,7 @@ public abstract class AbstractContextTest {
     public static class KafkaBootstrapAddressOverrider
             implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
+        @SuppressWarnings("NullableProblems")
         @Override
         public void initialize(ConfigurableApplicationContext applicationContext) {
             TestPropertySourceUtils.addInlinedPropertiesToEnvironment(applicationContext,

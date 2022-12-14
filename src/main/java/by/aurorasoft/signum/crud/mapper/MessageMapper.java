@@ -1,13 +1,11 @@
 package by.aurorasoft.signum.crud.mapper;
 
-import by.aurorasoft.signum.crud.model.dto.Device;
 import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.crud.model.dto.Message.GpsCoordinate;
 import by.aurorasoft.signum.crud.model.dto.Message.ParameterName;
 import by.aurorasoft.signum.crud.model.entity.DeviceEntity;
 import by.aurorasoft.signum.crud.model.entity.MessageEntity;
 import by.nhorushko.crudgeneric.v2.mapper.AbsMapperEntityDto;
-import by.nhorushko.crudgeneric.v2.mapper.AbsMapperEntityExtDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -18,14 +16,20 @@ import static by.aurorasoft.signum.crud.model.dto.Message.ParameterName.*;
 
 @Component
 public final class MessageMapper extends AbsMapperEntityDto<MessageEntity, Message> {
-    public MessageMapper(ModelMapper modelMapper) {
+    private static final Long NOT_DEFINED_ID = 0L;
+
+    private final EntityManager entityManager;
+
+    public MessageMapper(ModelMapper modelMapper, EntityManager entityManager) {
         super(modelMapper, MessageEntity.class, Message.class);
+        this.entityManager = entityManager;
     }
 
     @Override
     protected void mapSpecificFields(Message source, MessageEntity destination) {
         mapGpsCoordinate(source, destination);
         mapParameters(source, destination);
+        this.mapDevice(source, destination);
     }
 
     @Override
@@ -44,7 +48,7 @@ public final class MessageMapper extends AbsMapperEntityDto<MessageEntity, Messa
                 entity.getIgnition(),
                 entity.getEngineTime(),
                 entity.getShock(),
-                super.map(entity.getDevice(), Device.class));
+                mapDeviceId(entity));
     }
 
     private static void mapGpsCoordinate(Message source, MessageEntity destination) {
@@ -61,6 +65,10 @@ public final class MessageMapper extends AbsMapperEntityDto<MessageEntity, Messa
         destination.setEcoBraking(source.getParameter(ACCELERATION_DOWN).floatValue());
     }
 
+    private void mapDevice(Message source, MessageEntity destination) {
+        destination.setDevice(this.entityManager.getReference(DeviceEntity.class, source.getDeviceId()));
+    }
+
     private static Map<ParameterName, Double> mapParameters(MessageEntity entity) {
         return Map.of(
                 GSM_LEVEL, (double) entity.getGsmLevel(),
@@ -69,5 +77,9 @@ public final class MessageMapper extends AbsMapperEntityDto<MessageEntity, Messa
                 ACCELERATION_UP, (double) entity.getEcoAcceleration(),
                 ACCELERATION_DOWN, (double) entity.getEcoBraking()
         );
+    }
+
+    private static Long mapDeviceId(MessageEntity entity) {
+        return entity.getDevice() != null ? entity.getDevice().getId() : NOT_DEFINED_ID;
     }
 }

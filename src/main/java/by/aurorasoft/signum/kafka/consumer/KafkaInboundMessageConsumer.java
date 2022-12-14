@@ -1,7 +1,6 @@
 package by.aurorasoft.signum.kafka.consumer;
 
 import by.aurorasoft.kafka.consumer.KafkaConsumerGenericRecordBatch;
-import by.aurorasoft.signum.crud.model.dto.Device;
 import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.crud.model.dto.Message.GpsCoordinate;
 import by.aurorasoft.signum.crud.model.dto.Message.ParameterName;
@@ -66,7 +65,7 @@ public final class KafkaInboundMessageConsumer extends KafkaConsumerGenericRecor
                 .ignition(super.getInt(genericRecord, IGNITION.getName()))
                 .engineTime(super.getLong(genericRecord, ENGINE_TIME.getName()))
                 .shock(super.getDouble(genericRecord, SHOCK.getName()))
-                .device(this.mapDevice(genericRecord))
+                .deviceId(super.getLong(genericRecord, DEVICE_ID.getName()))
                 .build();
     }
 
@@ -94,11 +93,5 @@ public final class KafkaInboundMessageConsumer extends KafkaConsumerGenericRecor
 
     private MessageType mapType(GenericRecord genericRecord) {
         return MessageType.valueOf(super.getString(genericRecord, TYPE.getName()));
-    }
-
-    private Device mapDevice(GenericRecord genericRecord) {
-        return Device.builder()
-                .id(super.getLong(genericRecord, DEVICE_ID.getName()))
-                .build();
     }
 }

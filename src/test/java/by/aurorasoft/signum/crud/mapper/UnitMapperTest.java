@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 public final class UnitMapperTest extends AbstractContextTest {
 
@@ -19,11 +18,15 @@ public final class UnitMapperTest extends AbstractContextTest {
 
     @Test
     public void entityShouldBeMappedToDto() {
-        final UnitEntity givenEntity = new UnitEntity(255L, "unit_a",
-                new UserEntity(256L, "user_a", emptyList()));
+        final UnitEntity givenEntity = UnitEntity.builder()
+                .id(255L)
+                .name("unit_a")
+                .user(new UserEntity(256L, "user_a", emptyList()))
+                .build();
 
         final Unit actual = this.mapper.toDto(givenEntity);
         final Unit expected = new Unit(255L, "unit_a", new User(256L, "user_a"));
+
         assertEquals(expected, actual);
     }
 
@@ -31,11 +34,19 @@ public final class UnitMapperTest extends AbstractContextTest {
     public void dtoShouldBeMappedToEntity() {
         final Unit givenUnit = new Unit(255L, "unit_a", new User(256L, "user_1"));
 
-        final UnitEntity resultEntity = this.mapper.toEntity(givenUnit);
-        assertEquals(255, resultEntity.getId().longValue());
-        assertEquals("unit_a", resultEntity.getName());
-        assertEquals(256,  resultEntity.getUser().getId().longValue());
-        assertEquals("user_1", resultEntity.getUser().getName());
-        assertNull(resultEntity.getUser().getUnits());
+        final UnitEntity actual = this.mapper.toEntity(givenUnit);
+        final UnitEntity expected = UnitEntity.builder()
+                .id(255L)
+                .name("unit_a")
+                .user(super.entityManager.getReference(UserEntity.class, 256L))
+                .build();
+
+        checkEquals(expected, actual);
+    }
+
+    private static void checkEquals(UnitEntity expected, UnitEntity actual) {
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getName(), actual.getName());
+        assertEquals(expected.getUser().getId(), actual.getUser().getId());
     }
 }

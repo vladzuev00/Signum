@@ -129,6 +129,6 @@ public final class ReceivingMessageService {
 
     private void injectDevice(Message message, ChannelHandlerContext context) {
         final Device device = this.contextManager.findDevice(context);
-        message.setDevice(device);
+        message.setDeviceId(device.getId());
     }
 }

@@ -17,7 +17,6 @@ import static javax.persistence.GenerationType.IDENTITY;
 @AllArgsConstructor
 @Setter
 @Getter
-@Builder
 public class UnitEntity extends NamedEntity<Long> {
 
     @Id
@@ -29,11 +28,7 @@ public class UnitEntity extends NamedEntity<Long> {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    public UnitEntity(String name, UserEntity user) {
-        super(name);
-        this.user = user;
-    }
-
+    @Builder
     public UnitEntity(Long id, String name, UserEntity user) {
         super(name);
         this.id = id;

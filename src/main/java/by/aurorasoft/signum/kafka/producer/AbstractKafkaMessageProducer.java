@@ -44,7 +44,7 @@ public abstract class AbstractKafkaMessageProducer
 
     @Override
     protected final Long getTopicKey(Message message) {
-        return message.getDevice().getId();
+        return message.getDeviceId();
     }
 
     @Override

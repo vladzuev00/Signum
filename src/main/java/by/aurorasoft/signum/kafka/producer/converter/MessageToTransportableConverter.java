@@ -12,7 +12,6 @@ public final class MessageToTransportableConverter {
     private static final long NOT_DEFINED_DATE_TIME = 0;
     private static final float NOT_DEFINED_LATITUDE = 0;
     private static final float NOT_DEFINED_LONGITUDE = 0;
-    private static final Long NOT_DEFINED_DEVICE_ID = 0L;
 
     public TransportableMessage convert(Message converted) {
         return new TransportableMessage(
@@ -34,7 +33,7 @@ public final class MessageToTransportableConverter {
                 converted.getIgnition(),
                 converted.getEngineTime(),
                 converted.getShock(),
-                findDeviceId(converted));
+                converted.getDeviceId());
     }
 
 
@@ -53,9 +52,5 @@ public final class MessageToTransportableConverter {
 
     private static float findLongitude(Message message) {
         return message.getCoordinate() != null ? message.getCoordinate().getLongitude() : NOT_DEFINED_LONGITUDE;
-    }
-
-    private static Long findDeviceId(Message message) {
-        return message.getDevice() != null ? message.getDevice().getId() : NOT_DEFINED_DEVICE_ID;
     }
 }
