@@ -15,10 +15,10 @@ public final class UnitRepositoryTest extends AbstractContextTest {
 
     @Test
     public void unitShouldBeInserted() {
-        final UnitEntity givenUnit = new UnitEntity(
-                "unit-name",
-                super.entityManager.getReference(UserEntity.class, 25551L)
-        );
+        final UnitEntity givenUnit = UnitEntity.builder()
+                .name("unit-name")
+                .user(super.entityManager.getReference(UserEntity.class, 25551L))
+                .build();
 
         super.startQueryCount();
         this.unitRepository.save(givenUnit);
@@ -28,11 +28,20 @@ public final class UnitRepositoryTest extends AbstractContextTest {
     @Test
     public void unitShouldBeFoundById() {
         super.startQueryCount();
-        final UnitEntity unit = this.unitRepository.findById(25551L).orElseThrow();
+        final UnitEntity actual = this.unitRepository.findById(25551L).orElseThrow();
         super.checkQueryCount(1);
 
-        assertEquals(25551, unit.getId().longValue());
-        assertEquals("unit_a", unit.getName());
-        assertEquals(25551, unit.getUser().getId().longValue());
+        final UnitEntity expected = UnitEntity.builder()
+                .id(25551L)
+                .name("unit_a")
+                .user(super.entityManager.getReference(UserEntity.class, 25551L))
+                .build();
+        checkEquals(expected, actual);
+    }
+
+    private static void checkEquals(UnitEntity expected, UnitEntity actual) {
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getName(), actual.getName());
+        assertEquals(expected.getUser().getId(), actual.getUser().getId());
     }
 }

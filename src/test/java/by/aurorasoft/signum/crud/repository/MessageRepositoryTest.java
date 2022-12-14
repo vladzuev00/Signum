@@ -10,6 +10,7 @@ import org.springframework.test.context.jdbc.Sql;
 import java.util.Optional;
 
 import static by.aurorasoft.signum.crud.model.entity.MessageEntity.MessageType.VALID;
+import static java.lang.Long.MIN_VALUE;
 import static java.time.Instant.now;
 import static java.time.Instant.parse;
 import static org.junit.Assert.*;
@@ -109,6 +110,12 @@ public final class MessageRepositoryTest extends AbstractContextTest {
                 .shock(2)
                 .build();
         checkEquals(expected, actual);
+    }
+
+    @Test
+    public void deviceLastMessageShouldNotBeFound() {
+        final Optional<MessageEntity> optionalActual = this.repository.findLastMessage(MIN_VALUE);
+        assertTrue(optionalActual.isEmpty());
     }
 
     private static void checkEquals(MessageEntity expected, MessageEntity actual) {

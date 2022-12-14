@@ -14,6 +14,7 @@ import java.util.Optional;
 import static by.aurorasoft.signum.crud.model.dto.Message.ParameterName.*;
 import static by.aurorasoft.signum.crud.model.entity.MessageEntity.MessageType.VALID;
 import static java.time.Instant.parse;
+import static java.util.Arrays.stream;
 import static org.junit.Assert.*;
 
 public final class MessageServiceTest extends AbstractContextTest {
@@ -50,6 +51,13 @@ public final class MessageServiceTest extends AbstractContextTest {
         checkEquals(expected, actual);
     }
 
+    @Test
+    public void lastMessageShouldNotBeFound() {
+        final Long givenDeviceId = 25551L;
+        final Optional<Message> optionalActual = this.service.findLastMessage(givenDeviceId);
+        assertTrue(optionalActual.isEmpty());
+    }
+
     private static void checkEquals(Message expected, Message actual) {
         assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getDatetime(), actual.getDatetime());
@@ -66,15 +74,19 @@ public final class MessageServiceTest extends AbstractContextTest {
     }
 
     private static void checkEqualsParameters(Map<ParameterName, Double> expected, Map<ParameterName, Double> actual) {
-//        stream(ParameterName.values())
-//                .forEach(parameterName
-//                        -> {
-//                    final boolean bothNotExist = !expected.containsKey(parameterName)
-//                            && !actual.containsKey(parameterName);
-//                    final Supplier<Boolean> bothEqualSupplier
-//                            = () -> checkEqualsWithInaccuracy(expected.get(parameterName), actual.get(parameterName));
-//                    final boolean parametersMatch = bothNotExist || bothEqualSupplier.get();
-//                    assertTrue(parametersMatch);
-//                });
+        stream(ParameterName.values())
+                .forEach(parameterName
+                        -> {
+                    final boolean bothExist = expected.containsKey(parameterName) && actual.containsKey(parameterName);
+                    final boolean bothNotExist = !expected.containsKey(parameterName)
+                            && !actual.containsKey(parameterName);
+                    if (bothExist) {
+                        checkEqualsWithInaccuracy(expected.get(parameterName), actual.get(parameterName));
+                    } else if (bothNotExist) {
+                        assertTrue(true);
+                    } else {
+                        fail();
+                    }
+                });
     }
 }

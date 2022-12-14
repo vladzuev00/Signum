@@ -32,27 +32,34 @@ public final class DeviceRepositoryTest extends AbstractContextTest {
     @Test
     public void deviceShouldBeFoundById() {
         super.startQueryCount();
-        final DeviceEntity foundDevice = this.repository.findById(25551L).orElseThrow();
+        final DeviceEntity actual = this.repository.findById(25551L).orElseThrow();
         super.checkQueryCount(1);
 
-        assertEquals(25551, foundDevice.getId().longValue());
-        assertEquals("355234055650192", foundDevice.getImei());
-        assertEquals("+37257063997", foundDevice.getPhoneNumber());
-        assertSame(TRACKER, foundDevice.getType());
-        assertEquals(25551L, foundDevice.getUnit().getId().longValue());
+        final DeviceEntity expected = DeviceEntity.builder()
+                .id(25551L)
+                .imei("355234055650192")
+                .phoneNumber("+37257063997")
+                .type(TRACKER)
+                .unit(super.entityManager.getReference(UnitEntity.class, 25551L))
+                .build();
+        checkEquals(expected, actual);
     }
 
     @Test
     public void deviceShouldBeFoundByImei() {
         super.startQueryCount();
-        final DeviceEntity foundDevice = this.repository.findByImei("355234055650192").orElseThrow();
+        final DeviceEntity actual = this.repository.findByImei("355234055650192").orElseThrow();
         super.checkQueryCount(1);
 
-        assertEquals(25551, foundDevice.getId().longValue());
-        assertEquals("355234055650192", foundDevice.getImei());
-        assertEquals("+37257063997", foundDevice.getPhoneNumber());
-        assertSame(TRACKER, foundDevice.getType());
-        assertEquals(25551L, foundDevice.getUnit().getId().longValue());
+        final DeviceEntity expected = DeviceEntity.builder()
+                .id(25551L)
+                .imei("355234055650192")
+                .phoneNumber("+37257063997")
+                .type(TRACKER)
+                .unit(super.entityManager.getReference(UnitEntity.class, 25551L))
+                .build();
+
+        checkEquals(expected, actual);
     }
 
     @Test
@@ -61,5 +68,13 @@ public final class DeviceRepositoryTest extends AbstractContextTest {
         final Optional<DeviceEntity> optionalDevice = this.repository.findByImei("00000000000000000000");
         super.checkQueryCount(1);
         assertTrue(optionalDevice.isEmpty());
+    }
+
+    private static void checkEquals(DeviceEntity expected, DeviceEntity actual) {
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getImei(), actual.getImei());
+        assertEquals(expected.getPhoneNumber(), actual.getPhoneNumber());
+        assertSame(expected.getType(), actual.getType());
+        assertEquals(expected.getUnit().getId(), actual.getUnit().getId());
     }
 }

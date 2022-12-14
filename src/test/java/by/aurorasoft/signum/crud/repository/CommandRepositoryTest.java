@@ -1,10 +1,12 @@
 package by.aurorasoft.signum.crud.repository;
 
 import by.aurorasoft.signum.base.AbstractContextTest;
+import by.aurorasoft.signum.crud.model.dto.Command.Status;
 import by.aurorasoft.signum.crud.model.entity.CommandEntity;
 import by.aurorasoft.signum.crud.model.entity.DeviceEntity;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
@@ -14,7 +16,7 @@ import static by.aurorasoft.signum.crud.model.dto.Command.Status.*;
 import static by.aurorasoft.signum.crud.model.dto.Command.Type.COMMAND;
 import static by.aurorasoft.signum.crud.model.entity.CommandEntity.builder;
 import static java.lang.Long.MIN_VALUE;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 import static org.junit.Assert.*;
 
 public final class CommandRepositoryTest extends AbstractContextTest {
@@ -40,14 +42,17 @@ public final class CommandRepositoryTest extends AbstractContextTest {
             = "INSERT INTO command(id, text, status, device_id, type) VALUES(255, 'command', 'NEW', 25551, 'COMMAND')")
     public void commandShouldBeFoundById() {
         super.startQueryCount();
-        final CommandEntity foundCommand = this.repository.findById(255L).orElseThrow();
+        final CommandEntity actual = this.repository.findById(255L).orElseThrow();
         super.checkQueryCount(1);
 
-        assertEquals(255, foundCommand.getId().longValue());
-        assertEquals("command", foundCommand.getText());
-        assertSame(NEW, foundCommand.getStatus());
-        assertEquals(25551, foundCommand.getDevice().getId().longValue());
-        assertSame(COMMAND, foundCommand.getType());
+        final CommandEntity expected = CommandEntity.builder()
+                .id(255L)
+                .text("command")
+                .status(NEW)
+                .device(super.entityManager.getReference(DeviceEntity.class, 25551L))
+                .type(COMMAND)
+                .build();
+        checkEquals(expected, actual);
     }
 
     @Test
@@ -58,12 +63,20 @@ public final class CommandRepositoryTest extends AbstractContextTest {
         this.repository.updateStatus(255L, SENT);
         super.checkQueryCount(1);
 
-        final CommandEntity updatedCommand = this.repository.findById(255L).orElseThrow();
-        assertEquals(255, updatedCommand.getId().longValue());
-        assertEquals("command", updatedCommand.getText());
-        assertSame(SENT, updatedCommand.getStatus());
-        assertEquals(25551, updatedCommand.getDevice().getId().longValue());
-        assertSame(COMMAND, updatedCommand.getType());
+        final CommandEntity actual = this.repository.findById(255L).orElseThrow();
+        final CommandEntity expected = CommandEntity.builder()
+                .id(255L)
+                .text("command")
+                .status(SENT)
+                .device(super.entityManager.getReference(DeviceEntity.class, 25551L))
+                .type(COMMAND)
+                .build();
+        checkEquals(expected, actual);
+    }
+
+    @Test(expected = DataIntegrityViolationException.class)
+    public void commandShouldNotBeUpdatedByNotDefinedStatus() {
+        this.repository.updateStatus(255L, Status.NOT_DEFINED);
     }
 
     @Test
@@ -79,10 +92,10 @@ public final class CommandRepositoryTest extends AbstractContextTest {
                 .findByDeviceIdAndStatuses(25552L, Set.of(SENT, SUCCESS));
         super.checkQueryCount(1);
 
-        final List<Long> actual = foundCommands.stream()
+        final Set<Long> actual = foundCommands.stream()
                 .map(CommandEntity::getId)
-                .collect(toList());
-        final List<Long> expected = List.of(256L, 257L);
+                .collect(toSet());
+        final Set<Long> expected = Set.of(256L, 257L);
         assertEquals(expected, actual);
     }
 
@@ -94,5 +107,18 @@ public final class CommandRepositoryTest extends AbstractContextTest {
         super.checkQueryCount(1);
 
         assertTrue(foundCommands.isEmpty());
+    }
+
+    @Test(expected = DataIntegrityViolationException.class)
+    public void commandsShouldNotBeFoundByNotDefinedStatus() {
+        this.repository.findByDeviceIdAndStatuses(MIN_VALUE, Set.of(Status.NOT_DEFINED, SUCCESS));
+    }
+
+    private static void checkEquals(CommandEntity expected, CommandEntity actual) {
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getText(), actual.getText());
+        assertSame(expected.getStatus(), actual.getStatus());
+        assertEquals(expected.getDevice().getId(), actual.getDevice().getId());
+        assertSame(expected.getType(), actual.getType());
     }
 }

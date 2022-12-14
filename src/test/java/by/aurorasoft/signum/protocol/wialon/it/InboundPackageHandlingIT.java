@@ -123,7 +123,6 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
 
         waitMessageDelivering();
 
-
         final List<MessageEntity> messagesFromDB = super.findEntities(MessageEntity.class);
         assertEquals(1, messagesFromDB.size());
 
@@ -175,6 +174,8 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String actualResponse = this.client.doRequest(request).get();
         final String expectedResponse = "#AD#1\r\n";
         assertEquals(expectedResponse, actualResponse);
+
+        waitMessageDelivering();
 
         final List<MessageEntity> messagesFromDB = super.findEntities(MessageEntity.class);
         assertEquals(1, messagesFromDB.size());
@@ -228,6 +229,8 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String expectedResponse = "#AD#1\r\n";
         assertEquals(expectedResponse, actualResponse);
 
+        waitMessageDelivering();
+
         final List<MessageEntity> messagesFromDB = super.findEntities(MessageEntity.class);
         assertEquals(1, messagesFromDB.size());
 
@@ -279,6 +282,8 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String actualResponse = this.client.doRequest(request).get();
         final String expectedResponse = "#AD#1\r\n";
         assertEquals(expectedResponse, actualResponse);
+
+        waitMessageDelivering();
 
         final List<MessageEntity> messagesFromDB = super.findEntities(MessageEntity.class);
         assertEquals(1, messagesFromDB.size());
@@ -332,6 +337,8 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String expectedResponse = "#AD#1\r\n";
         assertEquals(expectedResponse, actualResponse);
 
+        waitMessageDelivering();
+
         final List<MessageEntity> messagesFromDB = super.findEntities(MessageEntity.class);
         assertEquals(1, messagesFromDB.size());
 
@@ -383,6 +390,8 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String actualResponse = this.client.doRequest(request).get();
         final String expectedResponse = "#AD#1\r\n";
         assertEquals(expectedResponse, actualResponse);
+
+        waitMessageDelivering();
 
         final List<MessageEntity> messagesFromDB = super.findEntities(MessageEntity.class);
         assertEquals(1, messagesFromDB.size());
@@ -436,6 +445,8 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String expectedResponse = "#AD#1\r\n";
         assertEquals(expectedResponse, actualResponse);
 
+        waitMessageDelivering();
+
         final List<MessageEntity> messagesFromDB = super.findEntities(MessageEntity.class);
         assertEquals(1, messagesFromDB.size());
 
@@ -487,6 +498,8 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String actualResponse = this.client.doRequest(request).get();
         final String expectedResponse = "#AD#1\r\n";
         assertEquals(expectedResponse, actualResponse);
+
+        waitMessageDelivering();
 
         final List<MessageEntity> messagesFromDB = super.findEntities(MessageEntity.class);
         assertEquals(1, messagesFromDB.size());
@@ -540,6 +553,8 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String expectedResponse = "#AD#1\r\n";
         assertEquals(expectedResponse, actualResponse);
 
+        waitMessageDelivering();
+
         final List<MessageEntity> messagesFromDB = super.findEntities(MessageEntity.class);
         assertEquals(1, messagesFromDB.size());
 
@@ -591,6 +606,8 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String actualResponse = this.client.doRequest(request).get();
         final String expectedResponse = "#AD#1\r\n";
         assertEquals(expectedResponse, actualResponse);
+
+        waitMessageDelivering();
 
         final List<MessageEntity> messagesFromDB = super.findEntities(MessageEntity.class);
         assertEquals(1, messagesFromDB.size());
@@ -650,6 +667,8 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String expectedResponseDataPackage = "#AD#1\r\n";
         assertEquals(expectedResponseDataPackage, actualResponseDataPackage);
 
+        waitMessageDelivering();
+
         final MessageEntity actualSavedMessage = this.findLastInsertedMessage();
         final MessageEntity expectedSavedMessage = MessageEntity.builder()
                 .device(super.entityManager.getReference(DeviceEntity.class, 25551L))
@@ -704,6 +723,8 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String actualResponseDataPackage = this.client.doRequest(requestDataPackage).get();
         final String expectedResponseDataPackage = "#AD#1\r\n";
         assertEquals(expectedResponseDataPackage, actualResponseDataPackage);
+
+        waitMessageDelivering();
 
         final MessageEntity actualSavedMessage = this.findLastInsertedMessage();
         final MessageEntity expectedSavedMessage = MessageEntity.builder()
@@ -760,6 +781,8 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String expectedResponseDataPackage = "#AD#1\r\n";
         assertEquals(expectedResponseDataPackage, actualResponseDataPackage);
 
+        waitMessageDelivering();
+
         final MessageEntity actualSavedMessage = this.findLastInsertedMessage();
         final MessageEntity expectedSavedMessage = MessageEntity.builder()
                 .device(super.entityManager.getReference(DeviceEntity.class, 25551L))
@@ -814,6 +837,8 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String actualResponseDataPackage = this.client.doRequest(requestDataPackage).get();
         final String expectedResponseDataPackage = "#AD#1\r\n";
         assertEquals(expectedResponseDataPackage, actualResponseDataPackage);
+
+        waitMessageDelivering();
 
         final MessageEntity actualSavedMessage = this.findLastInsertedMessage();
         final MessageEntity expectedSavedMessage = MessageEntity.builder()
@@ -870,6 +895,8 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String expectedResponseDataPackage = "#AD#1\r\n";
         assertEquals(expectedResponseDataPackage, actualResponseDataPackage);
 
+        waitMessageDelivering();
+
         final MessageEntity actualSavedMessage = this.findLastInsertedMessage();
         final MessageEntity expectedSavedMessage = MessageEntity.builder()
                 .device(super.entityManager.getReference(DeviceEntity.class, 25551L))
@@ -924,6 +951,8 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String actualResponseDataPackage = this.client.doRequest(requestDataPackage).get();
         final String expectedResponseDataPackage = "#AD#1\r\n";
         assertEquals(expectedResponseDataPackage, actualResponseDataPackage);
+
+        waitMessageDelivering();
 
         final MessageEntity actualSavedMessage = this.findLastInsertedMessage();
         final MessageEntity expectedSavedMessage = MessageEntity.builder()
@@ -980,6 +1009,8 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String expectedResponseDataPackage = "#AD#1\r\n";
         assertEquals(expectedResponseDataPackage, actualResponseDataPackage);
 
+        waitMessageDelivering();
+
         final MessageEntity actualSavedMessage = this.findLastInsertedMessage();
         final MessageEntity expectedSavedMessage = MessageEntity.builder()
                 .device(super.entityManager.getReference(DeviceEntity.class, 25551L))
@@ -1035,6 +1066,8 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String expectedResponseDataPackage = "#AD#1\r\n";
         assertEquals(expectedResponseDataPackage, actualResponseDataPackage);
 
+        waitMessageDelivering();
+
         final MessageEntity actualSavedMessage = this.findLastInsertedMessage();
         final MessageEntity expectedSavedMessage = MessageEntity.builder()
                 .device(super.entityManager.getReference(DeviceEntity.class, 25551L))
@@ -1088,6 +1121,8 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String actualResponseDataPackage = this.client.doRequest(requestDataPackage).get();
         final String expectedResponseDataPackage = "#AD#1\r\n";
         assertEquals(expectedResponseDataPackage, actualResponseDataPackage);
+
+        waitMessageDelivering();
 
         final MessageEntity actualSavedMessage = this.findLastInsertedMessage();
         final MessageEntity expectedSavedMessage = MessageEntity.builder()
@@ -1165,6 +1200,8 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String actualResponse = this.client.doRequest(requestBlackBoxPackage).get();
         final String expectedResponse = "#AB#2\r\n";
         assertEquals(expectedResponse, actualResponse);
+
+        waitMessageDelivering();
 
         final List<MessageEntity> messagesFromDB = super.findEntities(MessageEntity.class);
         assertEquals(2, messagesFromDB.size());
@@ -1251,6 +1288,8 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String expectedResponse = "#AB#2\r\n";
         assertEquals(expectedResponse, actualResponse);
 
+        waitMessageDelivering();
+
         final List<MessageEntity> messagesFromDB = super.findEntities(MessageEntity.class);
         assertEquals(2, messagesFromDB.size());
 
@@ -1336,6 +1375,8 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String expectedResponse = "#AB#2\r\n";
         assertEquals(expectedResponse, actualResponse);
 
+        waitMessageDelivering();
+
         final List<MessageEntity> messagesFromDB = super.findEntities(MessageEntity.class);
         assertEquals(2, messagesFromDB.size());
 
@@ -1419,6 +1460,8 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String actualResponse = this.client.doRequest(requestBlackBoxPackage).get();
         final String expectedResponse = "#AB#2\r\n";
         assertEquals(expectedResponse, actualResponse);
+
+        waitMessageDelivering();
 
         final List<MessageEntity> messagesFromDB = super.findEntities(MessageEntity.class);
         assertEquals(2, messagesFromDB.size());
@@ -1510,6 +1553,8 @@ public class InboundPackageHandlingIT extends AbstractContextTest {
         final String actualResponse = this.client.doRequest(requestBlackBoxPackage).get();
         final String expectedResponse = "#AB#2\r\n";
         assertEquals(expectedResponse, actualResponse);
+
+        waitMessageDelivering();
 
         final List<MessageEntity> messagesFromDB = super.findEntities(MessageEntity.class);
         assertEquals(3, messagesFromDB.size());
