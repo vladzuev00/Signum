@@ -1,6 +1,6 @@
 package by.aurorasoft.signum.protocol.wialon.it;
 
-import by.aurorasoft.signum.base.AbstractContextTest;
+import by.aurorasoft.signum.base.AbstractKafkaContainerTest;
 import by.aurorasoft.signum.config.property.ServerProperty;
 import by.aurorasoft.signum.crud.model.entity.CommandEntity;
 import by.aurorasoft.signum.crud.model.entity.DeviceEntity;
@@ -13,6 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +35,8 @@ import static org.junit.Assert.*;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORTED;
 
-public class InboundPackageHandlingIT extends AbstractContextTest {
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+public class InboundPackageHandlingIT extends AbstractKafkaContainerTest {
     private static boolean serverWasRan = false;
     private static final String RESPONSE_LOGIN_PACKAGE_SUCCESS_AUTHORIZATION = "#AL#1\r\n";
     private static final String HQL_QUERY_TO_FIND_LAST_INSERTED_MESSAGE

@@ -1,9 +1,13 @@
 package by.aurorasoft.signum.kafka.producer.transportable;
 
 import by.aurorasoft.signum.crud.model.entity.MessageEntity.MessageType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Value;
 
 @Value
+@AllArgsConstructor
+@Builder
 public class TransportableMessage {
     Long id;
     long datetimeEpochSecond;

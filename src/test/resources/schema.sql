@@ -1,3 +1,18 @@
+DROP TABLE IF EXISTS device_state;
+DROP TABLE IF EXISTS message;
+DROP TABLE IF EXISTS command;
+DROP TABLE IF EXISTS device;
+DROP TABLE IF EXISTS unit;
+DROP TABLE IF EXISTS app_user;
+
+DROP TYPE IF EXISTS device_type;
+DROP TYPE IF EXISTS command_status;
+DROP TYPE IF EXISTS command_type;
+DROP TYPE IF EXISTS message_type;
+
+DROP FUNCTION IF EXISTS tr_insert_device_state;
+DROP FUNCTION IF EXISTS tr_update_device_state;
+
 CREATE TABLE app_user
 (
     id      SERIAL      NOT NULL PRIMARY KEY,

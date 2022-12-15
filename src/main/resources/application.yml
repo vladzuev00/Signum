@@ -59,5 +59,3 @@ kafka:
         fetch-min-bytes: 10000
 
 
-
-
