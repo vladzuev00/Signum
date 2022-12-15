@@ -2,19 +2,19 @@ package by.aurorasoft.signum.crud.model.entity;
 
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import lombok.*;
-import org.hibernate.annotations.ColumnTransformer;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Parameter;
+import javax.persistence.Table;
 import java.time.Instant;
 
 import static by.aurorasoft.signum.utils.BoundingUtils.bound;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
+import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity
 @Table(name = "message")
@@ -30,10 +30,11 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Setter
 @Getter
 @Builder
+@SequenceGenerator(name = "message_id_seq", sequenceName = "message_id_seq", allocationSize = 1)
 public class MessageEntity extends BaseEntity<Long> {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = SEQUENCE, generator = "message_id_seq")
     @Column(name = "id")
     private Long id;
 

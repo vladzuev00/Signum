@@ -69,10 +69,4 @@ public final class IgnitionAndEngineTimeCalculatorTest {
         assertEquals(0, this.integerArgumentCaptor.getValue().intValue());
         assertEquals(0, this.longArgumentCaptor.getValue().longValue());
     }
-
-    @Test
-    public void ignitionAndEngineTimeShouldBeCalculatedInCaseExistingPreviousMessageAndIgnitionOnInBoth() {
-        //TODO: доделать после уточнения так ли его считать
-        throw new RuntimeException();
-    }
 }

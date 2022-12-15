@@ -16,6 +16,11 @@ spring:
     password: root
     driver-class-name: org.postgresql.Driver
   jpa:
+    properties:
+      hibernate:
+        generate_statistics: true
+        jdbc:
+          batch_size: 500
     database-platform: org.hibernate.dialect.PostgreSQL10Dialect
     show-sql: true
   kafka:
@@ -36,7 +41,7 @@ kafka:
       partitions-amount: 1
       replication-factor: 3
       producer:
-        batch-size: 10
+        batch-size: 500
         linger-ms: 500
         delivery-timeout-ms: 100000
       consumer:
@@ -49,9 +54,9 @@ kafka:
       partitions-amount: 1
       replication-factor: 3
       producer:
-        batch-size: 10
+        batch-size: 500
         linger-ms: 500
-        delivery-timeout-ms: 100000
+        delivery-timeout-ms: 60000
       consumer:
         group-id: signum-messages-main-group
         max-poll-records: 400

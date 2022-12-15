@@ -43,7 +43,7 @@ public final class MessageRepositoryTest extends AbstractContextTest {
                 .build();
         super.startQueryCount();
         this.repository.save(givenMessage);
-        super.checkQueryCount(1);
+        super.checkQueryCount(2);
     }
 
     @Test

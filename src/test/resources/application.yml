@@ -17,6 +17,11 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: true
+    properties:
+      hibernate:
+        generate_statistics: true
+        jdbc:
+          batch_size: 2
   sql:
     init:
       mode: always
@@ -43,7 +48,7 @@ kafka:
       consumer:
         group-id: signum-messages-group
         max-poll-records: 400
-        fetch-max-wait-ms: 1
+        fetch-max-wait-ms: 1000
         fetch-min-bytes: 10000
     saved-messages:
       name: signum-messages-main
@@ -56,5 +61,5 @@ kafka:
       consumer:
         group-id: signum-messages-main-group
         max-poll-records: 400
-        fetch-max-wait-ms: 1
+        fetch-max-wait-ms: 1000
         fetch-min-bytes: 10000

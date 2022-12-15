@@ -17,9 +17,9 @@ import static java.lang.String.format;
 public abstract class AbstractKafkaMessageProducer
         extends KafkaProducerGenericRecordIntermediaryHooks<Long, TransportableMessage, Message> {
     private static final String LOG_START_SENDING_MESSAGES
-            = "Sending messages to kafka is started. Messages: %s. Topic: %s";
+            = "Sending messages to kafka is started. Amount messages: %d. Topic: %s";
     private static final String LOG_END_SENDING_MESSAGES
-            = "Messages were sent to kafka. Messages: %s. Topic: %s";
+            = "Messages were sent to kafka. Amount messages: %d. Topic: %s";
     private static final String LOG_MESSAGE_WAS_SENT_FAILURE
             = "Sending message to kafka was failed. Message: %s. Topic: %s";
 
@@ -32,9 +32,9 @@ public abstract class AbstractKafkaMessageProducer
     }
 
     public final void send(List<Message> messages) {
-        log.info(format(LOG_START_SENDING_MESSAGES, messages, super.topicName));
-        messages.forEach(super::send);
-        log.info(format(LOG_END_SENDING_MESSAGES, messages, super.topicName));
+        log.info(format(LOG_START_SENDING_MESSAGES, messages.size(), super.topicName));
+        super.send(messages);
+        log.info(format(LOG_END_SENDING_MESSAGES, messages.size(), super.topicName));
     }
 
     @Override

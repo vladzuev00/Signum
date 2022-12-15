@@ -16,7 +16,7 @@ public final class KafkaSavedMessageConsumer extends AbstractKafkaMessageConsume
     @KafkaListener(
             topics = "${kafka.topic.saved-messages.name}",
             groupId = "${kafka.topic.saved-messages.consumer.group-id}",
-            containerFactory = "consumerFactorySavedMessages")
+            containerFactory = "kafkaListenerContainerFactorySavedMessages")
     public void listen(List<ConsumerRecord<Long, GenericRecord>> records) {
 
     }

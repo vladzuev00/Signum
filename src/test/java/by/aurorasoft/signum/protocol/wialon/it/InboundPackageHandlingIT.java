@@ -1,6 +1,6 @@
 package by.aurorasoft.signum.protocol.wialon.it;
 
-import by.aurorasoft.signum.base.AbstractKafkaContainerTest;
+import by.aurorasoft.signum.base.kafka.AbstractKafkaContainerTest;
 import by.aurorasoft.signum.config.property.ServerProperty;
 import by.aurorasoft.signum.crud.model.entity.CommandEntity;
 import by.aurorasoft.signum.crud.model.entity.DeviceEntity;
@@ -1691,24 +1691,24 @@ public class InboundPackageHandlingIT extends AbstractKafkaContainerTest {
     }
 
     private static void checkEqualsExceptId(MessageEntity expected, MessageEntity actual) {
-//        assertEquals(expected.getDevice().getId(), actual.getDevice().getId());
-//        assertEquals(expected.getDatetime(), actual.getDatetime());
-//        assertTrue(InboundPackageHandlingIT.checkEqualsWithInaccuracy(expected.getLatitude(), expected.getLatitude()));
-//        assertTrue(InboundPackageHandlingIT.checkEqualsWithInaccuracy(expected.getLongitude(), actual.getLongitude()));
-//        assertEquals(expected.getSpeed(), actual.getSpeed());
-//        assertEquals(expected.getCourse(), actual.getCourse());
-//        assertEquals(expected.getAltitude(), actual.getAltitude());
-//        assertEquals(expected.getAmountSatellite(), actual.getAmountSatellite());
-//        assertEquals(expected.getGsmLevel(), actual.getGsmLevel());
-//        assertTrue(InboundPackageHandlingIT.checkEqualsWithInaccuracy(expected.getOnboardVoltage(), actual.getOnboardVoltage()));
-//        assertTrue(InboundPackageHandlingIT.checkEqualsWithInaccuracy(expected.getEcoCornering(), actual.getEcoCornering()));
-//        assertTrue(InboundPackageHandlingIT.checkEqualsWithInaccuracy(expected.getEcoAcceleration(), actual.getEcoAcceleration()));
-//        assertTrue(InboundPackageHandlingIT.checkEqualsWithInaccuracy(expected.getEcoBraking(), actual.getEcoBraking()));
-//        assertSame(expected.getType(), actual.getType());
-//        assertTrue(checkEqualsWithInaccuracy(expected.getGpsOdometer(), actual.getGpsOdometer()));
-//        assertEquals(expected.getIgnition(), actual.getIgnition());
-//        assertEquals(expected.getEngineTime(), actual.getEngineTime());
-//        assertTrue(checkEqualsWithInaccuracy(expected.getShock(), actual.getShock()));
+        assertEquals(expected.getDevice().getId(), actual.getDevice().getId());
+        assertEquals(expected.getDatetime(), actual.getDatetime());
+        checkEqualsWithInaccuracy(expected.getLatitude(), expected.getLatitude());
+        checkEqualsWithInaccuracy(expected.getLongitude(), actual.getLongitude());
+        assertEquals(expected.getSpeed(), actual.getSpeed());
+        assertEquals(expected.getCourse(), actual.getCourse());
+        assertEquals(expected.getAltitude(), actual.getAltitude());
+        assertEquals(expected.getAmountSatellite(), actual.getAmountSatellite());
+        assertEquals(expected.getGsmLevel(), actual.getGsmLevel());
+        checkEqualsWithInaccuracy(expected.getOnboardVoltage(), actual.getOnboardVoltage());
+        checkEqualsWithInaccuracy(expected.getEcoCornering(), actual.getEcoCornering());
+        checkEqualsWithInaccuracy(expected.getEcoAcceleration(), actual.getEcoAcceleration());
+        checkEqualsWithInaccuracy(expected.getEcoBraking(), actual.getEcoBraking());
+        assertSame(expected.getType(), actual.getType());
+        checkEqualsWithInaccuracy(expected.getGpsOdometer(), actual.getGpsOdometer());
+        assertEquals(expected.getIgnition(), actual.getIgnition());
+        assertEquals(expected.getEngineTime(), actual.getEngineTime());
+        checkEqualsWithInaccuracy(expected.getShock(), actual.getShock());
     }
 
     private MessageEntity findLastInsertedMessage() {

@@ -4,11 +4,14 @@ import by.aurorasoft.signum.crud.model.entity.MessageEntity.MessageType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
+import org.apache.avro.reflect.Nullable;
 
 @Value
 @AllArgsConstructor
 @Builder
 public class TransportableMessage {
+
+    @Nullable
     Long id;
     long datetimeEpochSecond;
     float latitude;

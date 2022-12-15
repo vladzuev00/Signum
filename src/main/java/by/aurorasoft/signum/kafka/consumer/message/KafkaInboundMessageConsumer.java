@@ -19,8 +19,8 @@ import static java.lang.String.format;
 @RequiredArgsConstructor
 public final class KafkaInboundMessageConsumer extends AbstractKafkaMessageConsumer {
     private static final String LOG_TEMPLATE_RECEIVE_INBOUND_MESSAGES_FROM_KAFKA
-            = "Inbound messages were received from kafka. Messages: %s.";
-    private static final String LOG_TEMPLATE_SAVE_INBOUND_MESSAGES = "Inbound messages were saved. Messages: %s";
+            = "Inbound messages were received from kafka. Amount messages: %d.";
+    private static final String LOG_TEMPLATE_SAVE_INBOUND_MESSAGES = "Inbound messages were saved. Amount messages: %d.";
 
     private final MessageService messageService;
     private final KafkaSavedMessageProducer savedMessageProducer;
@@ -32,9 +32,9 @@ public final class KafkaInboundMessageConsumer extends AbstractKafkaMessageConsu
             containerFactory = "kafkaListenerContainerFactoryInboundMessages")
     public void listen(List<ConsumerRecord<Long, GenericRecord>> records) {
         final List<Message> messages = super.map(records);
-        log.info(format(LOG_TEMPLATE_RECEIVE_INBOUND_MESSAGES_FROM_KAFKA, messages));
+        log.debug(format(LOG_TEMPLATE_RECEIVE_INBOUND_MESSAGES_FROM_KAFKA, messages.size()));
         final List<Message> savedMessages = this.messageService.saveAll(messages);
-        log.info(format(LOG_TEMPLATE_SAVE_INBOUND_MESSAGES, messages));
+        log.debug(format(LOG_TEMPLATE_SAVE_INBOUND_MESSAGES, messages.size()));
         this.savedMessageProducer.send(savedMessages);
     }
 }
