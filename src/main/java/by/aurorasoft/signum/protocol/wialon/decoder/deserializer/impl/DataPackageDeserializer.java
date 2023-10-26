@@ -3,6 +3,7 @@ package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl;
 import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data.AbstractDataPackageDeserializer;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.MessageParser;
+import by.aurorasoft.signum.protocol.wialon.model.DataPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import org.springframework.stereotype.Component;
 
@@ -26,12 +27,14 @@ public final class DataPackageDeserializer extends AbstractDataPackageDeserializ
 
     @Override
     protected Package createPackageBySubMessages(final List<Message> messages) {
-        return null;
+        checkContainingOneMessage(messages);
+        final Message message = messages.get(0);
+        return new DataPackage(message);
     }
 
     private static void checkContainingOneMessage(final List<Message> messages) {
         if (!isOneMessage(messages)) {
-            throw new IllegalArgumentException("Data package should contain only one sub message. Given ");
+            throw new IllegalArgumentException("Data package should contain only one message");
         }
     }
 
