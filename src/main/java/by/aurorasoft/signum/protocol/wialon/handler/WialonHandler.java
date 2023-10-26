@@ -2,7 +2,7 @@ package by.aurorasoft.signum.protocol.wialon.handler;
 
 import by.aurorasoft.signum.crud.model.dto.Device;
 import by.aurorasoft.signum.protocol.core.connectionmanager.ConnectionManager;
-import by.aurorasoft.signum.protocol.core.exception.AnswerableException;
+import by.aurorasoft.signum.protocol.core.exception.AnsweredException;
 import by.aurorasoft.signum.protocol.core.contextmanager.ContextManager;
 import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.PackageHandler;
 import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.StarterPackageHandler;
@@ -45,8 +45,8 @@ public final class WialonHandler extends ChannelInboundHandlerAdapter {
         if (exception instanceof DecoderException) {  //exception in decoders are wrapped in DecoderException
             exception = exception.getCause();
         }
-        if (exception instanceof AnswerableException) {
-            final AnswerableException answerableException = (AnswerableException) exception;
+        if (exception instanceof AnsweredException) {
+            final AnsweredException answerableException = (AnsweredException) exception;
             context.writeAndFlush(answerableException.getAnswerToClient());
         } else {
             context.fireExceptionCaught(exception);

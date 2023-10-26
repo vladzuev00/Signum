@@ -4,7 +4,7 @@ import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.PackageDeserializer;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.MessageParser;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.exception.NotValidMessageException;
-import by.aurorasoft.signum.protocol.core.exception.AnswerableException;
+import by.aurorasoft.signum.protocol.core.exception.AnsweredException;
 import by.aurorasoft.signum.protocol.wialon.model.DataPackage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -26,7 +26,7 @@ public final class DataPackageDeserializer implements PackageDeserializer {
             final Message message = this.messageParser.parse(serializedMessage);
             return new DataPackage(singletonList(message));
         } catch (final NotValidMessageException cause) {
-            throw new AnswerableException(RESPONSE_FAILURE_HANDLING, cause);
+            throw new AnsweredException(RESPONSE_FAILURE_HANDLING, cause);
         }
     }
 }

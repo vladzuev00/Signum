@@ -1,23 +1,23 @@
 package by.aurorasoft.signum.protocol.core.exception;
 
-public final class AnswerableException extends RuntimeException {
+public final class AnsweredException extends RuntimeException {
     private final String answerToClient;
 
-    public AnswerableException(String answerToClient) {
+    public AnsweredException(String answerToClient) {
         this.answerToClient = answerToClient;
     }
 
-    public AnswerableException(String answerToClient, String description) {
+    public AnsweredException(String answerToClient, String description) {
         super(description);
         this.answerToClient = answerToClient;
     }
 
-    public AnswerableException(String answerToClient, Exception cause) {
+    public AnsweredException(String answerToClient, Exception cause) {
         super(cause);
         this.answerToClient = answerToClient;
     }
 
-    public AnswerableException(String answerToClient, String description, Exception cause) {
+    public AnsweredException(String answerToClient, String description, Exception cause) {
         super(description, cause);
         this.answerToClient = answerToClient;
     }
