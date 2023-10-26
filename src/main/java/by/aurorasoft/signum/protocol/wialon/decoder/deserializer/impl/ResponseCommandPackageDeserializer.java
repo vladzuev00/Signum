@@ -1,7 +1,6 @@
 package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl;
 
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.PackageDeserializer;
-import by.aurorasoft.signum.protocol.wialon.model.Package;
 import by.aurorasoft.signum.protocol.wialon.model.ResponseCommandPackage;
 import by.aurorasoft.signum.protocol.wialon.model.ResponseCommandPackage.Status;
 import org.springframework.stereotype.Component;
@@ -18,7 +17,7 @@ public final class ResponseCommandPackageDeserializer extends PackageDeserialize
     }
 
     @Override
-    protected Package deserializeMessage(final String message) {
+    protected ResponseCommandPackage deserializeMessage(final String message) {
         final Status status = findCommandStatus(message);
         return new ResponseCommandPackage(status);
     }
