@@ -15,14 +15,14 @@ import static java.util.stream.Collectors.toList;
 
 public abstract class AbstractDataPackageDeserializer extends PackageDeserializer {
     private final MessageParser messageParser;
-    private final String responseFailureHandling;
+    private final String failureHandlingResponse;
 
     public AbstractDataPackageDeserializer(final String packagePrefix,
                                            final MessageParser messageParser,
-                                           final String responseFailureHandling) {
+                                           final String failureHandlingResponse) {
         super(packagePrefix);
         this.messageParser = messageParser;
-        this.responseFailureHandling = responseFailureHandling;
+        this.failureHandlingResponse = failureHandlingResponse;
     }
 
     @Override
@@ -45,7 +45,7 @@ public abstract class AbstractDataPackageDeserializer extends PackageDeserialize
         try {
             return this.messageParser.parse(message);
         } catch (final NotValidMessageException cause) {
-            throw new AnsweredException(this.responseFailureHandling, cause);
+            throw new AnsweredException(this.failureHandlingResponse, cause);
         }
     }
 }

@@ -1,28 +1,28 @@
 package by.aurorasoft.signum.protocol.core.exception;
 
+import lombok.Getter;
+
 public final class AnsweredException extends RuntimeException {
-    private final String answerToClient;
 
-    public AnsweredException(String answerToClient) {
-        this.answerToClient = answerToClient;
+    @Getter
+    private final String answer;
+
+    public AnsweredException(String answer) {
+        this.answer = answer;
     }
 
-    public AnsweredException(String answerToClient, String description) {
+    public AnsweredException(String answer, String description) {
         super(description);
-        this.answerToClient = answerToClient;
+        this.answer = answer;
     }
 
-    public AnsweredException(String answerToClient, Exception cause) {
+    public AnsweredException(String answer, Exception cause) {
         super(cause);
-        this.answerToClient = answerToClient;
+        this.answer = answer;
     }
 
-    public AnsweredException(String answerToClient, String description, Exception cause) {
+    public AnsweredException(String answer, String description, Exception cause) {
         super(description, cause);
-        this.answerToClient = answerToClient;
-    }
-
-    public String getAnswerToClient() {
-        return this.answerToClient;
+        this.answer = answer;
     }
 }

@@ -47,7 +47,7 @@ public final class WialonHandler extends ChannelInboundHandlerAdapter {
         }
         if (exception instanceof AnsweredException) {
             final AnsweredException answerableException = (AnsweredException) exception;
-            context.writeAndFlush(answerableException.getAnswerToClient());
+            context.writeAndFlush(answerableException.getAnswer());
         } else {
             context.fireExceptionCaught(exception);
         }
