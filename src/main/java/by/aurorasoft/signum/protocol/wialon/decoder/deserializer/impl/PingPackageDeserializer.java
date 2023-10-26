@@ -5,13 +5,13 @@ import by.aurorasoft.signum.protocol.wialon.model.Package;
 import by.aurorasoft.signum.protocol.wialon.model.PingPackage;
 import org.springframework.stereotype.Component;
 
-import static by.aurorasoft.signum.protocol.wialon.model.PingPackage.PACKAGE_DESCRIPTION_PREFIX;
+import static by.aurorasoft.signum.protocol.wialon.model.PingPackage.PACKAGE_PREFIX;
 
 @Component
 public final class PingPackageDeserializer extends PackageDeserializer {
 
     public PingPackageDeserializer() {
-        super(PACKAGE_DESCRIPTION_PREFIX);
+        super(PACKAGE_PREFIX);
     }
 
     @Override
