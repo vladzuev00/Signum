@@ -9,7 +9,7 @@ public final class PingPackageDeserializerTest {
     private final PingPackageDeserializer deserializer = new PingPackageDeserializer();
 
     @Test
-    public void packageShouldBeDeserialized() {
+    public void messageShouldBeDeserialized() {
         final String givenMessage = "";
 
         final PingPackage actual = this.deserializer.deserializeMessage(givenMessage);
