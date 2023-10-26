@@ -28,7 +28,7 @@ public final class BlackBoxPackageDeserializer extends AbstractDataPackageDeseri
     }
 
     @Override
-    protected Package createPackage(final List<Message> messages) {
+    protected Package createPackageBySubMessages(final List<Message> messages) {
         return new BlackBoxPackage(messages);
     }
 }

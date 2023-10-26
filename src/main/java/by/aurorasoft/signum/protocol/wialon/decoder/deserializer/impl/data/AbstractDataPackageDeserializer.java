@@ -32,18 +32,18 @@ public abstract class AbstractDataPackageDeserializer extends PackageDeserialize
                 .collect(
                         collectingAndThen(
                                 toList(),
-                                this::createPackage
+                                this::createPackageBySubMessages
                         )
                 );
     }
 
     protected abstract Stream<String> splitIntoSubMessages(final String message);
 
-    protected abstract Package createPackage(final List<Message> messages);
+    protected abstract Package createPackageBySubMessages(final List<Message> messages);
 
-    private Message parseSubMessage(final String subMessage) {
+    private Message parseSubMessage(final String message) {
         try {
-            return this.messageParser.parse(subMessage);
+            return this.messageParser.parse(message);
         } catch (final NotValidMessageException cause) {
             throw new AnsweredException(this.responseFailureHandling, cause);
         }
