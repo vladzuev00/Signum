@@ -1,4 +1,4 @@
-package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser;
+package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data.parser;
 
 import by.aurorasoft.signum.crud.model.dto.Message;
 import org.springframework.stereotype.Component;

@@ -1,7 +1,7 @@
 package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data;
 
 import by.aurorasoft.signum.crud.model.dto.Message;
-import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.MessageParser;
+import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data.parser.MessageParser;
 import by.aurorasoft.signum.protocol.wialon.model.BlackBoxPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import org.springframework.stereotype.Component;

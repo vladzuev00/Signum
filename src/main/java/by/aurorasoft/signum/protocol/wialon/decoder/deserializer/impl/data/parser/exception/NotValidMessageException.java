@@ -1,4 +1,4 @@
-package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.exception;
+package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data.parser.exception;
 
 public final class NotValidMessageException extends RuntimeException {
     public NotValidMessageException() {

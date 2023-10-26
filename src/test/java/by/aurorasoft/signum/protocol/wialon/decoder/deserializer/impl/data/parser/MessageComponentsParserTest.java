@@ -1,8 +1,9 @@
-package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser;
+package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data.parser;
 
 import by.aurorasoft.signum.crud.model.dto.Message.GpsCoordinate;
 import by.aurorasoft.signum.crud.model.dto.Message.ParameterName;
-import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.exception.NotValidMessageException;
+import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data.parser.MessageComponentsParser;
+import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data.parser.exception.NotValidMessageException;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
