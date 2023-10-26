@@ -1,13 +1,14 @@
 package by.aurorasoft.signum.crud.model.entity;
 
 import by.nhorushko.crudgeneric.v2.domain.AbstractEntity;
+import org.hibernate.Hibernate;
 
 import java.util.Objects;
 
 public abstract class BaseEntity<IdType> implements AbstractEntity<IdType> {
 
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "EqualsWhichDoesntCheckParameterClass"})
     public boolean equals(Object otherObject) {
         if (this == otherObject) {
             return true;
@@ -15,7 +16,7 @@ public abstract class BaseEntity<IdType> implements AbstractEntity<IdType> {
         if (otherObject == null) {
             return false;
         }
-        if (this.getClass() != otherObject.getClass()) {
+        if (Hibernate.getClass(this) != Hibernate.getClass(otherObject)) {
             return false;
         }
         final BaseEntity<IdType> other = (BaseEntity<IdType>) otherObject;

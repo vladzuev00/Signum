@@ -1,13 +1,21 @@
 package by.aurorasoft.signum.protocol.wialon.decoder.deserializer;
 
 import by.aurorasoft.signum.protocol.wialon.model.Package;
+import lombok.RequiredArgsConstructor;
 
-@FunctionalInterface
-public interface PackageDeserializer {
-    Package deserialize(String deserialized);
+@RequiredArgsConstructor
+public abstract class PackageDeserializer {
+    private final String packagePrefix;
 
-    static String removePrefix(String source, String prefix) {
-        final int indexAfterPrefix = prefix.length();
+    public final Package deserialize(final String source) {
+        final String message = this.removePackagePrefix(source);
+        return this.deserializeMessage(message);
+    }
+
+    protected abstract Package deserializeMessage(final String message);
+
+    private String removePackagePrefix(final String source) {
+        final int indexAfterPrefix = this.packagePrefix.length();
         return source.substring(indexAfterPrefix);
     }
 }
