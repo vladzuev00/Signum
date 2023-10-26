@@ -1,4 +1,4 @@
-package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl;
+package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data;
 
 import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.protocol.core.exception.AnsweredException;
@@ -11,13 +11,14 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static by.aurorasoft.signum.protocol.wialon.model.BlackBoxPackage.PACKAGE_PREFIX;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
 @Component
-public final class BlackBoxPackageDeserializer extends PackageDeserializer {
+public final class BlackBoxPackageDeserializer extends AbstractDataPackageDeserializer {
     private static final String REGEX_MESSAGES_DELIMITER = "\\|";
     private static final String RESPONSE_FAILURE_HANDLING = "#AB#0";
 
@@ -38,10 +39,14 @@ public final class BlackBoxPackageDeserializer extends PackageDeserializer {
         }
     }
 
-    private List<Message> parseMessages(final String message) {
-        final String[] serializedMessages = message.split(REGEX_MESSAGES_DELIMITER);
-        return stream(serializedMessages)
-                .map(this.messageParser::parse)
-                .toList();
+    @Override
+    protected Stream<String> splitIntoSubMessages(final String message) {
+        final String[] subMessages = message.split(REGEX_MESSAGES_DELIMITER);
+        return stream(subMessages);
+    }
+
+    @Override
+    protected Package createPackage(final List<Message> messages) {
+        return new BlackBoxPackage(messages);
     }
 }
