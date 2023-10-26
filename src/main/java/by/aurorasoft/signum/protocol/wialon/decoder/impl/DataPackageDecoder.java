@@ -1,7 +1,7 @@
 package by.aurorasoft.signum.protocol.wialon.decoder.impl;
 
 import by.aurorasoft.signum.protocol.wialon.decoder.PackageDecoder;
-import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.DataPackageDeserializer;
+import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data.DataPackageDeserializer;
 import by.aurorasoft.signum.protocol.wialon.model.DataPackage;
 import org.springframework.stereotype.Component;
 

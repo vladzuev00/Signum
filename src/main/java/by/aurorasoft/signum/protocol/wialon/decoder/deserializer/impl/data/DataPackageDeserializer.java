@@ -1,7 +1,6 @@
-package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl;
+package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data;
 
 import by.aurorasoft.signum.crud.model.dto.Message;
-import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data.AbstractDataPackageDeserializer;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.parser.MessageParser;
 import by.aurorasoft.signum.protocol.wialon.model.DataPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
