@@ -10,6 +10,7 @@ import by.aurorasoft.signum.protocol.wialon.model.Package;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static by.aurorasoft.signum.protocol.wialon.model.BlackBoxPackage.PACKAGE_PREFIX;
 import static java.util.Arrays.stream;
@@ -41,6 +42,6 @@ public final class BlackBoxPackageDeserializer extends PackageDeserializer {
         final String[] serializedMessages = message.split(REGEX_MESSAGES_DELIMITER);
         return stream(serializedMessages)
                 .map(this.messageParser::parse)
-                .collect(toList());
+                .toList();
     }
 }
