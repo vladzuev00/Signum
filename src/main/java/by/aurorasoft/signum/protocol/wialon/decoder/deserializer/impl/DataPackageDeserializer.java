@@ -29,7 +29,7 @@ public final class DataPackageDeserializer extends AbstractDataPackageDeserializ
         return null;
     }
 
-    private static void validateMessages(final List<Message> messages) {
+    private static void checkContainingOneMessage(final List<Message> messages) {
         if (!isOneMessage(messages)) {
             throw new IllegalArgumentException("Data package should contain only one sub message. Given ");
         }
