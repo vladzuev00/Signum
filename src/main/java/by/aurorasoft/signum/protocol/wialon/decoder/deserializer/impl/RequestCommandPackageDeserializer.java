@@ -4,15 +4,17 @@ import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.PackageDeserial
 import by.aurorasoft.signum.protocol.wialon.model.RequestCommandPackage;
 import org.springframework.stereotype.Component;
 
-import static by.aurorasoft.signum.protocol.wialon.decoder.deserializer.PackageDeserializer.removePrefix;
 import static by.aurorasoft.signum.protocol.wialon.model.RequestCommandPackage.PACKAGE_PREFIX;
 
 @Component
-public final class RequestCommandPackageDeserializer implements PackageDeserializer {
+public final class RequestCommandPackageDeserializer extends PackageDeserializer {
+
+    public RequestCommandPackageDeserializer() {
+        super(PACKAGE_PREFIX);
+    }
 
     @Override
-    public RequestCommandPackage deserialize(String deserialized) {
-        final String message = removePrefix(deserialized, PACKAGE_PREFIX);
+    protected RequestCommandPackage deserializeMessage(final String message) {
         return new RequestCommandPackage(message);
     }
 }
