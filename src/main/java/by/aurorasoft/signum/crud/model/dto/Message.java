@@ -3,15 +3,15 @@ package by.aurorasoft.signum.crud.model.dto;
 import by.aurorasoft.signum.crud.model.entity.MessageEntity.MessageType;
 import by.nhorushko.crudgeneric.v2.domain.AbstractDto;
 import by.nhorushko.distancecalculator.LatLngAlt;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Value;
+import lombok.*;
 
 import java.time.Instant;
 import java.util.Map;
+import java.util.Set;
 
 import static by.aurorasoft.signum.crud.model.entity.MessageEntity.MessageType.VALID;
 import static java.util.Map.copyOf;
+import static lombok.AccessLevel.PRIVATE;
 
 @Data
 @Builder
@@ -102,9 +102,10 @@ public final class Message implements AbstractDto<Long>, LatLngAlt {
         float longitude;
     }
 
+    @RequiredArgsConstructor(access = PRIVATE)
     public enum ParameterName {
-        GSM_LEVEL,
-        VOLTAGE,
+        GSM_LEVEL(Set.of("GSMCSQ", "par21", "21")),
+        VOLTAGE(Set.of("VPWR", "par66", "66")),
         CORNER_ACCELERATION,
         ACCELERATION_UP,
         ACCELERATION_DOWN,
@@ -113,6 +114,9 @@ public final class Message implements AbstractDto<Long>, LatLngAlt {
         PDOP,
         ACC_X,
         ACC_Y,
-        ACC_Z
+        ACC_Z;
+
+        @Getter
+        private final Set<String> aliases;
     }
 }
