@@ -13,7 +13,7 @@ import static by.aurorasoft.signum.protocol.wialon.model.RequestBlackBoxPackage.
 import static java.util.Arrays.stream;
 
 @Component
-public final class BlackBoxPackageDeserializer extends AbstractDataPackageDeserializer {
+public final class BlackBoxPackageDeserializer extends AbstractRequestDataPackageDeserializer {
     private static final String REGEX_MESSAGES_DELIMITER = "\\|";
     private static final String RESPONSE_FAILURE_HANDLING = "#AB#0";
 

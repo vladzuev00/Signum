@@ -21,18 +21,18 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public final class AbstractDataPackageDeserializerTest {
+public final class AbstractRequestDataPackageDeserializerTest {
     private static final String GIVEN_PACKAGE_PREFIX = "#TEST#";
     private static final String GIVEN_FAILURE_HANDLING_RESPONSE = "#ATEST#0";
 
     @Mock
     private MessageParser mockedMessageParser;
 
-    private AbstractDataPackageDeserializer deserializer;
+    private AbstractRequestDataPackageDeserializer deserializer;
 
     @Before
     public void initializeDeserializer() {
-        this.deserializer = new TestDataPackageDeserializerTest(
+        this.deserializer = new TestRequestDataPackageDeserializerTest(
                 GIVEN_PACKAGE_PREFIX,
                 this.mockedMessageParser,
                 GIVEN_FAILURE_HANDLING_RESPONSE
@@ -98,12 +98,12 @@ public final class AbstractDataPackageDeserializerTest {
         List<Message> messages;
     }
 
-    private static final class TestDataPackageDeserializerTest extends AbstractDataPackageDeserializer {
+    private static final class TestRequestDataPackageDeserializerTest extends AbstractRequestDataPackageDeserializer {
         private static final String REGEX_MESSAGES_DELIMITER = "\\|";
 
-        public TestDataPackageDeserializerTest(final String packagePrefix,
-                                               final MessageParser messageParser,
-                                               final String failureHandlingResponse) {
+        public TestRequestDataPackageDeserializerTest(final String packagePrefix,
+                                                      final MessageParser messageParser,
+                                                      final String failureHandlingResponse) {
             super(packagePrefix, messageParser, failureHandlingResponse);
         }
 

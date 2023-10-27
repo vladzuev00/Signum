@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 import static by.aurorasoft.signum.protocol.wialon.model.RequestDataPackage.PACKAGE_PREFIX;
 
 @Component
-public final class DataPackageDeserializer extends AbstractDataPackageDeserializer {
+public final class DataPackageDeserializer extends AbstractRequestDataPackageDeserializer {
     private static final String RESPONSE_FAILURE_HANDLING = "#AD#0";
 
     public DataPackageDeserializer(final MessageParser messageParser) {
