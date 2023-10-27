@@ -2,6 +2,7 @@ package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data;
 
 import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data.parser.MessageParser;
+import by.aurorasoft.signum.protocol.wialon.model.RequestDataPackage;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,11 +40,23 @@ public final class DataPackageDeserializerTest {
 
     @Test
     public void packageShouldBeCreatedBySubMessages() {
-        final List<Message> givenMessages = singletonList(createMessage(255L));
+        final Message givenMessage = createMessage(255L);
+        final List<Message> givenMessages = singletonList(givenMessage);
 
-
+        final RequestDataPackage actual = this.deserializer.createPackageBySubMessages(givenMessages);
+        final RequestDataPackage expected = new RequestDataPackage(givenMessage);
+        assertEquals(expected, actual);
     }
 
+    @Test
+    public void packageShouldNotBeCreatedBySubMessages() {
+        final Message givenMessage = createMessage(255L);
+        final List<Message> givenMessages = singletonList(givenMessage);
+
+        throw new RuntimeException();
+    }
+
+    @SuppressWarnings("SameParameterValue")
     private static Message createMessage(final Long id) {
         return Message.builder()
                 .id(id)
