@@ -16,16 +16,16 @@ import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
-public final class DataPackageDeserializerTest {
+public final class RequestDataPackageDeserializerTest {
 
     @Mock
     private MessageParser mockedParser;
 
-    private DataPackageDeserializer deserializer;
+    private RequestDataPackageDeserializer deserializer;
 
     @Before
     public void initializeDeserializer() {
-        this.deserializer = new DataPackageDeserializer(this.mockedParser);
+        this.deserializer = new RequestDataPackageDeserializer(this.mockedParser);
     }
 
     @Test
@@ -48,15 +48,16 @@ public final class DataPackageDeserializerTest {
         assertEquals(expected, actual);
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void packageShouldNotBeCreatedBySubMessages() {
-        final Message givenMessage = createMessage(255L);
-        final List<Message> givenMessages = singletonList(givenMessage);
+        final List<Message> givenMessages = List.of(
+                createMessage(255L),
+                createMessage(256L)
+        );
 
-        throw new RuntimeException();
+        this.deserializer.createPackageBySubMessages(givenMessages);
     }
 
-    @SuppressWarnings("SameParameterValue")
     private static Message createMessage(final Long id) {
         return Message.builder()
                 .id(id)

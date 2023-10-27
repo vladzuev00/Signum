@@ -12,9 +12,9 @@ import java.util.stream.Stream;
 import static by.aurorasoft.signum.protocol.wialon.model.RequestDataPackage.PACKAGE_PREFIX;
 
 @Component
-public final class DataPackageDeserializer extends AbstractRequestDataPackageDeserializer {
+public final class RequestDataPackageDeserializer extends AbstractRequestDataPackageDeserializer {
 
-    public DataPackageDeserializer(final MessageParser messageParser) {
+    public RequestDataPackageDeserializer(final MessageParser messageParser) {
         super(PACKAGE_PREFIX, messageParser, ResponseDataPackage::new);
     }
 
