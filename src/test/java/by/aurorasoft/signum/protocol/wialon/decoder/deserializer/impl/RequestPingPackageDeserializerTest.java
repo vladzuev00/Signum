@@ -5,8 +5,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
 
-public final class PingPackageDeserializerTest {
-    private final PingPackageDeserializer deserializer = new PingPackageDeserializer();
+public final class RequestPingPackageDeserializerTest {
+    private final RequestPingPackageDeserializer deserializer = new RequestPingPackageDeserializer();
 
     @Test
     public void messageShouldBeDeserialized() {

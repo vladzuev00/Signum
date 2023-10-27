@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 import static by.aurorasoft.signum.protocol.wialon.model.RequestPingPackage.PACKAGE_PREFIX;
 
 @Component
-public final class PingPackageDeserializer extends PackageDeserializer {
+public final class RequestPingPackageDeserializer extends PackageDeserializer {
 
-    public PingPackageDeserializer() {
+    public RequestPingPackageDeserializer() {
         super(PACKAGE_PREFIX);
     }
 
