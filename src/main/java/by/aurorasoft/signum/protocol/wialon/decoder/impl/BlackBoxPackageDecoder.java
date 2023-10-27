@@ -1,7 +1,7 @@
 package by.aurorasoft.signum.protocol.wialon.decoder.impl;
 
 import by.aurorasoft.signum.protocol.wialon.decoder.PackageDecoder;
-import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data.BlackBoxPackageDeserializer;
+import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data.RequestBlackBoxPackageDeserializer;
 import org.springframework.stereotype.Component;
 
 import static by.aurorasoft.signum.protocol.wialon.model.RequestBlackBoxPackage.PACKAGE_PREFIX;
@@ -10,7 +10,7 @@ import static by.aurorasoft.signum.protocol.wialon.model.RequestBlackBoxPackage.
 public final class BlackBoxPackageDecoder extends PackageDecoder {
 
     public BlackBoxPackageDecoder(ResponseCommandPackageDecoder nextPackageDecoder,
-                                  BlackBoxPackageDeserializer packageDeserializer) {
+                                  RequestBlackBoxPackageDeserializer packageDeserializer) {
         super(nextPackageDecoder, PACKAGE_PREFIX, packageDeserializer);
     }
 }

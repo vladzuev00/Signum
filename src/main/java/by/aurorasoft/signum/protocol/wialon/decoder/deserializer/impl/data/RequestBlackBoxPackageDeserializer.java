@@ -3,7 +3,7 @@ package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data;
 import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data.parser.MessageParser;
 import by.aurorasoft.signum.protocol.wialon.model.RequestBlackBoxPackage;
-import by.aurorasoft.signum.protocol.wialon.model.Package;
+import by.aurorasoft.signum.protocol.wialon.model.ResponseBlackBoxPackage;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,12 +13,11 @@ import static by.aurorasoft.signum.protocol.wialon.model.RequestBlackBoxPackage.
 import static java.util.Arrays.stream;
 
 @Component
-public final class BlackBoxPackageDeserializer extends AbstractRequestDataPackageDeserializer {
+public final class RequestBlackBoxPackageDeserializer extends AbstractRequestDataPackageDeserializer {
     private static final String REGEX_MESSAGES_DELIMITER = "\\|";
-    private static final String RESPONSE_FAILURE_HANDLING = "#AB#0";
 
-    public BlackBoxPackageDeserializer(final MessageParser messageParser) {
-        super(PACKAGE_PREFIX, messageParser, RESPONSE_FAILURE_HANDLING);
+    public RequestBlackBoxPackageDeserializer(final MessageParser messageParser) {
+        super(PACKAGE_PREFIX, messageParser, ResponseBlackBoxPackage::new);
     }
 
     @Override
@@ -28,7 +27,7 @@ public final class BlackBoxPackageDeserializer extends AbstractRequestDataPackag
     }
 
     @Override
-    protected Package createPackageBySubMessages(final List<Message> messages) {
+    protected RequestBlackBoxPackage createPackageBySubMessages(final List<Message> messages) {
         return new RequestBlackBoxPackage(messages);
     }
 }
