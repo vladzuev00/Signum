@@ -5,8 +5,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public final class LoginPackageDeserializerTest {
-    private final LoginPackageDeserializer deserializer = new LoginPackageDeserializer();
+public final class RequestLoginPackageDeserializerTest {
+    private final RequestLoginPackageDeserializer deserializer = new RequestLoginPackageDeserializer();
 
     @Test
     public void messageShouldBeDeserialized() {

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import static by.aurorasoft.signum.protocol.wialon.model.RequestCommandPackage.PACKAGE_PREFIX;
 
+//TODO: possible need to be removed
 @Component
 public final class RequestCommandPackageDeserializer extends PackageDeserializer {
 

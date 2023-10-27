@@ -7,12 +7,12 @@ import org.springframework.stereotype.Component;
 import static by.aurorasoft.signum.protocol.wialon.model.RequestLoginPackage.PACKAGE_PREFIX;
 
 @Component
-public final class LoginPackageDeserializer extends PackageDeserializer {
+public final class RequestLoginPackageDeserializer extends PackageDeserializer {
     private static final String REGEX_COMPONENT_DELIMITER = ";";
     private static final int INDEX_COMPONENT_IMEI = 0;
     private static final int INDEX_COMPONENT_PASSWORD = 1;
 
-    public LoginPackageDeserializer() {
+    public RequestLoginPackageDeserializer() {
         super(PACKAGE_PREFIX);
     }
 
