@@ -1,13 +1,13 @@
 package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl;
 
-import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.RequestPackageDeserializer;
+import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.PackageDeserializer;
 import by.aurorasoft.signum.protocol.wialon.model.RequestLoginPackage;
 import org.springframework.stereotype.Component;
 
 import static by.aurorasoft.signum.protocol.wialon.model.RequestLoginPackage.PACKAGE_PREFIX;
 
 @Component
-public final class LoginPackageDeserializer extends RequestPackageDeserializer {
+public final class LoginPackageDeserializer extends PackageDeserializer {
     private static final String REGEX_COMPONENT_DELIMITER = ";";
     private static final int INDEX_COMPONENT_IMEI = 0;
     private static final int INDEX_COMPONENT_PASSWORD = 1;

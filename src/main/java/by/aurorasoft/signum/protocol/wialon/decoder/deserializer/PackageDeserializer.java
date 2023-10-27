@@ -4,7 +4,7 @@ import by.aurorasoft.signum.protocol.wialon.model.Package;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public abstract class RequestPackageDeserializer {
+public abstract class PackageDeserializer {
     private final String packagePrefix;
 
     public final Package deserialize(final String source) {

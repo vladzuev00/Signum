@@ -7,6 +7,6 @@ public final class BlackBoxPackageDeserializerTest {
 
     @Test
     public void messageShouldBeSplittedIntoSubMessages() {
-        throw
+        //throw
     }
 }

@@ -2,7 +2,7 @@ package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data;
 
 import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.protocol.core.exception.AnsweredException;
-import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.RequestPackageDeserializer;
+import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.PackageDeserializer;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data.parser.MessageParser;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data.parser.exception.NotValidMessageException;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
-public abstract class AbstractDataPackageDeserializer extends RequestPackageDeserializer {
+public abstract class AbstractDataPackageDeserializer extends PackageDeserializer {
     private final MessageParser messageParser;
     private final String failureHandlingResponse;
 

@@ -1,6 +1,6 @@
 package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl;
 
-import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.RequestPackageDeserializer;
+import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.PackageDeserializer;
 import by.aurorasoft.signum.protocol.wialon.model.ResponseCommandPackage;
 import by.aurorasoft.signum.protocol.wialon.model.ResponseCommandPackage.Status;
 import org.springframework.stereotype.Component;
@@ -10,7 +10,7 @@ import static by.aurorasoft.signum.protocol.wialon.model.ResponseCommandPackage.
 import static java.lang.Byte.parseByte;
 
 @Component
-public final class ResponseCommandPackageDeserializer extends RequestPackageDeserializer {
+public final class ResponseCommandPackageDeserializer extends PackageDeserializer {
 
     public ResponseCommandPackageDeserializer() {
         super(PACKAGE_PREFIX);
