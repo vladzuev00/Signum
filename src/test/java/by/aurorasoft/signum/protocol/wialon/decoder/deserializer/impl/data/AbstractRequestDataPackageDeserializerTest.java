@@ -4,8 +4,9 @@ import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.protocol.core.exception.AnsweredException;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data.parser.MessageParser;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data.parser.exception.NotValidMessageException;
+import by.aurorasoft.signum.protocol.wialon.model.AbstractRequestDataPackage;
+import by.aurorasoft.signum.protocol.wialon.model.AbstractResponseDataPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
-import lombok.Value;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +24,6 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public final class AbstractRequestDataPackageDeserializerTest {
     private static final String GIVEN_PACKAGE_PREFIX = "#TEST#";
-    private static final String GIVEN_FAILURE_HANDLING_RESPONSE = "#ATEST#0";
 
     @Mock
     private MessageParser mockedMessageParser;
@@ -32,11 +32,7 @@ public final class AbstractRequestDataPackageDeserializerTest {
 
     @Before
     public void initializeDeserializer() {
-        this.deserializer = new TestRequestDataPackageDeserializerTest(
-                GIVEN_PACKAGE_PREFIX,
-                this.mockedMessageParser,
-                GIVEN_FAILURE_HANDLING_RESPONSE
-        );
+        this.deserializer = new TestRequestDataPackageDeserializerTest(GIVEN_PACKAGE_PREFIX, this.mockedMessageParser);
     }
 
     @Test
@@ -58,8 +54,8 @@ public final class AbstractRequestDataPackageDeserializerTest {
                 thirdGivenSubMessage
         );
 
-        final Package actual = this.deserializer.deserializeMessage(givenMessage);
-        final Package expected = new TestPackage(givenSubMessages);
+        final AbstractRequestDataPackage actual = this.deserializer.deserializeMessage(givenMessage);
+        final AbstractRequestDataPackage expected = new TestRequestDataPackage(givenSubMessages);
         assertEquals(expected, actual);
     }
 
@@ -80,7 +76,7 @@ public final class AbstractRequestDataPackageDeserializerTest {
             this.deserializer.deserializeMessage(givenMessage);
             exceptionWasArisen = false;
         } catch (final AnsweredException exception) {
-            assertEquals(GIVEN_FAILURE_HANDLING_RESPONSE, exception.getAnswer());
+            assertEquals(0, findCountFixedMessages(exception));
             assertNotNull(exception.getCause());
             exceptionWasArisen = true;
         }
@@ -93,18 +89,32 @@ public final class AbstractRequestDataPackageDeserializerTest {
                 .build();
     }
 
-    @Value
-    private static class TestPackage implements Package {
-        List<Message> messages;
+    private static int findCountFixedMessages(final AnsweredException exception) {
+        final Package answer = exception.getAnswer();
+        final AbstractResponseDataPackage responseDataPackage = (AbstractResponseDataPackage) answer;
+        return responseDataPackage.getCountFixedMessages();
+    }
+
+    private static class TestRequestDataPackage extends AbstractRequestDataPackage {
+
+        public TestRequestDataPackage(final List<Message> messages) {
+            super(messages);
+        }
+    }
+
+    private static final class TestResponseDataPackage extends AbstractResponseDataPackage {
+
+        public TestResponseDataPackage(final int countFixedMessages) {
+            super(countFixedMessages);
+        }
+
     }
 
     private static final class TestRequestDataPackageDeserializerTest extends AbstractRequestDataPackageDeserializer {
         private static final String REGEX_MESSAGES_DELIMITER = "\\|";
 
-        public TestRequestDataPackageDeserializerTest(final String packagePrefix,
-                                                      final MessageParser messageParser,
-                                                      final String failureHandlingResponse) {
-            super(packagePrefix, messageParser, failureHandlingResponse);
+        public TestRequestDataPackageDeserializerTest(final String packagePrefix, final MessageParser messageParser) {
+            super(packagePrefix, messageParser, TestResponseDataPackage::new);
         }
 
         @Override
@@ -114,8 +124,8 @@ public final class AbstractRequestDataPackageDeserializerTest {
         }
 
         @Override
-        protected TestPackage createPackageBySubMessages(final List<Message> messages) {
-            return new TestPackage(messages);
+        protected TestRequestDataPackage createPackageBySubMessages(final List<Message> messages) {
+            return new TestRequestDataPackage(messages);
         }
     }
 }
