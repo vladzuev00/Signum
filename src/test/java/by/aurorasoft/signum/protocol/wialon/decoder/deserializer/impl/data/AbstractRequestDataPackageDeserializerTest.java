@@ -6,7 +6,6 @@ import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data.parse
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data.parser.exception.NotValidMessageException;
 import by.aurorasoft.signum.protocol.wialon.model.AbstractRequestDataPackage;
 import by.aurorasoft.signum.protocol.wialon.model.AbstractResponseDataPackage;
-import by.aurorasoft.signum.protocol.wialon.model.Package;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -76,7 +75,8 @@ public final class AbstractRequestDataPackageDeserializerTest {
             this.deserializer.deserializeMessage(givenMessage);
             exceptionWasArisen = false;
         } catch (final AnsweredException exception) {
-            assertEquals(0, findCountFixedMessages(exception));
+            final TestResponseDataPackage expectedResponseDataPackage = new TestResponseDataPackage(0);
+            assertEquals(expectedResponseDataPackage, exception.getAnswer());
             assertNotNull(exception.getCause());
             exceptionWasArisen = true;
         }
@@ -87,12 +87,6 @@ public final class AbstractRequestDataPackageDeserializerTest {
         return Message.builder()
                 .id(id)
                 .build();
-    }
-
-    private static int findCountFixedMessages(final AnsweredException exception) {
-        final Package answer = exception.getAnswer();
-        final AbstractResponseDataPackage responseDataPackage = (AbstractResponseDataPackage) answer;
-        return responseDataPackage.getCountFixedMessages();
     }
 
     private static class TestRequestDataPackage extends AbstractRequestDataPackage {

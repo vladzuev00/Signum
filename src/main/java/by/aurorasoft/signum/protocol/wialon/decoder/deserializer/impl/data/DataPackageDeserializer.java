@@ -13,6 +13,7 @@ import static by.aurorasoft.signum.protocol.wialon.model.RequestDataPackage.PACK
 
 @Component
 public final class DataPackageDeserializer extends AbstractRequestDataPackageDeserializer {
+
     public DataPackageDeserializer(final MessageParser messageParser) {
         super(PACKAGE_PREFIX, messageParser, ResponseDataPackage::new);
     }
