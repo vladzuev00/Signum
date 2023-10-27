@@ -2,7 +2,7 @@ package by.aurorasoft.signum.protocol.wialon.handler.packagehandler;
 
 import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.data.DataPackageHandler;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
-import by.aurorasoft.signum.protocol.wialon.model.PingPackage;
+import by.aurorasoft.signum.protocol.wialon.model.RequestPingPackage;
 import io.netty.channel.ChannelHandlerContext;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +11,7 @@ public final class PingPackageHandler extends PackageHandler {
     private static final String RESPONSE_PACKAGE = "#AP#";
 
     public PingPackageHandler(DataPackageHandler nextHandler) {
-        super(PingPackage.class, nextHandler);
+        super(RequestPingPackage.class, nextHandler);
     }
 
     @Override

@@ -4,10 +4,10 @@ import by.aurorasoft.signum.crud.model.dto.Message;
 
 import java.util.List;
 
-public final class BlackBoxPackage extends AbstractDataPackage {
+public final class RequestBlackBoxPackage extends AbstractRequestDataPackage {
     public static final String PACKAGE_PREFIX = "#B#";
 
-    public BlackBoxPackage(List<Message> messages) {
+    public RequestBlackBoxPackage(List<Message> messages) {
         super(messages);
     }
 }

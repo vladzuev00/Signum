@@ -2,14 +2,14 @@ package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data;
 
 import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data.parser.MessageParser;
-import by.aurorasoft.signum.protocol.wialon.model.BlackBoxPackage;
+import by.aurorasoft.signum.protocol.wialon.model.RequestBlackBoxPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Stream;
 
-import static by.aurorasoft.signum.protocol.wialon.model.BlackBoxPackage.PACKAGE_PREFIX;
+import static by.aurorasoft.signum.protocol.wialon.model.RequestBlackBoxPackage.PACKAGE_PREFIX;
 import static java.util.Arrays.stream;
 
 @Component
@@ -29,6 +29,6 @@ public final class BlackBoxPackageDeserializer extends AbstractDataPackageDeseri
 
     @Override
     protected Package createPackageBySubMessages(final List<Message> messages) {
-        return new BlackBoxPackage(messages);
+        return new RequestBlackBoxPackage(messages);
     }
 }

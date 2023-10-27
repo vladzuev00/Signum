@@ -8,13 +8,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;
 
-public final class PackageDeserializerTest {
+public final class RequestPackageDeserializerTest {
 
     @Test
     public void sourceShouldBeDeserialized() {
         final String givenPackagePrefix = "#TEST#";
         final Package givenDeserializedPackage = mock(Package.class);
-        final TestPackageDeserializer givenDeserializer = new TestPackageDeserializer(
+        final TestRequestPackageDeserializer givenDeserializer = new TestRequestPackageDeserializer(
                 givenPackagePrefix,
                 givenDeserializedPackage
         );
@@ -29,13 +29,13 @@ public final class PackageDeserializerTest {
         assertEquals(expectedMessage, actualMessage);
     }
 
-    private static final class TestPackageDeserializer extends PackageDeserializer {
+    private static final class TestRequestPackageDeserializer extends RequestPackageDeserializer {
         private final Package deserializedPackage;
 
         @Getter
         private String capturedMessage;
 
-        public TestPackageDeserializer(final String packagePrefix, final Package deserializedPackage) {
+        public TestRequestPackageDeserializer(final String packagePrefix, final Package deserializedPackage) {
             super(packagePrefix);
             this.deserializedPackage = deserializedPackage;
         }

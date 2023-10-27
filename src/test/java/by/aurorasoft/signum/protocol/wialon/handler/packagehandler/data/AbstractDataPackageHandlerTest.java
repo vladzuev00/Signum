@@ -3,7 +3,7 @@ package by.aurorasoft.signum.protocol.wialon.handler.packagehandler.data;
 import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.crud.model.dto.Message.GpsCoordinate;
 import by.aurorasoft.signum.protocol.core.service.receivemessage.ReceivingMessageService;
-import by.aurorasoft.signum.protocol.wialon.model.AbstractDataPackage;
+import by.aurorasoft.signum.protocol.wialon.model.AbstractRequestDataPackage;
 
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import io.netty.channel.ChannelHandlerContext;
@@ -73,7 +73,7 @@ public final class AbstractDataPackageHandlerTest {
     }
 
     @SuppressWarnings("all")
-    private static final class HandledPackage extends AbstractDataPackage {
+    private static final class HandledPackage extends AbstractRequestDataPackage {
         public HandledPackage(List<Message> messages) {
             super(messages);
         }

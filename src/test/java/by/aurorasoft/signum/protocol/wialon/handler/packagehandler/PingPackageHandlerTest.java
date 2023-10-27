@@ -1,7 +1,7 @@
 package by.aurorasoft.signum.protocol.wialon.handler.packagehandler;
 
 import by.aurorasoft.signum.protocol.wialon.model.Package;
-import by.aurorasoft.signum.protocol.wialon.model.PingPackage;
+import by.aurorasoft.signum.protocol.wialon.model.RequestPingPackage;
 import io.netty.channel.ChannelHandlerContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +25,7 @@ public final class PingPackageHandlerTest {
 
     @Test
     public void handlerShouldHandlePackage() {
-        final Package givenPackage = new PingPackage();
+        final Package givenPackage = new RequestPingPackage();
         final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
 
         this.packageHandler.doHandle(givenPackage, givenContext);

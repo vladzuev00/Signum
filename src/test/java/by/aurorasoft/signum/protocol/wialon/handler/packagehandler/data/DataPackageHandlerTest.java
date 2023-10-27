@@ -1,7 +1,7 @@
 package by.aurorasoft.signum.protocol.wialon.handler.packagehandler.data;
 
 import by.aurorasoft.signum.base.AbstractContextTest;
-import by.aurorasoft.signum.protocol.wialon.model.DataPackage;
+import by.aurorasoft.signum.protocol.wialon.model.RequestDataPackage;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 public final class DataPackageHandlerTest extends AbstractContextTest {
 
     @Autowired
-    private AbstractDataPackageHandler<DataPackage> packageHandler;
+    private AbstractDataPackageHandler<RequestDataPackage> packageHandler;
 
     @Test
     public void responseShouldBeCreated() {

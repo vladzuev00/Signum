@@ -4,7 +4,7 @@ import by.aurorasoft.signum.protocol.wialon.decoder.PackageDecoder;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.PingPackageDeserializer;
 import org.springframework.stereotype.Component;
 
-import static by.aurorasoft.signum.protocol.wialon.model.PingPackage.PACKAGE_PREFIX;
+import static by.aurorasoft.signum.protocol.wialon.model.RequestPingPackage.PACKAGE_PREFIX;
 
 @Component
 public final class PingPackageDecoder extends PackageDecoder {

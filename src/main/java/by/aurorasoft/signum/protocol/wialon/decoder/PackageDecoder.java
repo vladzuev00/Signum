@@ -1,15 +1,15 @@
 package by.aurorasoft.signum.protocol.wialon.decoder;
 
 import by.aurorasoft.signum.protocol.wialon.model.Package;
-import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.PackageDeserializer;
+import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.RequestPackageDeserializer;
 
 public abstract class PackageDecoder {
     private final PackageDecoder nextDecoder;
     private final String packagePrefix;
-    private final PackageDeserializer packageDeserializer;
+    private final RequestPackageDeserializer packageDeserializer;
 
     public PackageDecoder(PackageDecoder nextDecoder, String packagePrefix,
-                          PackageDeserializer packageDeserializer) {
+                          RequestPackageDeserializer packageDeserializer) {
         this.nextDecoder = nextDecoder;
         this.packagePrefix = packagePrefix;
         this.packageDeserializer = packageDeserializer;

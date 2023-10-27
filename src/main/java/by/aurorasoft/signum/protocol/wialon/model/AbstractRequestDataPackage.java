@@ -12,6 +12,6 @@ import java.util.List;
 @Getter
 @EqualsAndHashCode
 @ToString
-public abstract class AbstractDataPackage implements Package {
+public abstract class AbstractRequestDataPackage implements Package {
     private final List<Message> messages;
 }

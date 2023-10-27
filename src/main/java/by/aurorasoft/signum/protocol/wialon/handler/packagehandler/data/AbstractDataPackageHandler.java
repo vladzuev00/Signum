@@ -3,13 +3,13 @@ package by.aurorasoft.signum.protocol.wialon.handler.packagehandler.data;
 import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.protocol.core.service.receivemessage.ReceivingMessageService;
 import by.aurorasoft.signum.protocol.wialon.handler.packagehandler.PackageHandler;
-import by.aurorasoft.signum.protocol.wialon.model.AbstractDataPackage;
+import by.aurorasoft.signum.protocol.wialon.model.AbstractRequestDataPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.List;
 
-public abstract class AbstractDataPackageHandler<T extends AbstractDataPackage> extends PackageHandler {
+public abstract class AbstractDataPackageHandler<T extends AbstractRequestDataPackage> extends PackageHandler {
     private final ReceivingMessageService receivingMessageService;
 
     public AbstractDataPackageHandler(Class<T> packageType, PackageHandler nextHandler,

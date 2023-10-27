@@ -4,10 +4,10 @@ import by.aurorasoft.signum.crud.model.dto.Message;
 
 import static java.util.Collections.singletonList;
 
-public final class DataPackage extends AbstractDataPackage {
+public final class RequestDataPackage extends AbstractRequestDataPackage {
     public static final String PACKAGE_PREFIX = "#D#";
 
-    public DataPackage(final Message message) {
+    public RequestDataPackage(final Message message) {
         super(singletonList(message));
     }
 }

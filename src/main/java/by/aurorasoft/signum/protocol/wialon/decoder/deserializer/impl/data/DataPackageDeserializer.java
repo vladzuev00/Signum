@@ -2,14 +2,14 @@ package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data;
 
 import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data.parser.MessageParser;
-import by.aurorasoft.signum.protocol.wialon.model.DataPackage;
+import by.aurorasoft.signum.protocol.wialon.model.RequestDataPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Stream;
 
-import static by.aurorasoft.signum.protocol.wialon.model.DataPackage.PACKAGE_PREFIX;
+import static by.aurorasoft.signum.protocol.wialon.model.RequestDataPackage.PACKAGE_PREFIX;
 
 @Component
 public final class DataPackageDeserializer extends AbstractDataPackageDeserializer {
@@ -28,7 +28,7 @@ public final class DataPackageDeserializer extends AbstractDataPackageDeserializ
     protected Package createPackageBySubMessages(final List<Message> messages) {
         checkContainingOneMessage(messages);
         final Message message = messages.get(0);
-        return new DataPackage(message);
+        return new RequestDataPackage(message);
     }
 
     private static void checkContainingOneMessage(final List<Message> messages) {

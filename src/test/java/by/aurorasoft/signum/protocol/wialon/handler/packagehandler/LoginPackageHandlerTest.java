@@ -1,7 +1,7 @@
 package by.aurorasoft.signum.protocol.wialon.handler.packagehandler;
 
 import by.aurorasoft.signum.crud.model.dto.Device;
-import by.aurorasoft.signum.protocol.wialon.model.LoginPackage;
+import by.aurorasoft.signum.protocol.wialon.model.RequestLoginPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import by.aurorasoft.signum.protocol.core.service.AuthorizationDeviceService;
 import by.aurorasoft.signum.protocol.core.service.CommandSenderService;
@@ -49,7 +49,7 @@ public final class LoginPackageHandlerTest {
 
     @Test
     public void handlerShouldHandlePackageAndAuthorizationShouldBeSuccess() {
-        final LoginPackage givenPackage = new LoginPackage("12345678912345678911", "password");
+        final RequestLoginPackage givenPackage = new RequestLoginPackage("12345678912345678911", "password");
 
         final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
 
@@ -72,7 +72,7 @@ public final class LoginPackageHandlerTest {
 
     @Test
     public void handlerShouldHandlePackageAndAuthorizationShouldBeFailure() {
-        final LoginPackage givenPackage = new LoginPackage("12345678912345678911", "password");
+        final RequestLoginPackage givenPackage = new RequestLoginPackage("12345678912345678911", "password");
 
         final ChannelHandlerContext givenContext = mock(ChannelHandlerContext.class);
 

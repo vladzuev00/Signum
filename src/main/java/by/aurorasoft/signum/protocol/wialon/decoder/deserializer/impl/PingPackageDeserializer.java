@@ -1,20 +1,20 @@
 package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl;
 
-import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.PackageDeserializer;
-import by.aurorasoft.signum.protocol.wialon.model.PingPackage;
+import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.RequestPackageDeserializer;
+import by.aurorasoft.signum.protocol.wialon.model.RequestPingPackage;
 import org.springframework.stereotype.Component;
 
-import static by.aurorasoft.signum.protocol.wialon.model.PingPackage.PACKAGE_PREFIX;
+import static by.aurorasoft.signum.protocol.wialon.model.RequestPingPackage.PACKAGE_PREFIX;
 
 @Component
-public final class PingPackageDeserializer extends PackageDeserializer {
+public final class PingPackageDeserializer extends RequestPackageDeserializer {
 
     public PingPackageDeserializer() {
         super(PACKAGE_PREFIX);
     }
 
     @Override
-    protected PingPackage deserializeMessage(final String message) {
-        return new PingPackage();
+    protected RequestPingPackage deserializeMessage(final String message) {
+        return new RequestPingPackage();
     }
 }

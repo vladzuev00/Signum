@@ -4,7 +4,7 @@ import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.LoginPacka
 import by.aurorasoft.signum.protocol.wialon.decoder.PackageDecoder;
 import org.springframework.stereotype.Component;
 
-import static by.aurorasoft.signum.protocol.wialon.model.LoginPackage.PACKAGE_PREFIX;
+import static by.aurorasoft.signum.protocol.wialon.model.RequestLoginPackage.PACKAGE_PREFIX;
 
 @Component
 public final class LoginPackageDecoder extends PackageDecoder {

@@ -1,7 +1,7 @@
 package by.aurorasoft.signum.protocol.wialon.handler.packagehandler;
 
 import by.aurorasoft.signum.crud.model.dto.Device;
-import by.aurorasoft.signum.protocol.wialon.model.LoginPackage;
+import by.aurorasoft.signum.protocol.wialon.model.RequestLoginPackage;
 import by.aurorasoft.signum.protocol.wialon.model.Package;
 import by.aurorasoft.signum.protocol.core.service.AuthorizationDeviceService;
 import by.aurorasoft.signum.protocol.core.service.CommandSenderService;
@@ -22,14 +22,14 @@ public final class LoginPackageHandler extends PackageHandler {
     public LoginPackageHandler(PingPackageHandler nextHandler,
                                AuthorizationDeviceService authorizationDeviceService,
                                CommandSenderService commandSenderService) {
-        super(LoginPackage.class, nextHandler);
+        super(RequestLoginPackage.class, nextHandler);
         this.authorizationDeviceService = authorizationDeviceService;
         this.commandSenderService = commandSenderService;
     }
 
     @Override
     protected void doHandle(Package requestPackage, ChannelHandlerContext context) {
-        final LoginPackage loginPackage = (LoginPackage) requestPackage;
+        final RequestLoginPackage loginPackage = (RequestLoginPackage) requestPackage;
         final Optional<Device> optionalDevice = this.authorizationDeviceService
                 .authorize(loginPackage.getImei(), context);
         final String response = optionalDevice.isPresent()
