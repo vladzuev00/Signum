@@ -1,19 +1,23 @@
 package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data.parser.exception;
 
 public final class NotValidMessageException extends RuntimeException {
+
+    @SuppressWarnings("unused")
     public NotValidMessageException() {
 
     }
 
-    public NotValidMessageException(String description) {
+    public NotValidMessageException(final String description) {
         super(description);
     }
 
-    public NotValidMessageException(Exception cause) {
+    @SuppressWarnings("unused")
+    public NotValidMessageException(final Exception cause) {
         super(cause);
     }
 
-    public NotValidMessageException(String description, Exception cause) {
+    @SuppressWarnings("unused")
+    public NotValidMessageException(final String description, final Exception cause) {
         super(description, cause);
     }
 }
