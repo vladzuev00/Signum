@@ -3,7 +3,7 @@ package by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data;
 import by.aurorasoft.signum.crud.model.dto.Message;
 import by.aurorasoft.signum.protocol.wialon.decoder.deserializer.impl.data.parser.MessageParser;
 import by.aurorasoft.signum.protocol.wialon.model.RequestDataPackage;
-import by.aurorasoft.signum.protocol.wialon.model.Package;
+import by.aurorasoft.signum.protocol.wialon.model.ResponseDataPackage;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,10 +13,8 @@ import static by.aurorasoft.signum.protocol.wialon.model.RequestDataPackage.PACK
 
 @Component
 public final class DataPackageDeserializer extends AbstractRequestDataPackageDeserializer {
-    private static final String RESPONSE_FAILURE_HANDLING = "#AD#0";
-
     public DataPackageDeserializer(final MessageParser messageParser) {
-        super(PACKAGE_PREFIX, messageParser, RESPONSE_FAILURE_HANDLING);
+        super(PACKAGE_PREFIX, messageParser, ResponseDataPackage::new);
     }
 
     @Override
@@ -25,7 +23,7 @@ public final class DataPackageDeserializer extends AbstractRequestDataPackageDes
     }
 
     @Override
-    protected Package createPackageBySubMessages(final List<Message> messages) {
+    protected RequestDataPackage createPackageBySubMessages(final List<Message> messages) {
         checkContainingOneMessage(messages);
         final Message message = messages.get(0);
         return new RequestDataPackage(message);
